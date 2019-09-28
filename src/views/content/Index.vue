@@ -8,10 +8,12 @@
 
       <!--    table列表-->
       <Table
-        style="width: 100%"
+        v-if="obj.tableData.length"
         :columns="obj.tableColumn"
         :data="obj.tableData"
-      ></Table>
+      >
+      </Table>
+      <div v-else>没数据</div>
 
       <!--    分页-->
       <Page

@@ -7,7 +7,8 @@ import {
   getBreadCrumbList
 } from "../../libs/util";
 import md5 from "js-md5";
-import { baseRouter, asyncRouter } from "../../router/base_router";
+import baseRouter from "../../router/base_router";
+import asyncRouter from "../../router/async_router";
 
 const cIsLock = getCookie("lock") === md5("true");
 // 用户是否有权限进入该页面

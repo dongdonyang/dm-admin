@@ -4,7 +4,7 @@
  * 配置axios请求类型为post时，使用qs.stringify来实现跨域访问，以及每次请求携带token
  * 配置请求成功后res，实现诸如登录失败，登录超时，账户密码错误和请求错误等拦截器
  */
-import axios from "axios";
+// import axios from "axios";
 import qs from "qs";
 import { Message } from "iview";
 import { router } from "../router/index";
@@ -14,12 +14,16 @@ let errQueue = 0; // 定义错误队列
 
 // axios 配置
 axios.defaults.timeout = 50000; // 请求超时时间
-axios.defaults.baseURL = process.env.BASE_API; // 请求的地址
+axios.defaults.baseURL =
+  process.env.BASE_API || "https://dev.sz-swjx.cn:10443/dm"; // 请求的地址
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
+
+const _axios = axios.create();
+
 // axios.defaults.withCredentials = true; //axios跨域携带cookie的配置
 // http request 拦截器
-axios.interceptors.request.use(
+_axios.interceptors.request.use(
   config => {
     if (config.method === "post") {
       if (
@@ -42,7 +46,7 @@ axios.interceptors.request.use(
 /**
  * 拦截器也可以判定返回的response成功时的状态码进行拦截
  */
-axios.interceptors.response.use(
+_axios.interceptors.response.use(
   res => {
     if (res.data.code) {
       if (res.data.code === 1001) {
@@ -83,5 +87,23 @@ axios.interceptors.response.use(
     }
   }
 );
+Plugin.install = function(Vue) {
+  Vue.axios = _axios;
+  window.axios = _axios;
+  Object.defineProperties(Vue.prototype, {
+    axios: {
+      get() {
+        return _axios;
+      }
+    },
+    $axios: {
+      get() {
+        return _axios;
+      }
+    }
+  });
+};
 
-export default axios;
+Vue.use(Plugin);
+
+export default _axios;

@@ -12,6 +12,7 @@ export default [
       title: "首页",
       roles: []
     },
+    redirect: { name: "homeIndex" },
     component: Main,
     children: [
       {
