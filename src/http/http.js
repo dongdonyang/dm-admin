@@ -52,7 +52,8 @@ _axios.interceptors.response.use(
       if (res.data.code === 1001) {
         // 接口返回数据正常
         errQueue = 0;
-        return res;
+        res.data.success = true;
+        return res.data;
       } else if (res.data.code === 2003) {
         // 用户需要重新登陆
         errQueue += 1;
@@ -69,7 +70,7 @@ _axios.interceptors.response.use(
           path: "/login"
         });
       } else {
-        // 如果请求不成果，则做对应的处理
+        // 如果请求不成功，则做对应的处理
         Message.error(res.data.msg);
         return res;
       }

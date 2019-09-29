@@ -4,6 +4,7 @@ import store from "./store/index.js";
 import API from "./http/api";
 import "iview/dist/styles/iview.css";
 import "./http/http";
+import "./libs/rem"
 
 Vue.prototype.$API = API;
 

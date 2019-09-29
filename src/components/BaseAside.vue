@@ -122,7 +122,7 @@ export default {
     text-align: center;
   }
   .ivu-menu::after {
-    background-color: #fff;
+    background-color: #f1f1f1;
   }
   /*修改菜单栏颜色*/
   .ivu-menu-item:hover,
