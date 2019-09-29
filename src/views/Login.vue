@@ -84,7 +84,7 @@ export default {
                 name: "home"
               });
               this.$Message.success(`欢迎登录四维聚象后台管理系统`);
-              this.saveUserInfo(res);
+              this.saveUserInfo(res.data);
             }
           });
         }
@@ -94,6 +94,7 @@ export default {
     saveUserInfo(info) {
       // 是否记住密码,判断是否登录的条件，token
       if (this.isRemember) {
+        this.$store.commit("setToken", info.token)
       } else {
       }
     }

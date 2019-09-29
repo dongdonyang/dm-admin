@@ -17,22 +17,32 @@ const RouterConfig = {
 
 export const router = new VueRouter(RouterConfig);
 
-// 用户是否有权限进入该页面
-function hasPermission(role, route) {
-  if (role && typeof role === "string") {
-    role = role.join(",");
-  }
-  if (route.meta && route.meta.roles) {
-    for (let k = 0, length = role.length; k < length; k++) {
-      if (route.meta.roles.indexOf(findRoleId(role[k])) >= 0) {
-        return true;
-      }
-    }
-    return false;
+router.beforeEach((to, form, next) => {
+  // 判断是否登录
+  if(store.state.user.token){
+    next();
   } else {
-    return true;
+    debugger;
+    next("/login")
   }
-}
+});
+
+// // 用户是否有权限进入该页面
+// function hasPermission(role, route) {
+//   if (role && typeof role === "string") {
+//     role = role.join(",");
+//   }
+//   if (route.meta && route.meta.roles) {
+//     for (let k = 0, length = role.length; k < length; k++) {
+//       if (route.meta.roles.indexOf(findRoleId(role[k])) >= 0) {
+//         return true;
+//       }
+//     }
+//     return false;
+//   } else {
+//     return true;
+//   }
+// }
 
 // const whiteList = ["/login"]; // 不重定向白名单
 
