@@ -92,7 +92,7 @@ export default {
     },
     //    用户信息储存
     saveUserInfo(info) {
-      // 是否记住密码
+      // 是否记住密码,判断是否登录的条件，token
       if (this.isRemember) {
       } else {
       }

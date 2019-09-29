@@ -3,9 +3,7 @@
   这里需要引入到main.js中
   整个应用都能访问store里的actions，state等
  */
-// import Vue from 'vue';
 import Vuex from "vuex";
-import Vue from "vue";
 
 // 全局主体的store
 import state from "./state.js";

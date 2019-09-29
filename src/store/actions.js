@@ -4,7 +4,6 @@
   通过commit提交给mutations，通过type作为两者相连的唯一通道
  */
 import * as types from "./types.js";
-import Router from "../router/index";
 export default {
   // 示例
   decrement: ({ commit, state }) => {
