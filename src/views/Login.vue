@@ -94,7 +94,7 @@ export default {
     saveUserInfo(info) {
       // 是否记住密码,判断是否登录的条件，token
       if (this.isRemember) {
-        this.$store.commit("setToken", info.token)
+        this.$store.commit("setToken", info.token);
       } else {
       }
     }

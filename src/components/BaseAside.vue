@@ -101,7 +101,7 @@ export default {
         return !item.meta.hideInMenu;
       });
       this.menuList = getMenu(routerList);
-      console.log("菜单：",this.menuList);
+      console.log("菜单：", this.menuList);
     },
     //  路由跳转
     openNew(name) {

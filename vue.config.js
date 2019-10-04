@@ -16,7 +16,9 @@ module.exports = {
 
       args[0]["process.env"].MODE = `"${mode}"`;
       args[0]["process.env"].BASE_URL = JSON.stringify(process.env.BASE_URL);
-      args[0]["process.env"].UPLOAD_URL = JSON.stringify(process.env.UPLOAD_URL);
+      args[0]["process.env"].UPLOAD_URL = JSON.stringify(
+        process.env.UPLOAD_URL
+      );
 
       return args;
     });
@@ -32,16 +34,16 @@ module.exports = {
     }
   },
 
-//  todo px转rem配置
+  //  todo px转rem配置
   css: {
     loaderOptions: {
       postcss: {
         plugins: [
-          require('postcss-pxtorem')({
-            rootValue : 16, // 换算的基数
-            selectorBlackList  : [], // 忽略转换正则匹配项
-            propList   : ['*'],
-          }),
+          require("postcss-pxtorem")({
+            rootValue: 16, // 换算的基数
+            selectorBlackList: [], // 忽略转换正则匹配项
+            propList: ["*"]
+          })
         ]
       }
     }
