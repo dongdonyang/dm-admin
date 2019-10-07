@@ -80,11 +80,11 @@ export default {
           };
           axios.post(this.$API.LOGIN, f).then(res => {
             if (res.success) {
+              this.saveUserInfo(res.data);
               this.$router.push({
                 name: "home"
               });
               this.$Message.success(`欢迎登录四维聚象后台管理系统`);
-              this.saveUserInfo(res.data);
             }
           });
         }

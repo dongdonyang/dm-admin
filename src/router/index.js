@@ -6,7 +6,6 @@
 import baseRouter from "./base_router";
 import asyncRouter from "./async_router";
 import store from "../store";
-import { findRoleId } from "../libs/util";
 
 Vue.use(VueRouter);
 
