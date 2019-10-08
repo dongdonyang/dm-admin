@@ -6,29 +6,50 @@ export default {
   searchUrl: "",
   tableColumn: [
     {
-      title: "姓名",
+      title: "名称",
       key: "name"
     },
     {
-      title: "年龄",
+      title: "厂商管理员",
       key: "age"
     },
     {
-      title: "地址",
+      title: "所在城市",
       key: "address"
     },
     {
+      title: "商品数",
+      key: ""
+    },
+    {
+      title: "使用户型数",
+      key: ""
+    },
+    {
+      title: "发布方案数",
+      key: ""
+    },
+    {
+      title: "合作类型",
+      key: ""
+    },
+    {
+      title: "创建时间",
+      key: ""
+    },
+    {
       title: "操作",
-      render: h => {
-        return h("a", "按钮", {
-          on: {
-            click: () => {
-              console.log(22);
-              alert(11);
-            }
-          }
-        });
-      }
+      slot: "action",
+      // render: h => {
+      //   return h("a", "按钮", {
+      //     on: {
+      //       click: () => {
+      //         console.log(22);
+      //         alert(11);
+      //       }
+      //     }
+      //   });
+      // }
     }
   ]
 };

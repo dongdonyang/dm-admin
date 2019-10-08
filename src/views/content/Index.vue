@@ -8,10 +8,22 @@
 
       <!--    table列表-->
       <Table
+        highlight-row
         v-if="obj.tableData.length"
         :columns="obj.tableColumn"
         :data="obj.tableData"
       >
+        <!--        操作-->
+        <Row
+          type="flex"
+          justify="space-between"
+          slot-scope="{ row, index }"
+          slot="action"
+        >
+          <Button size="small" @click="obj.getDetail(index)">查看</Button>
+          <Button size="small" @click="obj.editRow(index)">编辑</Button>
+          <Button size="small" @click="obj.deleteRow(index)">删除</Button>
+        </Row>
       </Table>
       <div v-else>没数据</div>
 
@@ -49,7 +61,7 @@ export default {
      *                作的看法和能看到的内容，根据当前页面router来渲染不同的table列表和筛选条件
      * */
     obj = new Content([1], this.$route);
-    obj.getList(); // 获取当前列表数据
+    // obj.getList(); // 获取当前列表数据
     this.obj = obj;
     console.log("当前页面对象", obj);
   },

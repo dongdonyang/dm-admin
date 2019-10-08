@@ -68,7 +68,7 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    //  用户登录
+    //  todo 用户登录
     login() {
       this.$refs.form.validate(valid => {
         if (valid) {
@@ -90,12 +90,13 @@ export default {
         }
       });
     },
-    //    用户信息储存
+    //    todo 用户信息储存
     saveUserInfo(info) {
-      // 是否记住密码,判断是否登录的条件，token
       if (this.isRemember) {
+        //存在localStorage中，进行长期存储
         this.$store.commit("setToken", info.token);
       } else {
+      //  存在session中，进行短期会话存储
       }
     }
   }

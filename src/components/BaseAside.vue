@@ -125,9 +125,9 @@ export default {
     background-color: #f1f1f1;
   }
   /*修改菜单栏颜色*/
-  .ivu-menu-item:hover,
-  .ivu-menu-submenu:hover {
-    background-color: #f1f1f1 !important;
-  }
+  /*.ivu-menu-item:hover,*/
+  /*.ivu-menu-submenu:hover {*/
+  /*  background-color: #f1f1f1 !important;*/
+  /*}*/
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>锁屏页面</div>
 </template>
 
 <script>

@@ -11,7 +11,7 @@ export default class Content {
   constructor(roles = [], currentRouter = {}) {
     this.currentPage = 1;
     this.totalPage = 0;
-    this.tableData = [];
+    this.tableData = [{}];
     this.init(currentRouter);
   }
 
@@ -37,11 +37,14 @@ export default class Content {
 
   // 查看详情
   getDetail() {
-    console.log("detail");
+    console.log("detail", this);
   }
 
   //  删除当前列
-  delete() {}
+  deleteRow() {}
+
+  // 编辑当前行
+  editRow(){}
 
   //  关键字查询
   searchByKey() {}
