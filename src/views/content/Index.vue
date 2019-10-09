@@ -1,10 +1,13 @@
 <template>
   <div class="index">
-    <div>选项</div>
+    <component class="index-header" :is="obj.qq"></component>
 
     <div class="index-card">
       <!--    筛选选项-->
-      <div>筛选</div>
+      <Row type="flex" justify="space-between">
+        <p class="index-card-title">{{ obj.title }}</p>
+        <Button icon="md-add">新增</Button>
+      </Row>
 
       <!--    table列表-->
       <Table
@@ -34,7 +37,6 @@
         size="small"
         :total="100"
         show-sizere
-        show-total
         @on-change="obj.pageChange.call(obj, $event)"
       ></Page>
     </div>
@@ -76,7 +78,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  & > :first-child {
+  &-header {
     font-size: 18px;
     margin-bottom: 30px;
   }
@@ -93,6 +95,18 @@ export default {
     & > :nth-child(1) {
       line-height: 36px;
       margin-bottom: 30px;
+      /*新增按钮*/
+      &> :last-child{
+        background-color: #0D35F1;
+        border-color: #fff;
+        border-radius: 18px;
+        color: #fff;
+      }
+    }
+    &-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
     }
     /*todo table*/
     & > :nth-child(2) {

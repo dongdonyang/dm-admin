@@ -1,5 +1,6 @@
 // 厂商管理，增删改查，权限控制，列表字段，筛选字段条件，样式，还是单独做成组件
 export default {
+  title: "厂商管理",
   addURl: "1",
   deleteUrl: "",
   editUrl: "",
@@ -39,7 +40,7 @@ export default {
     },
     {
       title: "操作",
-      slot: "action",
+      slot: "action"
       // render: h => {
       //   return h("a", "按钮", {
       //     on: {

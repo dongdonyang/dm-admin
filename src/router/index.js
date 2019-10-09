@@ -18,7 +18,7 @@ export const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, form, next) => {
   // 判断是否登录
-  if (store.state.user.token) {
+  if (sessionStorage.getItem("token")) {
     next();
   } else {
     to.name === "login" ? next() : next("/login");

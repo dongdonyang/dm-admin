@@ -1,5 +1,6 @@
 // 户型资源-楼盘管理
 export default {
+  title: "楼盘管理",
   listURL: "",
   deleteURL: "",
   addURL: "",

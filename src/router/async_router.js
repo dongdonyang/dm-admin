@@ -72,6 +72,7 @@ export default [
   {
     path: "/apartmentTask",
     name: "apartmentTask",
+    redirect: { name: "apartmentTaskList" },
     meta: {
       title: "户型任务",
       roles: []
@@ -79,8 +80,8 @@ export default [
     component: Main,
     children: [
       {
-        path: "factorList",
-        name: "factorList",
+        path: "apartmentTaskList",
+        name: "apartmentTaskList",
         meta: {
           hideInMenu: true,
           title: "列表"
