@@ -5,7 +5,6 @@
 
 import baseRouter from "./base_router";
 import asyncRouter from "./async_router";
-import store from "../store";
 
 Vue.use(VueRouter);
 

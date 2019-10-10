@@ -13,7 +13,7 @@
         <!--        为什么line-height会被子元素继承-->
         <div>
           <h1>{{ totalCount[item.value] || 0 }}</h1>
-          <p>{{ item.name }}</p>
+          <p>{{ `${item.name}数量` }}</p>
         </div>
         <Icon type="md-barcode" />
       </div>
@@ -42,28 +42,28 @@ export default {
       totalList: [
         {
           value: "",
-          name: "模型数量",
+          name: "模型",
           icon: "",
           leftColor: "#8192FF",
           rightColor: "#5D75E6"
         },
         {
           value: "",
-          name: "户型数量",
+          name: "户型",
           icon: "",
           leftColor: "#4FDEE2",
           rightColor: "#1292FF"
         },
         {
           value: "",
-          name: "商品数量",
+          name: "商品",
           icon: "",
           leftColor: "#F9A355",
           rightColor: "#F76C8C"
         },
         {
           value: "",
-          name: "材质数量",
+          name: "材质",
           icon: "",
           leftColor: "#7FE085",
           rightColor: "#56B765"

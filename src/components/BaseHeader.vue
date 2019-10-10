@@ -34,9 +34,6 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    qq() {
-      alert(11);
-    }
   }
 };
 </script>

@@ -12,12 +12,12 @@ export default [
       title: "首页",
       roles: []
     },
-    redirect: { name: "homeIndex" },
+    redirect: { name: "home" },
     component: Main,
     children: [
       {
-        path: "index",
-        name: "homeIndex",
+        path: "/home",
+        name: "home",
         meta: {
           title: "首页",
           hideInMenu: true

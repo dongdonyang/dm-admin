@@ -1,12 +1,15 @@
 <template>
   <div class="index">
-    <component class="index-header" :is="obj.qq"></component>
+    <!--    todo 因组件注册有缓存，故使用v-if-->
+    <head-component class="index-header" v-if="obj.head"></head-component>
 
     <div class="index-card">
       <!--    筛选选项-->
       <Row type="flex" justify="space-between">
         <p class="index-card-title">{{ obj.title }}</p>
-        <Button icon="md-add">新增</Button>
+        <!--        自定义筛选组件-->
+        <select-component></select-component>
+        <Button icon="md-add" @click="obj.addRow">新增</Button>
       </Row>
 
       <!--    table列表-->
@@ -52,20 +55,25 @@ import Content from "./index";
 let obj = Object;
 export default {
   name: "Index",
+  components: {
+    // 异步加载当前页面各自的组件
+    HeadComponent: resolve => resolve(obj.head),
+    SelectComponent: resolve => resolve(obj.select)
+  },
   data() {
     return {
       obj: Object
     };
   },
+  /**
+   * @fileOverview new一个对象，把当前用户，和页面传入，对象根据当前用户生成该用户能操
+   *               作的看法和能看到的内容，根据当前页面router来渲染不同的table列表和筛选条件
+   * */
   created() {
-    /**
-     * @fileOverview new一个对象，把当前用户，和页面传入，对象根据当前用户生成该用户能操
-     *                作的看法和能看到的内容，根据当前页面router来渲染不同的table列表和筛选条件
-     * */
     obj = new Content([1], this.$route);
+    console.log("当前页面对象", obj);
     // obj.getList(); // 获取当前列表数据
     this.obj = obj;
-    console.log("当前页面对象", obj);
   },
   mounted() {},
   methods: {}
@@ -80,7 +88,7 @@ export default {
 
   &-header {
     font-size: 18px;
-    margin-bottom: 30px;
+    height: 48px;
   }
 
   /*  卡片*/
@@ -96,8 +104,8 @@ export default {
       line-height: 36px;
       margin-bottom: 30px;
       /*新增按钮*/
-      &> :last-child{
-        background-color: #0D35F1;
+      & > :last-child {
+        background-color: #0d35f1;
         border-color: #fff;
         border-radius: 18px;
         color: #fff;

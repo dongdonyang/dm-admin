@@ -17,7 +17,7 @@ export default class Content {
 
   // 区别不同的页面不同的数值
   init(router) {
-    // 根据路由名匹配配置文件路径
+    // 根据路由名匹配配置文件路径 todo 为什么只能替换第一次出现的大写字母
     let path = router.name.replace(/[A-Z]/, function(val) {
       return `_${val.toLocaleLowerCase()}`;
     });
@@ -30,9 +30,15 @@ export default class Content {
     }
   }
 
+  //下列方法都可以在各自的对象中复写
   // 获取table列表
   getList() {
     axios.get();
+  }
+
+  //新增
+  addRow(){
+
   }
 
   // 查看详情

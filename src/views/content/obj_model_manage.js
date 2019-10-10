@@ -14,6 +14,10 @@ export default {
       key: ""
     },
     {
+      title: "上传人员",
+      key: ""
+    },
+    {
       title: "创建时间",
       key: ""
     },
