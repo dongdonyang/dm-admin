@@ -37,11 +37,15 @@ export default class Content {
   }
 
   //新增
-  addRow() {}
-
+  addRow() {
+    this.$router.push({
+      name: this.addRoute
+    });
   // 查看详情
-  getDetail() {
-    console.log("detail", this);
+  detailRow() {
+    this.$router.push({
+      name: this.detailRoute
+    });
   }
 
   //  删除当前列

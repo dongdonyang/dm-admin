@@ -1,10 +1,11 @@
 // 户型任务，状态筛选条件加成一个属性来判断
 export default {
   //若过于复杂，抽离成单独组件
+  // todo 头部组件
   get head() {
     return {
       template: `<div>
-        <a v-for='item in list' :key='item'>{{item}}</a>
+        <Button type="text" v-for='item in list' :key='item'>{{item}}</Button>
       </div>`,
       data() {
         return {
@@ -13,6 +14,23 @@ export default {
       }
     };
   },
+
+  //todo 筛选组件
+  get select(){
+    return {
+      template: "<base-select v-model='this.val'></base-select>",
+      components: {
+        BaseSelect: resolve => resolve(require("./base_select"))
+      },
+      data(){
+        return{
+          val: ""
+        }
+      }
+    }
+  },
+
+  // todo 数据参数
   title: "户型任务",
   tableColumn: [
     {

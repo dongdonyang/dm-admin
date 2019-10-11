@@ -8,8 +8,11 @@
       <Row type="flex" justify="space-between">
         <p class="index-card-title">{{ obj.title }}</p>
         <!--        自定义筛选组件-->
-        <select-component></select-component>
-        <Button icon="md-add" @click="obj.addRow">新增</Button>
+        <select-component
+          class="index-card-select"
+          v-if="obj.select"
+        ></select-component>
+        <Button icon="md-add" @click="obj.addRow.call(obj)">新增</Button>
       </Row>
 
       <!--    table列表-->
@@ -26,7 +29,7 @@
           slot-scope="{ row, index }"
           slot="action"
         >
-          <Button size="small" @click="obj.getDetail(index)">查看</Button>
+          <Button size="small" @click="obj.detailRow(index)">查看</Button>
           <Button size="small" @click="obj.editRow(index)">编辑</Button>
           <Button size="small" @click="obj.deleteRow(index)">删除</Button>
         </Row>
@@ -56,9 +59,9 @@ let obj = Object;
 export default {
   name: "Index",
   components: {
-    // 异步加载当前页面各自的组件
-    HeadComponent: resolve => resolve(obj.head),
-    SelectComponent: resolve => resolve(obj.select)
+    // 异步加载当前页面各自的组件，todo 组件存在缓存，并不想要缓存
+    HeadComponent: resolve => obj.head && resolve(obj.head),
+    SelectComponent: resolve => obj.select && resolve(obj.select)
   },
   data() {
     return {
@@ -71,6 +74,7 @@ export default {
    * */
   created() {
     obj = new Content([1], this.$route);
+    obj.$router = this.$router; // 方便路由跳转
     console.log("当前页面对象", obj);
     // obj.getList(); // 获取当前列表数据
     this.obj = obj;
@@ -100,6 +104,14 @@ export default {
     display: flex;
     flex-direction: column;
     /*todo 筛选*/
+    /*自定义筛选*/
+    &-select {
+      flex: 2 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 15px;
+    }
     & > :nth-child(1) {
       line-height: 36px;
       margin-bottom: 30px;

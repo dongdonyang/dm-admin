@@ -40,17 +40,9 @@ export default {
     },
     {
       title: "操作",
-      slot: "action"
-      // render: h => {
-      //   return h("a", "按钮", {
-      //     on: {
-      //       click: () => {
-      //         console.log(22);
-      //         alert(11);
-      //       }
-      //     }
-      //   });
-      // }
+      slot: "action",
+      width: "160",
+      align: "center"
     }
   ]
 };
