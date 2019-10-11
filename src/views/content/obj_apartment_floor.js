@@ -1,6 +1,28 @@
 // 户型资源-楼盘管理
 export default {
+  get select() {
+    let that = this;
+    return {
+      template: `<div>
+<base-select placeholder="楼盘类型" v-model="obj.a"></base-select>
+<base-select placeholder="选择省份" v-model="obj.a"></base-select>
+<base-select placeholder="选择城市" v-model="obj.a"></base-select>
+<base-input placeholder="楼盘名称或关键字" v-model="obj.b"></base-input>
+</div>`,
+      components: {
+        BaseSelect: resolve => resolve(require("./base_select")),
+        BaseInput: resolve => resolve(require("./base_input"))
+      },
+      data() {
+        return {
+          obj: that
+        };
+      }
+    };
+  },
   title: "楼盘管理",
+  addRoute: "addFloor",
+  detailRoute: "lookFloor",
   listURL: "",
   deleteURL: "",
   addURL: "",

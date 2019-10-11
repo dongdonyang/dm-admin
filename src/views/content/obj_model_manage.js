@@ -1,5 +1,6 @@
 //模型管理
 export default {
+  title: "模型管理",
   tableColumn: [
     {
       title: "SN编码",

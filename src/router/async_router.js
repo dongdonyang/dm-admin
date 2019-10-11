@@ -132,6 +132,28 @@ export default [
             "home"
           )
       },
+      //  楼盘管理-新增-编辑
+      {
+        path: "addFloor",
+        name: "addFloor",
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("../views/content/Edit.vue")),
+            "home"
+          )
+      },
+      //  楼盘管理-查看
+      {
+        path: "lookFloor",
+        name: "lookFloor",
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("../views/content/Detail.vue")),
+                "home"
+            )
+      },
       {
         path: "manage",
         name: "apartmentManage",
