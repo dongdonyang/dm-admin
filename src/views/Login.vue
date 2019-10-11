@@ -93,11 +93,11 @@ export default {
     //    todo 用户信息储存
     saveUserInfo(info) {
       this.$store.commit("setToken", info.token);
-      sessionStorage.setItem("token",info.token);
+      sessionStorage.setItem("token", info.token);
       if (this.isRemember) {
         //存在localStorage中，进行长期存储
       } else {
-      //  存在session中，进行短期会话存储
+        //  存在session中，进行短期会话存储
       }
     }
   }

@@ -37,9 +37,7 @@ export default class Content {
   }
 
   //新增
-  addRow(){
-
-  }
+  addRow() {}
 
   // 查看详情
   getDetail() {
@@ -50,7 +48,7 @@ export default class Content {
   deleteRow() {}
 
   // 编辑当前行
-  editRow(){}
+  editRow() {}
 
   //  关键字查询
   searchByKey() {}
