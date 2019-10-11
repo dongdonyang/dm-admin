@@ -13,6 +13,12 @@ export default {
         BaseSelect: resolve => resolve(require("./base_select")),
         BaseInput: resolve => resolve(require("./base_input"))
       },
+      destroyed() {
+        console.log("floor组件销毁");
+      },
+      created() {
+        console.log("floor组件创建");
+      },
       data() {
         return {
           obj: that

@@ -1,7 +1,8 @@
 <template>
   <div class="index">
     <!--    todo 因组件注册有缓存，故使用v-if-->
-    <head-component class="index-header" v-if="obj.head"></head-component>
+<!--    <head-component class="index-header" v-if="obj.head"></head-component>-->
+    <comment is="HeadComponent"></comment>
 
     <div class="index-card">
       <!--    筛选选项-->

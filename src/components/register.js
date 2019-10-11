@@ -1,4 +1,4 @@
-// 基础组件全局注册
+// 基础组件全局注册-按需注册
 import BaseInput from "./BaseInput";
 import BaseSelect from "./BaseSelect";
 
