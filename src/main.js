@@ -5,6 +5,7 @@ import API from "./http/api";
 import "iview/dist/styles/iview.css";
 import "./http/http";
 import "./libs/rem";
+import "./components/register"; //基础组件注册
 
 Vue.prototype.$API = API;
 

@@ -40,7 +40,9 @@ export default class Content {
   addRow() {
     this.$router.push({
       name: this.addRoute
-    });
+    })
+  }
+
   // 查看详情
   detailRow() {
     this.$router.push({

@@ -66,6 +66,7 @@ export default {
     },
     // 是否折叠宽度计算
     sideWidth: function() {
+      //todo 没有转成rem
       return this.isCollapsed ? "76px" : "250px";
     }
   },

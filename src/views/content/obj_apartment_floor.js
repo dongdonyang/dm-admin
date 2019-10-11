@@ -1,4 +1,4 @@
-// 户型资源-楼盘管理
+// 户型资源-楼盘管理-配置list页面
 export default {
   get select() {
     let that = this;
@@ -71,6 +71,42 @@ export default {
       title: "操作",
       slot: "action",
       align: "center"
+    }
+  ]
+};
+
+// 配置新增页面?抛出一个class如何？新增页面之间是否存在相同属性？抛出对象还是class？
+export const adds = {
+  //
+  addURL: "",
+  editURL: "",
+  formList: [
+    {
+      label: "",
+      slot: "",
+      value: "",
+      class: "",
+      //  组件的配置参数
+      icon: "",
+      //  是否有自定义组件、局部注册的问题
+      myComponent: "",
+      get myCom() {
+        return {
+          template: `<a>自定义子组件</a>`
+        };
+      }
+    }
+  ]
+};
+
+//配置详情页面
+export const detail = {
+  form: {},
+  formList: [
+    {
+      label: "",
+      value: ""
+      //  自定义展示配置
     }
   ]
 };
