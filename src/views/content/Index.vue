@@ -1,8 +1,7 @@
 <template>
   <div class="index">
     <!--    todo 因组件注册有缓存，故使用v-if-->
-<!--    <head-component class="index-header" v-if="obj.head"></head-component>-->
-    <comment is="HeadComponent"></comment>
+    <head-component class="index-header" v-if="obj.head"></head-component>
 
     <div class="index-card">
       <!--    筛选选项-->
@@ -13,6 +12,7 @@
           class="index-card-select"
           v-if="obj.select"
         ></select-component>
+
         <Button icon="md-add" @click="obj.addRow.call(obj)">新增</Button>
       </Row>
 
@@ -60,9 +60,9 @@ let obj = Object;
 export default {
   name: "Index",
   components: {
-    // 异步加载当前页面各自的组件，todo 组件存在缓存，并不想要缓存
-    HeadComponent: resolve => obj.head && resolve(obj.head),
-    SelectComponent: resolve => obj.select && resolve(obj.select)
+    // 异步加载当前页面各自的组件，todo 组件注册存在缓存，obj.head改变后不会重新渲染页面、暂时改成全局注册
+    // HeadComponent: resolve => obj.head && resolve(obj.head),
+    // SelectComponent: resolve => obj.select && resolve(obj.select)
   },
   data() {
     return {
@@ -75,12 +75,19 @@ export default {
    * */
   created() {
     obj = new Content([1], this.$route);
+    Vue.component("select-component", obj.select); // 全局注册
+    Vue.component("head-component", obj.head);
     obj.$router = this.$router; // 方便路由跳转
-    console.log("当前页面对象", obj);
-    // obj.getList(); // 获取当前列表数据
     this.obj = obj;
+    // obj.getList(); // 获取当前列表数据
+    console.log("当前页面对象", obj);
   },
   mounted() {},
+  destroyed() {
+    // 销毁对象
+    this.obj = null;
+    obj = null;
+  },
   methods: {}
 };
 </script>

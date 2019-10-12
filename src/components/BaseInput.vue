@@ -1,5 +1,10 @@
 <template>
-  <div>输入框组件</div>
+  <Input
+    :placeholder="this.placeholder"
+    :style="inputStyle"
+    suffix="ios-search"
+    v-model="this.value"
+  ></Input>
 </template>
 
 <script>
@@ -9,12 +14,29 @@
  */
 export default {
   name: "BaseInput",
-  props: {},
-  data() {
-    return {};
+  model: {
+    prop: "value",
+    event: "change"
   },
-  created() {
+  props: {
+    value: {
+      type: String,
+      required: true,
+      default: ""
+    },
+    placeholder: {
+      type: String
+    }
   },
+  data(){
+    return {
+      inputStyle: {
+        margin: "0 5px",
+        width: "240px"
+      }
+    }
+  },
+  created() {},
   mounted() {},
   methods: {}
 };

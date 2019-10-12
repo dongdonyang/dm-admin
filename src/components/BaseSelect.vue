@@ -1,5 +1,11 @@
 <template>
-  <div>下拉选择框</div>
+  <Select
+    :placeholder="this.placeholder"
+    :style="selectStyle"
+    v-model="this.value"
+  >
+    <Option v-for="(item, index) in list" :key="index">{{ item }}}</Option>
+  </Select>
 </template>
 
 <script>
@@ -9,9 +15,27 @@
  */
 export default {
   name: "BaseSelect",
-  props: {},
+  model: {
+    prop: "value",
+    event: "change"
+  },
+  props: {
+    value: {
+      type: "",
+      required: true
+    },
+    placeholder: {
+      type: String
+    }
+  },
   data() {
-    return {};
+    return {
+      selectStyle: {
+        margin: "0 5px",
+        width: "130px"
+      },
+      list: []
+    };
   },
   created() {},
   mounted() {},

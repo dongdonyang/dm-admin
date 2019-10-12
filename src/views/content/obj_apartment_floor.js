@@ -9,10 +9,6 @@ export default {
 <base-select placeholder="选择城市" v-model="obj.a"></base-select>
 <base-input placeholder="楼盘名称或关键字" v-model="obj.b"></base-input>
 </div>`,
-      components: {
-        BaseSelect: resolve => resolve(require("./base_select")),
-        BaseInput: resolve => resolve(require("./base_input"))
-      },
       destroyed() {
         console.log("floor组件销毁");
       },
@@ -82,6 +78,7 @@ export default {
 };
 
 // 配置新增页面?抛出一个class如何？新增页面之间是否存在相同属性？抛出对象还是class？
+// todo 验证规则表放在哪里？不可能每个配置单独写一份规则表。单独写一份规则表js，然后在edit.vue中引入。这边配置相应的配置规则名和参数就ok
 export const adds = {
   //
   addURL: "",
@@ -92,7 +89,7 @@ export const adds = {
       slot: "",
       value: "",
       class: "",
-      //  组件的配置参数
+      //  组件的配置参数、配置验证规则
       icon: "",
       //  是否有自定义组件、局部注册的问题
       myComponent: "",

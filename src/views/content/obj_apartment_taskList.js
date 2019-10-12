@@ -16,18 +16,18 @@ export default {
   },
 
   //todo 筛选组件
-  get select(){
+  get select() {
     return {
-      template: "<base-select v-model='this.val'></base-select>",
-      components: {
-        BaseSelect: resolve => resolve(require("./base_select"))
-      },
-      data(){
-        return{
+      template: `<div>
+<base-select v-model='this.val'></base-select>
+<base-select v-model='this.val'></base-select>
+</div>`,
+      data() {
+        return {
           val: ""
-        }
+        };
       }
-    }
+    };
   },
 
   // todo 数据参数
