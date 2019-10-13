@@ -16,7 +16,7 @@
             :label="item.label"
           >
             <!--              得留一个自定义组件的地方、有自定义组件就渲染自定义组件-->
-            <component v-if="item.slot" :is="item.slot"></component>
+            <component v-if="item.slot" :is="item.slot" v-model="form[item.value]"></component>
             <div v-else>自定义组件</div>
           </form-item>
         </Form>
@@ -35,10 +35,13 @@ export default {
   data() {
     return {
       //  obj数组对象从配置文件中读取就行了，
+      form: {
+      },
       obj: [
         //  label,value,参数，校验信息，各自的class吧
         {
           label: "1",
+          value: "aa",
           slot: "base-input"
         },
         {

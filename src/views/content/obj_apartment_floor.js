@@ -4,24 +4,23 @@ export default {
     let that = this;
     return {
       template: `<div>
-<base-select placeholder="楼盘类型" v-model="obj.a"></base-select>
+<base-select placeholder="楼盘类型" v-model="obj.type"></base-select>
 <base-select placeholder="选择省份" v-model="obj.a"></base-select>
-<base-select placeholder="选择城市" v-model="obj.a"></base-select>
-<base-input placeholder="楼盘名称或关键字" v-model="obj.b"></base-input>
+<base-select placeholder="选择城市" v-model="obj.city"></base-select>
+<base-input placeholder="楼盘名称或关键字" v-model="obj.searchKey"></base-input>
 </div>`,
-      destroyed() {
-        console.log("floor组件销毁");
-      },
-      created() {
-        console.log("floor组件创建");
-      },
       data() {
         return {
-          obj: that
+          obj: {
+            searchKey: "212121"
+          }
         };
       }
     };
   },
+  searchKey: "",
+  type: "",
+  city: "",
   title: "楼盘管理",
   addRoute: "addFloor",
   detailRoute: "lookFloor",

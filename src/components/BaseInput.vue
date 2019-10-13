@@ -1,10 +1,11 @@
 <template>
   <Input
-    :placeholder="this.placeholder"
+    :placeholder="placeholder"
     :style="inputStyle"
     suffix="ios-search"
-    v-model="this.value"
-  ></Input>
+    v-model="value1"
+    @input="aa"
+  />
 </template>
 
 <script>
@@ -16,7 +17,7 @@ export default {
   name: "BaseInput",
   model: {
     prop: "value",
-    event: "change"
+    event: "input"
   },
   props: {
     value: {
@@ -25,19 +26,25 @@ export default {
       default: ""
     },
     placeholder: {
-      type: String
+      type: String,
+      default: "请输入参数"
     }
   },
-  data(){
+  data() {
     return {
+      value1: "",
       inputStyle: {
         margin: "0 5px",
         width: "240px"
       }
-    }
+    };
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    aa($event) {
+      this.$emit("input", $event);
+    }
+  }
 };
 </script>
