@@ -3,8 +3,7 @@
     :placeholder="placeholder"
     :style="inputStyle"
     suffix="ios-search"
-    v-model="value1"
-    @input="aa"
+    v-model="value"
   />
 </template>
 
