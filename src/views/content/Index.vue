@@ -9,6 +9,7 @@
         <p class="index-card-title">{{ obj.title }}</p>
         <!--        自定义筛选组件-->
         <select-component
+          :obj="obj"
           class="index-card-select"
           v-if="obj.select"
         ></select-component>
@@ -30,19 +31,20 @@
           slot-scope="{ row, index }"
           slot="action"
         >
-          <Button size="small" @click="obj.detailRow(index)">查看</Button>
-          <Button size="small" @click="obj.editRow(index)">编辑</Button>
-          <Button size="small" @click="obj.deleteRow(index)">删除</Button>
+          <Button size="small" @click="obj.detailRow(row.id)">查看</Button>
+          <Button size="small" @click="obj.editRow(row.id)">编辑</Button>
+          <Button size="small" @click="obj.deleteRow(row.id)">删除</Button>
         </Row>
       </Table>
       <div v-else>没数据</div>
 
       <!--    分页-->
       <Page
+        v-show="obj.totalSize > obj.pageSize"
         prev-text="上一页"
         next-text="下一页"
         size="small"
-        :total="100"
+        :total="obj.totalSize"
         show-sizere
         @on-change="obj.pageChange.call(obj, $event)"
       ></Page>
@@ -79,7 +81,7 @@ export default {
     Vue.component("head-component", obj.head);
     obj.$router = this.$router; // 方便路由跳转
     this.obj = obj;
-    // obj.getList(); // 获取当前列表数据
+    obj.getList(); // 获取当前列表数据
     console.log("当前页面对象", obj);
   },
   mounted() {},

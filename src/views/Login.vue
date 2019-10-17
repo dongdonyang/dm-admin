@@ -75,8 +75,8 @@ export default {
           // 数据加密
           let f = {
             account: Base64.encodeURI(this.form.account),
-            password: md5(this.form.password + this.form.account),
-            isWeb: 1
+            password: md5(this.form.password),
+            loginType: 1 //1-manage 2-mkt
           };
           axios.post(this.$API.LOGIN, f).then(res => {
             if (res.success) {

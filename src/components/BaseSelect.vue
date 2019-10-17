@@ -3,8 +3,11 @@
     :placeholder="this.placeholder"
     :style="selectStyle"
     v-model="this.value"
+    @on-change="change"
   >
-    <Option v-for="(item, index) in list" :key="index">{{ item }}}</Option>
+    <Option v-for="(item, index) in list" :key="index" :value="item.value">{{
+      item.label
+    }}</Option>
   </Select>
 </template>
 
@@ -24,6 +27,12 @@ export default {
       type: "",
       required: true
     },
+    list: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
     placeholder: {
       type: String
     }
@@ -33,12 +42,15 @@ export default {
       selectStyle: {
         margin: "0 5px",
         width: "130px"
-      },
-      list: []
+      }
     };
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    change($event) {
+      this.$emit("change", $event);
+    }
+  }
 };
 </script>

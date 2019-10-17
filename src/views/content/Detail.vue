@@ -9,8 +9,8 @@
     <div class="detail-card">
       <h1>厂商详情</h1>
 
-      <Form>
-        <form-item label="名称：">浸泡</form-item>
+      <Form :label-width="100">
+        <form-item v-for="(item, index) in formList" :key="index" :label="`${item.label}：`">{{form[item.value]}}</form-item>
       </Form>
     </div>
   </div>
@@ -21,12 +21,23 @@
  * 作者：杨东
  * 时间：2019/9/25/11:15
  */
+import detailObj from "./detail"
+let obj = Object;
 export default {
   name: "Detail",
   data() {
-    return {};
+    return {
+      form: {},
+      formList: []
+    };
   },
-  created() {},
+  created() {
+    obj = new detailObj(this.$route.query.path);
+    console.log("详情对象", obj);
+    obj.getInfo.call(this, this.$route.query.id);
+    this.from = obj.form;
+    this.formList = obj.formList;
+  },
   mounted() {},
   methods: {}
 };

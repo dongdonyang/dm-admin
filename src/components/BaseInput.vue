@@ -3,7 +3,8 @@
     :placeholder="placeholder"
     :style="inputStyle"
     suffix="ios-search"
-    v-model="value"
+    v-model="inputValue"
+    @on-change="change"
   />
 </template>
 
@@ -31,7 +32,7 @@ export default {
   },
   data() {
     return {
-      value1: "",
+      inputValue: "",
       inputStyle: {
         margin: "0 5px",
         width: "240px"
@@ -41,8 +42,9 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    aa($event) {
-      this.$emit("input", $event);
+    change($event) {
+      this.$emit("input", $event.data);
+      this.$emit("change", $event.data);
     }
   }
 };

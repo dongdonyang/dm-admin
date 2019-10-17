@@ -139,6 +139,7 @@ export default [
         component: resolve =>
           require.ensure(
             [],
+            // () => resolve(require("../views/lowerView/buildings/AddBuilding")),
             () => resolve(require("../views/content/Edit.vue")),
             "home"
           )
@@ -316,7 +317,101 @@ export default [
       title: "分类管理",
       roles: []
     },
-    component: Main
+    component: Main,
+    children: [
+      {
+        path: "gridModel",
+        name: "gridModel",
+        meta: {
+          title: "软装模型分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      },
+      {
+        path: "component",
+        name: "component",
+        meta: {
+          title: "部件分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      },
+      {
+        path: "model",
+        name: "model",
+        meta: {
+          title: "硬装模型分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      },
+      {
+        path: "color",
+        name: "color",
+        meta: {
+          title: "颜色分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      },
+      {
+        path: "graph",
+        name: "graph",
+        meta: {
+          title: "纹理分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      },
+      {
+        path: "material",
+        name: "material",
+        meta: {
+          title: "材质分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      },
+      {
+        path: "goods",
+        name: "goods",
+        meta: {
+          title: "商品分类管理"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/Classify.vue")),
+                "home"
+            )
+      }
+    ]
+
   },
   //  运营面板
   {

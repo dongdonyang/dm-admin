@@ -4,7 +4,21 @@
 export default {
   //todo 通信数据
   state: {
-    menuState: false // 菜单栏状态
+    menuState: false, // 菜单栏状态
+    apartmentType: [
+      {
+        value: "1",
+        label: "精装房"
+      },
+      {
+        value: "2",
+        label: "毛坯房"
+      },
+      {
+        value: "3",
+        label: "旧改房"
+      }
+    ] // 楼盘类型
   },
 
   //todo 通信方法
