@@ -5,6 +5,7 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 module.exports = {
+  assetsDir: "static",
   chainWebpack: config => {
     //  todo 设置路径别名
     config.resolve.alias.set("views", resolve("src/views"));
