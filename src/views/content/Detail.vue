@@ -7,10 +7,19 @@
 
     <!--    content-->
     <div class="detail-card">
-      <h1>厂商详情</h1>
+      <h1>{{ obj.title || "详情" }}</h1>
 
       <Form :label-width="100">
-        <form-item v-for="(item, index) in formList" :key="index" :label="`${item.label}：`">{{form[item.value]}}</form-item>
+        <form-item
+          v-for="(item, index) in formList"
+          :key="index"
+          :label="`${item.label}：`"
+        >
+          <div v-if="!item.html">{{ form[item.value] }}</div>
+
+          <!--          自定义展示-->
+          <div v-else v-html="item.html(form)"></div>
+        </form-item>
       </Form>
     </div>
   </div>
@@ -21,13 +30,14 @@
  * 作者：杨东
  * 时间：2019/9/25/11:15
  */
-import detailObj from "./detail"
+import detailObj from "./detail";
 let obj = Object;
 export default {
   name: "Detail",
   data() {
     return {
       form: {},
+      obj: {},
       formList: []
     };
   },
@@ -36,6 +46,7 @@ export default {
     console.log("详情对象", obj);
     obj.getInfo.call(this, this.$route.query.id);
     this.from = obj.form;
+    this.obj = obj;
     this.formList = obj.formList;
   },
   mounted() {},
@@ -62,8 +73,8 @@ export default {
     background-color: #fff;
     border-radius: 6px;
     padding: 30px;
-  /*  title*/
-    &>h1{
+    /*  title*/
+    & > h1 {
       height: 50px;
       font-size: 20px;
       line-height: 20px;

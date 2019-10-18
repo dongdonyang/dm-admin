@@ -3,6 +3,7 @@
  * */
 // import _axios from "../../http/http.js";
 import API from "../../http/api";
+import {Message} from "iview"
 
 export default class Content {
   tableData = Array;
@@ -79,6 +80,7 @@ export default class Content {
       removeBuildingId: id
     }).then(res => {
       if(res.success){
+        Message.success("删除成功");
         this.getList();
       }
     })

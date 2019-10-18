@@ -16,6 +16,9 @@ Vue.config.productionTip = false;
 let token = sessionStorage.getItem("token");
 if(token){
   store.commit("setToken", token);
+} else {
+  // 取消登录
+  // sessionStorage.setItem("token", "132");
 }
 
 new Vue({

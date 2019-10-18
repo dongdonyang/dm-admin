@@ -9,6 +9,7 @@ export default {
   BUILDING_DETAIL: "manage/building/detail", // 查询楼盘detail
   BUILDING_DELETE: "manage/building/delete", // 查询楼盘delete
   BUILDING_ADD: "manage/building/add", // 查询楼盘add
+  BUILDING_EDIT: "manage/building/edit", // 查询楼盘edit
 
 //  todo 获取省市区
   GET_PROVINCE: "catalog/location/all_province", // 获取省

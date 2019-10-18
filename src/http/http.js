@@ -24,7 +24,7 @@ const _axios = axios.create();
 // http request 拦截器
 _axios.interceptors.request.use(
   config => {
-    if (config.method === "post") {
+    if (config.method === "post" && config.url !== "upload") {
       config.data.token = store.state.user.token || null; // 给每次请求设置token
       config.data = qs.stringify(config.data); // 跨域设置
 

@@ -6,9 +6,9 @@ export default {
     let that = this;
     return {
       template: `<div>
-<base-select placeholder="楼盘类型" :list="typeList" v-model="currentObj.searchInfo.btype"></base-select>
-<base-select placeholder="选择省份" v-model="currentObj.searchInfo.province"></base-select>
-<base-select placeholder="选择城市" v-model="currentObj.searchInfo.city"></base-select>
+<base-select placeholder="楼盘类型" :list="typeList" @change="change" v-model="currentObj.searchInfo.btype"></base-select>
+<!--<base-select placeholder="选择省份" v-model="currentObj.searchInfo.province"></base-select>-->
+<!--<base-select placeholder="选择城市" v-model="currentObj.searchInfo.city"></base-select>-->
 <base-input placeholder="楼盘名称或关键字" @change="change" v-model="currentObj.searchInfo.name"></base-input>
 </div>`,
       props: {
@@ -72,12 +72,21 @@ export default {
     },
     {
       title: "楼盘类型",
-      key: "btype"
+      key: "btype",
+      render: (h, params) => {
+        return h(
+          "span",
+          {
+            "1": "精装房",
+            "2": "毛坯房",
+            "3": "旧改房"
+          }[params.row.btype]
+        );
+      }
     },
     {
       title: "户型数量",
-      key: "houseNum",
-      sortable: true
+      key: "houseNum"
     },
     {
       title: "省份",
@@ -105,9 +114,10 @@ export default {
 // todo 验证规则表放在哪里？不可能每个配置单独写一份规则表。单独写一份规则表js，然后在edit.vue中引入。这边配置相应的配置规则名和参数就ok
 export const addConfig = {
   //
-  title: "新增楼盘",
-  addURL: "",
-  editURL: "",
+  addTitle: "新增楼盘",
+  editTitle: "编辑楼盘",
+  addURL: "BUILDING_ADD",
+  editURL: "BUILDING_EDIT",
   // labelWidth: 120,
   form: {}, // 可以提供默认值
   formList: [
@@ -143,21 +153,28 @@ export const addConfig = {
       label: "地区",
       value: "province",
       component: "BaseCity",
-      attrs: {
-        placeholder: "请选择地区",
-        list: store.state.app.apartmentType
+      get attrs() {
+        return {
+          province: addConfig.form.province,
+          form: addConfig.form
+        };
       },
-      get myComponent(){
+      change: function(value) {
+        this.form.province = value.province;
+        this.form.city = value.city;
+      },
+      get myComponent() {
         return {
           template: `<a>a</a>`
-        }
+        };
       }
     },
     {
       label: "楼盘位置",
       value: "location",
       component: "Input",
-      attrs: {
+
+      at1trs: {
         placeholder: "请输入楼盘具体位置信息"
       }
     },
@@ -176,6 +193,9 @@ export const addConfig = {
       attrs: {
         placeholder: "请选择开盘时间",
         format: "yyyy-MM-dd"
+      },
+      change: function(value) {
+        this.form.startDate = value;
       }
     },
     {
@@ -192,13 +212,23 @@ export const addConfig = {
     {
       label: "上传图片",
       value: "previewPic",
-      component: "BaseUpload"
+      component: "BaseUpload",
+      change: function(value) {
+        this.form.previewPic = value[0];
+      }
     }
-  ]
+  ],
+  // 编辑查询后
+  editInfo: function() {
+    this.form.startDate = this.form.createTime;
+    this.form.btype = String(this.form.btype);
+    addConfig.form = this.form; // 动态改变子组件的参数
+  }
 };
 
-//配置详情页面
+// todo 配置详情页面
 export const detailConfig = {
+  title: "楼盘详情",
   form: {
     city: "2"
   },
@@ -234,7 +264,10 @@ export const detailConfig = {
     },
     {
       label: "上传图片",
-      value: "previewPic"
+      value: "previewPic",
+      html: function(form) {
+        return `<img alt="22" />`;
+      }
     }
   ]
 };

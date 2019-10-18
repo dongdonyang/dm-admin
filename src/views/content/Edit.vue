@@ -7,7 +7,7 @@
 
     <!--    content-->
     <div class="edit-card">
-      <h1>{{ obj.title || "未定义" }}</h1>
+      <h1>{{ id? obj.editTitle: obj.title }}</h1>
       <div>
         <Form class="edit-card-form" :label-width="obj.labelWidth || 100">
           <form-item
@@ -23,6 +23,8 @@
               :is="item.component"
               v-bind="item.attrs"
               v-model="obj.form[item.value]"
+              @change="item.change && item.change.call(obj,$event)"
+              @on-change="item.change && item.change.call(obj,$event)"
             ></component>
 
             <!--            自定义组件-->
@@ -31,7 +33,8 @@
 
           <!--          操作-->
           <form-item>
-            <Button type="primary" @click="submit">提交</Button>
+            <Button v-if="!id" type="primary" @click="obj.submit.call(obj)">提交</Button>
+            <Button v-else type="primary" @click="obj.edit.call(obj)">更新</Button>
             <Button @click="$router.back()">取消</Button>
           </form-item>
         </Form>
@@ -51,6 +54,7 @@ export default {
   name: "Edit",
   data() {
     return {
+      id: "",
       obj: {},
       form: {},
       arr: []
@@ -62,11 +66,10 @@ export default {
   // todo 下下策，把所有组件全局注册好，然后使用compont is属性
   //  还是建议把基础组件写在components中吧，写成js文件有点难受
   created() {
-    let id = this.$route.query.id;
-
-    obj = new editObj(this.$route.query.path);
-    if(id){
-      obj.getInfo(id);
+    this.id = this.$route.query.id;
+    obj = new editObj(this.$route.query.path, this.$router);
+    if(this.id){
+      obj.getInfo(this.id);
     }
     console.log("新增、编辑对象", obj);
     this.obj = obj;
@@ -81,21 +84,8 @@ export default {
     this.arr = null;
   },
   methods: {
-    submit() {
-      obj.form.city = "北京";
-      obj.form.province = "北京";
-      obj.form.startDate = "2019-2-2";
-      obj.form.previewPic = "www.asasd";
-      axios
-        .post(this.$API.BUILDING_ADD, {
-          buildingInfo: JSON.stringify(obj.form)
-        })
-        .then(res => {
-          if (res.success) {
-            debugger;
-          }
-        });
-      console.log(obj.form);
+    change(value){
+
     }
   }
 };
