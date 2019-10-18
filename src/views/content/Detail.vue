@@ -15,10 +15,10 @@
           :key="index"
           :label="`${item.label}：`"
         >
-          <div v-if="!item.html">{{ form[item.value] }}</div>
+          <div v-if="!item.render">{{ form[item.value] }}</div>
 
           <!--          自定义展示-->
-          <div v-else v-html="item.html(form)"></div>
+          <Render v-else :render="item.render" :item="form"></Render>
         </form-item>
       </Form>
     </div>
@@ -31,9 +31,13 @@
  * 时间：2019/9/25/11:15
  */
 import detailObj from "./detail";
+import Render from "./render"; // 异步组件
 let obj = Object;
 export default {
   name: "Detail",
+  components: {
+    Render
+  },
   data() {
     return {
       form: {},
@@ -43,11 +47,11 @@ export default {
   },
   created() {
     obj = new detailObj(this.$route.query.path);
-    console.log("详情对象", obj);
-    obj.getInfo.call(this, this.$route.query.id);
+    obj.getInfo.call(this, obj, this.$route.query.id);
     this.from = obj.form;
     this.obj = obj;
     this.formList = obj.formList;
+    console.log("详情对象", obj);
   },
   mounted() {},
   methods: {}

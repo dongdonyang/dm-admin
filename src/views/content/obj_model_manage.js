@@ -1,5 +1,5 @@
 //模型管理
-export default {
+export const LIST_CONFIG = {
   title: "模型管理",
   tableColumn: [
     {

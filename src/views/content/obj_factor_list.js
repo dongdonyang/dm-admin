@@ -1,5 +1,5 @@
 // 厂商管理，增删改查，权限控制，列表字段，筛选字段条件，样式，还是单独做成组件
-export default {
+export const LIST_CONFIG =  {
   title: "厂商管理",
   addURl: "1",
   deleteUrl: "",

@@ -53,5 +53,5 @@ export default class edit {
 }
 function init(that, path) {
   let config = require(`./obj_${path}`); // 取值
-  Object.assign(that, config.addConfig); // 合并
+  Object.assign(that, config.ADD_CONFIG); // 合并
 }

@@ -1,5 +1,5 @@
 // 户型管理
-export default {
+export const LIST_CONFIG= {
   title: "户型管理",
   tableColumn: [
     {

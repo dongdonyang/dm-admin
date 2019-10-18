@@ -5,6 +5,11 @@ export default {
   //todo 通信数据
   state: {
     menuState: false, // 菜单栏状态
+    getApartmentType: {
+      "1": "精装房",
+      "2": "毛坯房",
+      "3": "旧改房"
+    },
     apartmentType: [
       {
         value: "1",

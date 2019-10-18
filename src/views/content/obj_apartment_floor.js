@@ -1,7 +1,9 @@
 // 户型资源-楼盘管理-配置list页面
-import rules from "../../libs/asyncRules";
+import rules from "../../libs/asyncRules"; // 表单验证表
 import store from "../../store";
-export default {
+
+// todo list配置
+export const LIST_CONFIG = {
   get select() {
     let that = this;
     return {
@@ -74,14 +76,7 @@ export default {
       title: "楼盘类型",
       key: "btype",
       render: (h, params) => {
-        return h(
-          "span",
-          {
-            "1": "精装房",
-            "2": "毛坯房",
-            "3": "旧改房"
-          }[params.row.btype]
-        );
+        return h("span", store.state.app.getApartmentType[params.row.btype]);
       }
     },
     {
@@ -111,8 +106,9 @@ export default {
 };
 
 // 配置新增页面?抛出一个class如何？新增页面之间是否存在相同属性？抛出对象还是class？
-// todo 验证规则表放在哪里？不可能每个配置单独写一份规则表。单独写一份规则表js，然后在edit.vue中引入。这边配置相应的配置规则名和参数就ok
-export const addConfig = {
+// 验证规则表放在哪里？不可能每个配置单独写一份规则表。单独写一份规则表js，然后在edit.vue中引入。这边配置相应的配置规则名和参数就ok
+// todo add、edit配置
+export const ADD_CONFIG = {
   //
   addTitle: "新增楼盘",
   editTitle: "编辑楼盘",
@@ -155,8 +151,8 @@ export const addConfig = {
       component: "BaseCity",
       get attrs() {
         return {
-          province: addConfig.form.province,
-          form: addConfig.form
+          province: ADD_CONFIG.form.province,
+          form: ADD_CONFIG.form
         };
       },
       change: function(value) {
@@ -222,29 +218,34 @@ export const addConfig = {
   editInfo: function() {
     this.form.startDate = this.form.createTime;
     this.form.btype = String(this.form.btype);
-    addConfig.form = this.form; // 动态改变子组件的参数
+    ADD_CONFIG.form = this.form; // 动态改变子组件的参数
   }
 };
 
-// todo 配置详情页面
-export const detailConfig = {
+// todo detail 配置
+export const DETAIL_CONFIG = {
+  searchURL: "BUILDING_DETAIL",
+  searchKey: "buildingId",
   title: "楼盘详情",
-  form: {
-    city: "2"
-  },
+  form: {},
   formList: [
     {
       label: "楼盘名称",
       value: "name"
-      //  自定义展示配置
     },
     {
       label: "楼盘类型",
-      value: "btype"
+      value: "btype",
+      render: (h, row) => {
+        return h("div", store.state.app.getApartmentType[row.btype]);
+      }
     },
     {
       label: "地区",
-      value: "province"
+      value: "province",
+      render: (h, item) => {
+        return h("div", `${item.province}-${item.city}`);
+      }
     },
     {
       label: "楼盘位置",
@@ -265,8 +266,14 @@ export const detailConfig = {
     {
       label: "上传图片",
       value: "previewPic",
-      html: function(form) {
-        return `<img alt="22" />`;
+      render: (h, row) => {
+        return h("img", {
+          attrs: {
+            alt: "",
+            height: 100, // todo 这种方式不会转成rem，可以给class名称来处理
+            src: row.previewPic
+          }
+        });
       }
     }
   ]

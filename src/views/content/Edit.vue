@@ -7,7 +7,7 @@
 
     <!--    content-->
     <div class="edit-card">
-      <h1>{{ id? obj.editTitle: obj.title }}</h1>
+      <h1>{{ id ? obj.editTitle : obj.title }}</h1>
       <div>
         <Form class="edit-card-form" :label-width="obj.labelWidth || 100">
           <form-item
@@ -23,8 +23,8 @@
               :is="item.component"
               v-bind="item.attrs"
               v-model="obj.form[item.value]"
-              @change="item.change && item.change.call(obj,$event)"
-              @on-change="item.change && item.change.call(obj,$event)"
+              @change="item.change && item.change.call(obj, $event)"
+              @on-change="item.change && item.change.call(obj, $event)"
             ></component>
 
             <!--            自定义组件-->
@@ -33,8 +33,12 @@
 
           <!--          操作-->
           <form-item>
-            <Button v-if="!id" type="primary" @click="obj.submit.call(obj)">提交</Button>
-            <Button v-else type="primary" @click="obj.edit.call(obj)">更新</Button>
+            <Button v-if="!id" type="primary" @click="obj.submit.call(obj)"
+              >提交</Button
+            >
+            <Button v-else type="primary" @click="obj.edit.call(obj)"
+              >更新</Button
+            >
             <Button @click="$router.back()">取消</Button>
           </form-item>
         </Form>
@@ -68,7 +72,7 @@ export default {
   created() {
     this.id = this.$route.query.id;
     obj = new editObj(this.$route.query.path, this.$router);
-    if(this.id){
+    if (this.id) {
       obj.getInfo(this.id);
     }
     console.log("新增、编辑对象", obj);
@@ -77,17 +81,13 @@ export default {
     this.form = obj.from;
   },
   mounted() {},
-  destroyed(){
-    obj = null;
+  destroyed() {
+    console.log("销毁后");
     this.obj = null;
     this.form = null;
     this.arr = null;
   },
-  methods: {
-    change(value){
-
-    }
-  }
+  methods: {}
 };
 </script>
 

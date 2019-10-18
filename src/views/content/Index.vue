@@ -1,6 +1,7 @@
 <template>
   <div class="index">
     <!--    todo 因组件注册有缓存，故使用v-if-->
+    <!--    可以使用异步组件来渲染render-->
     <head-component class="index-header" v-if="obj.head"></head-component>
 
     <div class="index-card">
@@ -28,7 +29,7 @@
         <Row
           type="flex"
           justify="space-between"
-          slot-scope="{ row, index }"
+          slot-scope="{ row }"
           slot="action"
         >
           <Button size="small" @click="obj.detailRow(row.id)">查看</Button>

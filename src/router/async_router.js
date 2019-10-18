@@ -323,7 +323,7 @@ export default [
         path: "gridModel",
         name: "gridModel",
         meta: {
-          title: "软装模型分类管理"
+          title: "成品分类管理"
         },
         component: resolve =>
             require.ensure(
@@ -336,25 +336,25 @@ export default [
         path: "component",
         name: "component",
         meta: {
-          title: "部件分类管理"
+          title: "软装饰品分类管理"
         },
         component: resolve =>
             require.ensure(
                 [],
-                () => resolve(require("views/Classify.vue")),
+                () => resolve(require("views/gridModel.vue")),
                 "home"
             )
       },
       {
-        path: "model",
-        name: "model",
+        path: "model1",
+        name: "model1",
         meta: {
-          title: "硬装模型分类管理"
+          title: "板式家具分类管理"
         },
         component: resolve =>
             require.ensure(
                 [],
-                () => resolve(require("views/Classify.vue")),
+                () => resolve(require("views/model.vue")),
                 "home"
             )
       },
@@ -367,7 +367,7 @@ export default [
         component: resolve =>
             require.ensure(
                 [],
-                () => resolve(require("views/Classify.vue")),
+                () => resolve(require("views/color.vue")),
                 "home"
             )
       },
@@ -380,36 +380,36 @@ export default [
         component: resolve =>
             require.ensure(
                 [],
-                () => resolve(require("views/Classify.vue")),
+                () => resolve(require("views/graph.vue")),
                 "home"
             )
       },
       {
-        path: "material",
-        name: "material",
+        path: "material1",
+        name: "material1",
         meta: {
           title: "材质分类管理"
         },
         component: resolve =>
             require.ensure(
                 [],
-                () => resolve(require("views/Classify.vue")),
+                () => resolve(require("views/material.vue")),
                 "home"
             )
       },
-      {
-        path: "goods",
-        name: "goods",
-        meta: {
-          title: "商品分类管理"
-        },
-        component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/Classify.vue")),
-                "home"
-            )
-      }
+      // {
+      //   path: "goods",
+      //   name: "goods",
+      //   meta: {
+      //     title: "商品分类管理"
+      //   },
+      //   component: resolve =>
+      //       require.ensure(
+      //           [],
+      //           () => resolve(require("views/goods.vue")),
+      //           "home"
+      //       )
+      // }
     ]
 
   },

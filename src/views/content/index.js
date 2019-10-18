@@ -3,7 +3,7 @@
  * */
 // import _axios from "../../http/http.js";
 import API from "../../http/api";
-import {Message} from "iview"
+import { Message } from "iview";
 
 export default class Content {
   tableData = Array;
@@ -31,7 +31,7 @@ export default class Content {
     this.path = path;
     try {
       let config = require(`./obj_${path}`); // 取值
-      Object.assign(this, config.default); // 合并
+      Object.assign(this, config.LIST_CONFIG); // 合并
     } catch (e) {
       alert("未找到当前页面配置文件", e);
     }
@@ -76,14 +76,16 @@ export default class Content {
 
   //  删除当前列
   deleteRow(id) {
-    axios.post(API.BUILDING_DELETE,{
-      removeBuildingId: id
-    }).then(res => {
-      if(res.success){
-        Message.success("删除成功");
-        this.getList();
-      }
-    })
+    axios
+      .post(API.BUILDING_DELETE, {
+        removeBuildingId: id
+      })
+      .then(res => {
+        if (res.success) {
+          Message.success("删除成功");
+          this.getList();
+        }
+      });
   }
 
   // 编辑当前行
