@@ -14,7 +14,7 @@ let errQueue = 0; // 定义错误队列
 
 // axios 配置
 axios.defaults.timeout = 50000; // 请求超时时间
-axios.defaults.baseURL = process.env.BASE_URL || "http://192.168.50.138:8621"; // 请求的地址
+axios.defaults.baseURL = process.env.BASE_URL || "http://192.168.50.11:8621/"; // 请求的地址
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
 
@@ -27,15 +27,6 @@ _axios.interceptors.request.use(
     if (config.method === "post" && config.url !== "upload") {
       config.data.token = store.state.user.token || null; // 给每次请求设置token
       config.data = qs.stringify(config.data); // 跨域设置
-
-      // if (
-      //   config.headers["Content-Type"] &&
-      //   config.headers["Content-Type"] === "multipart/form-data"
-      // ) {
-      //   // aixos上传文件到七牛
-      // } else {
-      //   config.data = qs.stringify(config.data);
-      // }
     }
     return config;
   },
@@ -73,7 +64,7 @@ _axios.interceptors.response.use(
         });
       } else {
         // 如果请求不成功，则做对应的处理
-        Message.error(res.data.msg);
+        // Message.error(res.data.msg);
         return res;
       }
     } else {

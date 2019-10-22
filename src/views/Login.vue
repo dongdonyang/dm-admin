@@ -25,6 +25,7 @@
             <!--            密码-->
             <FormItem prop="password">
               <Input
+                type="password"
                 v-model="form.password"
                 prefix="ios-contact"
                 placeholder="请输入密码"

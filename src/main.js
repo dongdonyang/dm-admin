@@ -14,7 +14,7 @@ Vue.config.productionTip = false;
 
 // 拉去用户信息，防止刷新页面丢失，然后存在store中
 let token = sessionStorage.getItem("token");
-if(token){
+if (token) {
   store.commit("setToken", token);
 } else {
   // 取消登录

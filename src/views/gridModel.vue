@@ -242,7 +242,7 @@ export default {
             data: delData
           }).then(res => {
             console.log(res);
-            if (res.code === 1001) {
+            if (res.data.code === 1001) {
               this.$Message.success(res.msg);
               // const parentKey = root.find(el => el === node).parent;
               // const parent = root.find(el => el.nodeKey === parentKey).node;

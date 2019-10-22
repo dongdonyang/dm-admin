@@ -7,7 +7,7 @@
 
     <!--    content-->
     <div class="edit-card">
-      <h1>{{ id ? obj.editTitle : obj.title }}</h1>
+      <h1>{{ id ? obj.editTitle : obj.addTitle }}</h1>
       <div>
         <Form class="edit-card-form" :label-width="obj.labelWidth || 100">
           <form-item
@@ -39,7 +39,7 @@
             <Button v-else type="primary" @click="obj.edit.call(obj)"
               >更新</Button
             >
-            <Button @click="$router.back()">取消</Button>
+            <Button type="text" @click="$router.back()">取消</Button>
           </form-item>
         </Form>
       </div>
@@ -75,14 +75,15 @@ export default {
     if (this.id) {
       obj.getInfo(this.id);
     }
-    console.log("新增、编辑对象", obj);
     this.obj = obj;
     this.arr = obj.formList;
     this.form = obj.from;
+    console.log("新增、编辑对象", this.form);
   },
   mounted() {},
   destroyed() {
-    console.log("销毁后");
+    obj.form = {};
+    obj.reForm();
     this.obj = null;
     this.form = null;
     this.arr = null;
@@ -116,7 +117,13 @@ export default {
     &-form {
       .ivu-form-item {
         margin-bottom: 20px;
-        width: 50%;
+        width: 440px;
+      }
+      /*操作*/
+      &>:last-child{
+        button{
+          margin-right: 20px;
+        }
       }
       /*选择框、时间样式*/
       .ivu-select,

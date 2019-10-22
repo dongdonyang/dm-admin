@@ -1,10 +1,26 @@
 // 厂商管理，增删改查，权限控制，列表字段，筛选字段条件，样式，还是单独做成组件
-export const LIST_CONFIG =  {
+
+// todo list配置
+export const LIST_CONFIG = {
+  // 筛选条件
+  get select() {
+    let that = this;
+    return {
+      template: `<div>
+<!--<base-select></base-select>-->
+<!--<base-select></base-select>-->
+<!--<Input />-->
+</div>`
+    };
+  },
   title: "厂商管理",
-  addURl: "1",
-  deleteUrl: "",
-  editUrl: "",
-  searchUrl: "",
+  listURL: "VENDOR_LIST",
+  listKey: "vendor_list",
+  detailKey: "id",
+  addRoute: "factorEdit",
+  detailRoute: "factorDetail",
+  deleteURL: "VENDOR_DELETE",
+  deleteKey: "vendorId",
   tableColumn: [
     {
       title: "名称",
@@ -12,37 +28,134 @@ export const LIST_CONFIG =  {
     },
     {
       title: "厂商管理员",
-      key: "age"
+      key: "vendorManager"
     },
     {
       title: "所在城市",
-      key: "address"
+      key: "address",
+      render: (h, params) => {
+        return h("div", (params.row.city && params.row.city.name) || "");
+      }
     },
     {
       title: "商品数",
-      key: ""
+      key: "goodsCount"
     },
     {
       title: "使用户型数",
-      key: ""
+      key: "houseCount"
     },
     {
       title: "发布方案数",
-      key: ""
+      key: "releasedPlanCount"
     },
     {
       title: "合作类型",
-      key: ""
+      key: "type"
     },
     {
       title: "创建时间",
-      key: ""
+      key: "createTimeFormat"
     },
     {
       title: "操作",
       slot: "action",
       width: "160",
       align: "center"
+    }
+  ]
+};
+
+// todo add、edit配置
+export const ADD_CONFIG = {
+  addTitle: "新增厂商",
+  editTitle: "编辑厂商",
+  addURL: "VENDOR_ADD",
+  addKey: "vendorInfo",
+  editURL: "VENDOR_EDIT",
+  detailURL: "VENDOR_DETAIL",
+  detailKey: "vendorId",
+  editKey: "vendorInfo",
+  hasBeforeSubmit: true,
+  beforeSubmit: function() {
+    this.form.cityCode = this.form.cityCoded;
+  },
+  form: {},
+  formList: [
+    {
+      label: "名称",
+      value: "name",
+      component: "Input",
+      attrs: {
+        placeholder: "请输入厂商名称"
+      }
+    },
+    {
+      label: "所在城市",
+      value: "cityCode",
+      component: "BaseCity",
+      get attrs() {
+        return {
+          form: ADD_CONFIG.form,
+          formKey: "code"
+        };
+      }
+    },
+    {
+      label: "合作类型",
+      value: "type",
+      component: "BaseSelect",
+      attrs: {
+        placeholder: "请选择合作类型",
+        list: [
+          {
+            value: "金牌",
+            label: "金牌"
+          },
+          {
+            value: "银牌",
+            label: "银牌"
+          },
+          {
+            value: "铜牌",
+            label: "铜牌"
+          }
+        ]
+      }
+    }
+  ],
+  // 清除缓存
+  reForm() {
+    ADD_CONFIG.form = {};
+  },
+  // 查询详情后
+  editInfo: function() {
+    this.form = this.form.vendor;
+    ADD_CONFIG.form = this.form; // 动态改变子组件的参数
+  }
+};
+
+// todo detail配置
+export const DETAIL_CONFIG = {
+  searchURL: "VENDOR_DETAIL",
+  searchKey: "vendorId",
+  listKey: "vendor",
+  title: "厂商详情",
+  form: {},
+  formList: [
+    {
+      label: "名称",
+      value: "name"
+    },
+    {
+      label: "所在城市",
+      render: (h, item) => {
+        return h("div", item.city && item.city.name);
+      }
+    },
+    {
+      label: "合作类型",
+      value: "type"
     }
   ]
 };

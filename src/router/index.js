@@ -9,7 +9,7 @@ import asyncRouter from "./async_router";
 Vue.use(VueRouter);
 
 const RouterConfig = {
-  mode: "history",
+  mode: "hash",
   routes: [...baseRouter, ...asyncRouter]
 };
 

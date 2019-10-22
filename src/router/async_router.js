@@ -62,7 +62,21 @@ export default [
         component: resolve =>
           require.ensure(
             [],
-            () => resolve(require("views/content/Index.vue")),
+            () => resolve(require("views/content/Edit.vue")),
+            "home"
+          )
+      },
+      {
+        path: "factorDetail",
+        name: "factorDetail",
+        meta: {
+          hideInMenu: true,
+          title: "详情"
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
             "home"
           )
       }
@@ -149,11 +163,11 @@ export default [
         path: "lookFloor",
         name: "lookFloor",
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("../views/content/Detail.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("../views/content/Detail.vue")),
+            "home"
+          )
       },
       {
         path: "manage",
@@ -167,6 +181,28 @@ export default [
             () => resolve(require("views/content/Index.vue")),
             "home"
           )
+      },
+      //  户型管理-新增
+      {
+        path: "apartmentManageAdd",
+        name: "apartmentManageAdd",
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/content/Edit.vue")),
+                "home"
+            )
+      },
+      //  户型管理-查看
+      {
+        path: "apartmentManageDetail",
+        name: "apartmentManageDetail",
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/content/Detail.vue")),
+                "home"
+            )
       }
     ]
   },
@@ -230,6 +266,34 @@ export default [
             () => resolve(require("views/content/Index.vue")),
             "home"
           )
+      },
+      {
+        path: "modelManageDetail",
+        name: "modelManageDetail",
+        meta: {
+          title: "模型管理modelManageDetail",
+          hideInMenu: true
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
+            "home"
+          )
+      },
+      {
+        path: "modelManageAdd",
+        name: "modelManageAdd",
+        meta: {
+          title: "模型管理modelManageAdd",
+          hideInMenu: true
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Edit.vue")),
+            "home"
+          )
       }
     ]
   },
@@ -253,6 +317,34 @@ export default [
           require.ensure(
             [],
             () => resolve(require("views/content/Index.vue")),
+            "home"
+          )
+      },
+      {
+        path: "manageDetail",
+        name: "manageDetail",
+        meta: {
+          title: "材质管理manageDetail",
+          hideInMenu: true
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
+            "home"
+          )
+      },
+      {
+        path: "manageAdd",
+        name: "manageAdd",
+        meta: {
+          title: "材质管理manageAdd",
+          hideInMenu: true
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Edit.vue")),
             "home"
           )
       }
@@ -326,11 +418,11 @@ export default [
           title: "成品分类管理"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/Classify.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/Classify.vue")),
+            "home"
+          )
       },
       {
         path: "component",
@@ -339,11 +431,11 @@ export default [
           title: "软装饰品分类管理"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/gridModel.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/gridModel.vue")),
+            "home"
+          )
       },
       {
         path: "model1",
@@ -352,11 +444,7 @@ export default [
           title: "板式家具分类管理"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/model.vue")),
-                "home"
-            )
+          require.ensure([], () => resolve(require("views/model.vue")), "home")
       },
       {
         path: "color",
@@ -365,11 +453,7 @@ export default [
           title: "颜色分类管理"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/color.vue")),
-                "home"
-            )
+          require.ensure([], () => resolve(require("views/color.vue")), "home")
       },
       {
         path: "graph",
@@ -378,11 +462,7 @@ export default [
           title: "纹理分类管理"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/graph.vue")),
-                "home"
-            )
+          require.ensure([], () => resolve(require("views/graph.vue")), "home")
       },
       {
         path: "material1",
@@ -391,12 +471,12 @@ export default [
           title: "材质分类管理"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/material.vue")),
-                "home"
-            )
-      },
+          require.ensure(
+            [],
+            () => resolve(require("views/material.vue")),
+            "home"
+          )
+      }
       // {
       //   path: "goods",
       //   name: "goods",
@@ -411,7 +491,6 @@ export default [
       //       )
       // }
     ]
-
   },
   //  运营面板
   {

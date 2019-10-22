@@ -2,16 +2,48 @@ export default {
   /**
    * @fileoverview 整个系统的后台API接口，通过vue.installed引入
    * */
+
+  // todo 登录模块
   LOGIN: "/user/login", // 登录接口
 
+//  todo 厂商管理
+  VENDOR_ADD: "manage/vendor/add", // 厂商add
+  VENDOR_DELETE: "manage/vendor/delete", // 厂商delete
+  VENDOR_DETAIL: "manage/vendor/detail", // 厂商detail
+  VENDOR_EDIT: "manage/vendor/edit", // 厂商edit
+  VENDOR_LIST: "manage/vendor/list", // 厂商list
+
 //  todo 楼盘管理接口
-  BUILDING_SEARCH: "manage/building/search", // 查询楼盘list
-  BUILDING_DETAIL: "manage/building/detail", // 查询楼盘detail
-  BUILDING_DELETE: "manage/building/delete", // 查询楼盘delete
-  BUILDING_ADD: "manage/building/add", // 查询楼盘add
-  BUILDING_EDIT: "manage/building/edit", // 查询楼盘edit
+  BUILDING_SEARCH: "manage/building/search", // 楼盘list
+  BUILDING_DETAIL: "manage/building/detail", // 楼盘detail
+  BUILDING_DELETE: "manage/building/delete", // 楼盘delete
+  BUILDING_ADD: "manage/building/add", // 楼盘add
+  BUILDING_EDIT: "manage/building/edit", // 楼盘edit
+
+//  todo 户型管理
+  HOUSE_SEARCH: "manage/house/search", // 户型list
+  HOUSE_DETAIL: "manage/house/detail", // 户型detail
+  HOUSE_DELETE: "manage/house/delete", // 户型delete
+  HOUSE_ADD: "manage/house/add", // 户型add
+  HOUSE_EDIT: "manage/house/edit", // 户型edit
+  HOUSE_DISTRICT: "manage/house/district", // 根据city查询所有的楼盘
+
+  //  todo 模型管理
+  MODEL_SEARCH: "manage/model/list", // 模型list
+  MODEL_DETAIL: "manage/model/detail", // 模型detail
+  MODEL_DELETE: "manage/model/delete", // 模型delete
+  MODEL_ADD: "manage/model/add", // 模型add
+  MODEL_EDIT: "manage/model/edit", // 模型edit
+
+  //  todo 材质管理
+  MATERIAL_SEARCH: "manage/material/list", // 材质list
+  MATERIAL_DETAIL: "manage/material/detail", // 材质detail
+  MATERIAL_DELETE: "manage/material/delete", // 材质delete
+  MATERIAL_ADD: "manage/material/add", // 材质add
+  MATERIAL_EDIT: "manage/material/edit", // 材质edit
 
 //  todo 获取省市区
   GET_PROVINCE: "catalog/location/all_province", // 获取省
-  GET_CITY: "catalog/location/all_city" // 获取市
+  GET_CITY: "catalog/location/all_city", // 获取市
+  GET_ALL_CITY: "manage/house/allCity" // 获取所有城市
 };

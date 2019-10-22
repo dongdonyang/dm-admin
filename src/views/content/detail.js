@@ -8,8 +8,7 @@ export default class detail {
     value[obj.searchKey] = id;
     axios.post(API[obj.searchURL], value).then(res => {
       if (res.success) {
-        this.form = res.data;
-        console.log(this);
+        this.form = obj.listKey ? res.data[obj.listKey] : res.data;
       }
     });
   }

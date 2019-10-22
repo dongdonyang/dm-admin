@@ -16,7 +16,7 @@ export default class Content {
     this.currentPage = 1;
     this.pageSize = 10;
     this.totalSize = 0;
-    this.tableData = [];
+    this.tableData = [{}];
     this.path = "";
     this.init(currentRouter);
   }
@@ -40,6 +40,7 @@ export default class Content {
   // todo 下列方法都可以在各自的对象中复写
   // 获取table列表
   getList() {
+    if (!this.listURL) return;
     let value = {
       pageNum: this.currentPage,
       pageSize: this.pageSize
@@ -48,7 +49,7 @@ export default class Content {
     axios.post(API[this.listURL], value).then(res => {
       if (res.success) {
         this.totalSize = res.data.count;
-        this.tableData = res.data.buildings;
+        this.tableData = res.data[this.listKey];
       }
     });
   }
@@ -64,28 +65,26 @@ export default class Content {
   }
 
   // 查看详情
-  detailRow(id) {
+  detailRow(row) {
     this.$router.push({
       name: this.detailRoute,
       query: {
         path: this.path,
-        id: id
+        id: row[this.detailKey]
       }
     });
   }
 
   //  删除当前列
   deleteRow(id) {
-    axios
-      .post(API.BUILDING_DELETE, {
-        removeBuildingId: id
-      })
-      .then(res => {
-        if (res.success) {
-          Message.success("删除成功");
-          this.getList();
-        }
-      });
+    let value = {};
+    value[this.deleteKey] = id;
+    axios.post(API[this.deleteURL], value).then(res => {
+      if (res.success) {
+        Message.success("删除成功");
+        this.getList();
+      }
+    });
   }
 
   // 编辑当前行

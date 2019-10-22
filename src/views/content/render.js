@@ -7,7 +7,7 @@ export default {
     item: {}
   },
   render: (h, context) => {
-    console.log(context);
+    console.log("异步组件",context);
     return context.props.render(h, context.props.item);
   }
 };

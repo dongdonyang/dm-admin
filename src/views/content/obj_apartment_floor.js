@@ -1,4 +1,4 @@
-// 户型资源-楼盘管理-配置list页面
+// 楼盘管理-配置list页面
 import rules from "../../libs/asyncRules"; // 表单验证表
 import store from "../../store";
 
@@ -51,10 +51,11 @@ export const LIST_CONFIG = {
   title: "楼盘管理",
   addRoute: "addFloor",
   detailRoute: "lookFloor",
+  listKey: "buildings",
+  detailKey: "id",
   listURL: "BUILDING_SEARCH",
-  deleteURL: "",
-  addURL: "",
-  editURL: "",
+  deleteURL: "BUILDING_DELETE",
+  deleteKey: "removeBuildingId",
   tableColumn: [
     {
       title: "楼盘名称",
@@ -113,7 +114,11 @@ export const ADD_CONFIG = {
   addTitle: "新增楼盘",
   editTitle: "编辑楼盘",
   addURL: "BUILDING_ADD",
+  addKey: "buildingInfo",
   editURL: "BUILDING_EDIT",
+  detailURL: "BUILDING_DETAIL",
+  detailKey: "buildingId",
+  editKey: "newInfo",
   // labelWidth: 120,
   form: {}, // 可以提供默认值
   formList: [
@@ -209,11 +214,21 @@ export const ADD_CONFIG = {
       label: "上传图片",
       value: "previewPic",
       component: "BaseUpload",
+      get attrs() {
+        return {
+          list: [ADD_CONFIG.form.previewPic]
+        }
+      },
       change: function(value) {
         this.form.previewPic = value[0];
       }
     }
   ],
+
+  //form重置
+  reForm: function(){
+    ADD_CONFIG.form = {}; // 动态改变子组件的参数
+  },
   // 编辑查询后
   editInfo: function() {
     this.form.startDate = this.form.createTime;

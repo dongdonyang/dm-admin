@@ -1,17 +1,14 @@
 <template>
   <div class="base-city">
     <!--        省-->
-    <Select v-model="form.province" style="width: 50%" @on-change="getlist2">
+    <Select v-model="form.province" style="width: 48%" @on-change="getlist2">
       <Option v-for="(item, index) in list1" :key="index" :value="item.name">{{
         item.name
       }}</Option>
     </Select>
 
     <!--        city-->
-    <Select
-      v-model="form.city"
-      style="width: 50%"
-    >
+    <Select v-model="form.city" style="width: 48%" @on-change="setCity">
       <Option v-for="(item, index) in list2" :key="index" :value="item.name">{{
         item.name
       }}</Option>
@@ -27,20 +24,15 @@
 export default {
   name: "BaseCity",
   props: {
-    province: "",
     form: {}
   },
   data() {
     return {
-      value: {},
-      model1: "",
-      model2: "",
       list1: [],
       list2: []
     };
   },
   created() {
-    console.log("city", this.form);
     this.getlist1();
   },
   mounted() {},
@@ -49,6 +41,9 @@ export default {
       axios.post(this.$API.GET_PROVINCE, {}).then(res => {
         if (res.success) {
           this.list1 = res.data.province_list;
+          // this.form.province = this.list1[0].name;
+          // this.form.provinceCode = this.list1[0].code;
+          // this.getlist2(this.form.province);
         }
       });
     },
@@ -56,6 +51,7 @@ export default {
       let id = this.list1.find(res => {
         return res.name === value;
       });
+      this.form.provinceCode = id.code;
       axios
         .post(this.$API.GET_CITY, {
           provinceCode: id.code
@@ -63,8 +59,16 @@ export default {
         .then(res => {
           if (res.success) {
             this.list2 = res.data.city_list;
+            this.form.city = this.list2[0].name;
+            this.form.cityCoded = this.list2[0].code;
           }
         });
+    },
+    setCity(value) {
+      let id = this.list2.find(res => {
+        return res.name === value;
+      });
+      this.form.cityCoded = id.code;
     }
   }
 };

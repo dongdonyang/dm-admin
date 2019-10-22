@@ -32,9 +32,9 @@
           slot-scope="{ row }"
           slot="action"
         >
-          <Button size="small" @click="obj.detailRow(row.id)">查看</Button>
+          <Button size="small" @click="obj.detailRow(row)">查看</Button>
           <Button size="small" @click="obj.editRow(row.id)">编辑</Button>
-          <Button size="small" @click="obj.deleteRow(row.id)">删除</Button>
+          <Button size="small" @click="deleteRow(row)">删除</Button>
         </Row>
       </Table>
       <div v-else>没数据</div>
@@ -91,7 +91,17 @@ export default {
     this.obj = null;
     obj = null;
   },
-  methods: {}
+  methods: {
+    deleteRow(row){
+      this.$Modal.confirm({
+        title: '确认？',
+        content: '<p>一旦删除，无法撤销，确定删除么</p>',
+        onOk: () => {
+          obj.deleteRow(row.id)
+        }
+      });
+    }
+  }
 };
 </script>
 
