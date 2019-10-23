@@ -14,7 +14,7 @@ let errQueue = 0; // 定义错误队列
 
 // axios 配置
 axios.defaults.timeout = 50000; // 请求超时时间
-axios.defaults.baseURL = process.env.BASE_URL1 || "http://192.168.50.11:8621/"; // 请求的地址
+axios.defaults.baseURL = process.env.BASE_URL || "http://192.168.50.11:8621/"; // 请求的地址
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
 
