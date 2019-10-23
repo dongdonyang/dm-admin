@@ -1,34 +1,13 @@
 // 表单的验证规则
-import _axios from "../http/http";
 
+// todo 事先定义好验证规则，然后接收相应的type来判断，比如，整数，小数，字数限制，邮箱，电话等验证类型
 const rules = {
-  myinput: {
-    require: true,
-    message: "qweqwe"
+  // 必填字段
+  fieldFill: function(msg = "该项为必填信息", type = "") {
+    return {
+      required: true,
+      message: msg
+    };
   }
-  // get myinput() {
-  //   return {
-  //     required: true,
-  //     message: "233"
-  //   };
-  // }
 };
 export default rules;
-
-// 注册插件
-// Plugin.install = function(Vue) {
-//   Vue.rules = rules;
-//   window.rules = rules;
-//   Object.defineProperties(Vue.prototype, {
-//     rules: {
-//       get() {
-//         return rules;
-//       }
-//     },
-//     $rules: {
-//       get() {
-//         return rules;
-//       }
-//     }
-//   });
-// };

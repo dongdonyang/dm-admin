@@ -27,6 +27,7 @@ export default {
   HOUSE_ADD: "manage/house/add", // 户型add
   HOUSE_EDIT: "manage/house/edit", // 户型edit
   HOUSE_DISTRICT: "manage/house/district", // 根据city查询所有的楼盘
+  HOUSE_HOUSE: "manage/house/house", // 根据楼盘id查询所有的户型
 
   //  todo 模型管理
   MODEL_SEARCH: "manage/model/list", // 模型list

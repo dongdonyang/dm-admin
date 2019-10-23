@@ -9,11 +9,12 @@
     <div class="edit-card">
       <h1>{{ id ? obj.editTitle : obj.addTitle }}</h1>
       <div>
-        <Form class="edit-card-form" :label-width="obj.labelWidth || 100">
+        <Form ref="form" :model="obj.form" class="edit-card-form" :label-width="obj.labelWidth || 90">
           <form-item
             v-for="(item, index) in arr"
             :key="index"
             :label="`${item.label}：`"
+            :prop="item.value"
             :rules="item.rule"
           >
             <!--              得留一个自定义组件的地方、有自定义组件就渲染自定义组件-->
@@ -33,7 +34,7 @@
 
           <!--          操作-->
           <form-item>
-            <Button v-if="!id" type="primary" @click="obj.submit.call(obj)"
+            <Button v-if="!id" type="primary" @click="submit"
               >提交</Button
             >
             <Button v-else type="primary" @click="obj.edit.call(obj)"
@@ -88,7 +89,15 @@ export default {
     this.form = null;
     this.arr = null;
   },
-  methods: {}
+  methods: {
+    submit(){
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          obj.submit.call(obj)
+        }
+      })
+    }
+  }
 };
 </script>
 

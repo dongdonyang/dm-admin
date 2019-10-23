@@ -41,9 +41,7 @@ export default {
       axios.post(this.$API.GET_PROVINCE, {}).then(res => {
         if (res.success) {
           this.list1 = res.data.province_list;
-          // this.form.province = this.list1[0].name;
-          // this.form.provinceCode = this.list1[0].code;
-          // this.getlist2(this.form.province);
+          this.form.id && this.getlist2(this.form.province)
         }
       });
     },
@@ -59,8 +57,10 @@ export default {
         .then(res => {
           if (res.success) {
             this.list2 = res.data.city_list;
-            this.form.city = this.list2[0].name;
-            this.form.cityCoded = this.list2[0].code;
+            if(!this.form.id){
+              this.form.city = this.list2[0].name;
+              this.form.cityCoded = this.list2[0].code;
+            }
           }
         });
     },

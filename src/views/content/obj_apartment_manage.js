@@ -1,6 +1,7 @@
 // 户型管理
 import rules from "../../libs/asyncRules";
 import store from "../../store";
+import API from "../../http/api";
 
 // todo list配置
 export const LIST_CONFIG = {
@@ -65,23 +66,35 @@ export const ADD_CONFIG = {
   editURL: "BUILDING_EDIT",
   detailURL: "BUILDING_DETAIL",
   detailKey: "buildingId",
+  buildingList: [],
+  typeList: [],
   form: {}, // 可以提供默认值
-  formList: [
+  get formList() {
+    this.getBuildingList();
+    return this.list;
+  },
+  list: [
     {
       label: "户型名称",
       component: "Input",
       value: "name",
       attrs: {
         placeholder: "请输入户型名称"
-      }
+      },
+      rule: rules.fieldFill("请输入户型名称")
     },
     {
       label: "所在楼盘",
       value: "buildingId",
-      component: "BaseApartment",
-      attrs: {
-        placeholder: "请选择楼盘",
-        list: store.state.app.apartmentType
+      component: "BaseSelect",
+      get attrs() {
+        return {
+          placeholder: "请选择楼盘",
+          list: ADD_CONFIG.buildingList
+        };
+      },
+      change: function(id) {
+        this.getTypeList(id);
       }
     },
     {
@@ -90,7 +103,8 @@ export const ADD_CONFIG = {
       component: "Input",
       attrs: {
         placeholder: "请输入户型面积"
-      }
+      },
+      rule: rules.fieldFill("请输入户型面积")
     },
     {
       label: "类型",
@@ -98,12 +112,16 @@ export const ADD_CONFIG = {
       component: "BaseSelect",
       attrs: {
         placeholder: "请选择户型"
-      }
+      },
+      rule: rules.fieldFill("请选择户型")
     },
     {
       label: "效果图",
       value: "picList",
       component: "BaseUpload",
+      rule: rules.fieldFill("请上传效果图"),
+      change: function (list) {
+      }
     },
     {
       label: "备注",
@@ -112,10 +130,50 @@ export const ADD_CONFIG = {
       attrs: {
         rows: 5,
         type: "textarea",
-        placeholder: "请输入楼盘描述"
-      }
+        placeholder: "请输入户型描述"
+      },
+      rule: rules.fieldFill("请输入户型备注")
     }
   ],
+  reForm: function() {
+    ADD_CONFIG.form = {};
+  },
+  //查询所有楼盘
+  getBuildingList: function() {
+    let value = {
+      value: JSON.stringify({
+        btype: 0
+      }),
+      pageSize: 999999,
+      pageNum: 1
+    };
+    axios.post(API.BUILDING_SEARCH, value).then(res => {
+      if (res.success) {
+        res.data.buildings.forEach(item => {
+          ADD_CONFIG.buildingList.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+      }
+    });
+  },
+  // 查询类型列表
+  getTypeList(id) {
+    let value = {
+      buildingId: id
+    };
+    axios.post(API.HOUSE_HOUSE, value).then(res => {
+      if (res.success) {
+        res.data.buildings.forEach(item => {
+          ADD_CONFIG.typeList.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+      }
+    });
+  },
   // 编辑查询后
   editInfo: function() {
     this.form.startDate = this.form.createTime;
@@ -128,15 +186,15 @@ export const ADD_CONFIG = {
 export const DETAIL_CONFIG = {
   searchURL: "BUILDING_DETAIL",
   searchKey: "buildingId",
-  title: "楼盘详情",
+  title: "户型详情",
   form: {},
   formList: [
     {
-      label: "楼盘名称",
+      label: "户型名称",
       value: "name"
     },
     {
-      label: "楼盘类型",
+      label: "户型类型",
       value: "btype",
       render: (h, row) => {
         return h("div", store.state.app.getApartmentType[row.btype]);
@@ -150,7 +208,7 @@ export const DETAIL_CONFIG = {
       }
     },
     {
-      label: "楼盘位置",
+      label: "户型位置",
       value: "location"
     },
     {
@@ -162,7 +220,7 @@ export const DETAIL_CONFIG = {
       value: "createTime"
     },
     {
-      label: "楼盘描述",
+      label: "户型描述",
       value: "description"
     },
     {

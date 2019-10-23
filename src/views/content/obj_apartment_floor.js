@@ -119,7 +119,6 @@ export const ADD_CONFIG = {
   detailURL: "BUILDING_DETAIL",
   detailKey: "buildingId",
   editKey: "newInfo",
-  // labelWidth: 120,
   form: {}, // 可以提供默认值
   formList: [
     {
@@ -129,17 +128,7 @@ export const ADD_CONFIG = {
       attrs: {
         placeholder: "请输入楼盘名称"
       },
-      rule: rules.myinput,
-      class: "",
-      //  组件的配置参数、配置验证规则
-      icon: "",
-      //  是否有自定义组件、局部注册的问题
-      myComponent: "",
-      get myCom() {
-        return {
-          template: `<a>自定义子组件</a>`
-        };
-      }
+      rule: rules.fieldFill("请填写楼盘名称"),
     },
     {
       label: "楼盘类型",
@@ -148,7 +137,8 @@ export const ADD_CONFIG = {
       attrs: {
         placeholder: "请选择楼盘类型",
         list: store.state.app.apartmentType
-      }
+      },
+      rule: rules.fieldFill("请选择楼盘类型"),
     },
     {
       label: "地区",
@@ -164,20 +154,16 @@ export const ADD_CONFIG = {
         this.form.province = value.province;
         this.form.city = value.city;
       },
-      get myComponent() {
-        return {
-          template: `<a>a</a>`
-        };
-      }
+      rule: rules.fieldFill("请选择地区"),
     },
     {
       label: "楼盘位置",
       value: "location",
       component: "Input",
-
-      at1trs: {
+      attrs: {
         placeholder: "请输入楼盘具体位置信息"
-      }
+      },
+      rule: rules.fieldFill("请输入楼盘具体位置信息"),
     },
     {
       label: "开发商",
@@ -185,7 +171,8 @@ export const ADD_CONFIG = {
       component: "Input",
       attrs: {
         placeholder: "请输入开发商名称"
-      }
+      },
+      rule: rules.fieldFill("请输入开发商名称"),
     },
     {
       label: "开盘时间",
@@ -197,7 +184,8 @@ export const ADD_CONFIG = {
       },
       change: function(value) {
         this.form.startDate = value;
-      }
+      },
+      rule: rules.fieldFill("请选择开盘时间"),
     },
     {
       label: "楼盘描述",
@@ -208,7 +196,8 @@ export const ADD_CONFIG = {
         rows: 5,
         type: "textarea",
         placeholder: "请输入楼盘描述"
-      }
+      },
+      rule: rules.fieldFill("请输入楼盘描述"),
     },
     {
       label: "上传图片",
@@ -221,7 +210,8 @@ export const ADD_CONFIG = {
       },
       change: function(value) {
         this.form.previewPic = value[0];
-      }
+      },
+      rule: rules.fieldFill("请上传一张图片"),
     }
   ],
 

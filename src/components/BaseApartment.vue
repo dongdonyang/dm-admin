@@ -1,5 +1,7 @@
 <template>
-  <div>所在楼盘</div>
+  <div>
+    所在楼盘
+  </div>
 </template>
 
 <script>
@@ -10,11 +12,28 @@
 export default {
   name: "BaseApartment",
   data() {
-    return {};
+    return {
+      list: []
+    };
   },
-  created() {},
+  created() {
+    this.getProvince();
+  },
   mounted() {},
-  methods: {}
+  methods: {
+    //  todo 获取省
+    getProvince() {
+      axios.post(this.$API.GET_PROVINCE, {}).then(res => {
+        if (res.success) {
+          this.list = res.data.province_list
+        }
+      });
+    },
+    //  todo 获取市
+    getCity() {},
+    //  todo 获取楼盘
+    getApart() {}
+  }
 };
 </script>
 
