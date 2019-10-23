@@ -1,16 +1,19 @@
 // 材质管理
 import store from "../../store";
 import rules from "../../libs/asyncRules";
+import API from "../../http/api";
 
 export const LIST_CONFIG = {
   title: "材质管理",
   listURL: "MATERIAL_SEARCH",
   searchKey: "searchInfo",
-    detailKey: "sn",
+  detailKey: "sn",
   searchInfo: {},
   listKey: "material_list",
   addRoute: "manageAdd",
   detailRoute: "manageDetail",
+  deleteURL: "MATERIAL_DELETE",
+  deleteKey: "sn",
   tableColumn: [
     {
       title: "SN编码",
@@ -55,14 +58,22 @@ export const ADD_CONFIG = {
   //
   addTitle: "新增材质",
   editTitle: "编辑材质",
-  addURL: "BUILDING_ADD",
-  addKey: "buildingInfo",
-  editURL: "BUILDING_EDIT",
-  detailURL: "BUILDING_DETAIL",
+  addURL: "MATERIAL_ADD",
+  addKey: "materialInfo",
+  editURL: "MATERIAL_EDIT",
+  detailURL: "MATERIAL_DETAIL",
   detailKey: "buildingId",
-  // labelWidth: 120,
+  colorList: [],
+  veinList: [],
+  materList: [],
   form: {}, // 可以提供默认值
-  formList: [
+  get formList() {
+    this.getColor();
+    this.getVein();
+    this.getMater();
+    return this.list;
+  },
+  list: [
     {
       label: "材质名称",
       component: "Input",
@@ -70,38 +81,54 @@ export const ADD_CONFIG = {
       attrs: {
         placeholder: "请输入材质名称"
       },
-      rule: rules.myinput
+      rule: rules.fieldFill("请输入材质名称")
     },
     {
       label: "色调",
       value: "colorCode",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择色调"
-      }
+      get attrs() {
+        return {
+          list: ADD_CONFIG.colorList,
+          placeholder: "请选择色调"
+        };
+      },
+      rule: rules.fieldFill("请选择色调")
     },
     {
       label: "纹理",
       value: "graphCode",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择纹理",
-      }
+      get attrs() {
+        return {
+          list: ADD_CONFIG.veinList,
+          placeholder: "请选择纹理"
+        }
+      },
+      rule: rules.fieldFill("请选择纹理")
     },
     {
       label: "材质类别",
       value: "catalogCode",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择材质类别"
-      }
+      get attrs() {
+        return {
+          list: ADD_CONFIG.materList,
+          placeholder: "请选择材质类别"
+        }
+      },
+      rule: rules.fieldFill("请选择材质类别")
     },
     {
       label: "材质文件",
       value: "pakFile",
-      component: "Input",
+      component: "BaseFiles",
       attrs: {
         placeholder: "请选择材质文件"
+      },
+      // rule: rules.fieldFill("请选择材质类别"),
+      change: function (val) {
+        this.form.pakFile = val
       }
     },
     {
@@ -112,17 +139,74 @@ export const ADD_CONFIG = {
         rows: 5,
         type: "textarea",
         placeholder: "请输入备注信息"
-      }
+      },
+      rule: rules.fieldFill("请输入备注信息")
     },
     {
       label: "预览图",
       value: "previewFile",
       component: "BaseUpload",
+      rule: rules.fieldFill("请上传图片"),
       change: function(value) {
-        this.form.previewPic = value[0];
-      }
+        this.form.previewFile = value[0];
+      },
     }
   ],
+  // 获取色调
+  getColor: function() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 6
+      })
+      .then(res => {
+        if (res.success) {
+          res.data.list.forEach(item => {
+            this.colorList.push({
+              label: item.name,
+              value: item.code
+            });
+          });
+        }
+      });
+  },
+  // 获取纹理
+  getVein: function() {
+    axios
+        .post(API.ALL_LEVEL, {
+          classify: 7
+        })
+        .then(res => {
+          if (res.success) {
+            res.data.list.forEach(item => {
+              this.veinList.push({
+                label: item.name,
+                value: item.code
+              });
+            });
+          }
+        });
+  },
+  // 获取材质
+  getMater: function() {
+    axios
+        .post(API.ALL_LEVEL, {
+          classify: 5
+        })
+        .then(res => {
+          if (res.success) {
+            res.data.list.forEach(item => {
+              this.materList.push({
+                label: item.name,
+                value: item.code
+              });
+            });
+          }
+        });
+  },
+  // 清除缓存
+  reForm(){
+    ADD_CONFIG.form = {}
+  },
   // 编辑查询后
   editInfo: function() {
     this.form.startDate = this.form.createTime;
@@ -136,7 +220,7 @@ export const DETAIL_CONFIG = {
   searchURL: "MATERIAL_DETAIL",
   searchKey: "sn",
   searchValue: "sn",
-    listKey: "material",
+  listKey: "material",
   title: "楼盘详情",
   form: {},
   formList: [
@@ -150,7 +234,7 @@ export const DETAIL_CONFIG = {
     },
     {
       label: "色调",
-      value: "colorCode",
+      value: "colorCode"
     },
     {
       label: "纹理",
@@ -171,7 +255,7 @@ export const DETAIL_CONFIG = {
             href: item.pakFile,
             download: "材质文件"
           }
-        })
+        });
       }
     },
     {

@@ -2,7 +2,7 @@
   <Select
     :placeholder="this.placeholder"
     :style="selectStyle"
-    v-model="this.value"
+    v-model="val"
     @on-change="change"
   >
     <Option v-for="(item, index) in list" :key="index" :value="item.value">{{
@@ -37,15 +37,22 @@ export default {
       type: String
     }
   },
+  watch: {
+    value: function (news) {
+      this.val = news
+    }
+  },
   data() {
     return {
+      val: "",
       selectStyle: {
         margin: "0 5px",
         width: "130px"
       }
     };
   },
-  created() {},
+  created() {
+  },
   mounted() {},
   methods: {
     change($event) {

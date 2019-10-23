@@ -46,5 +46,9 @@ export default {
 //  todo 获取省市区
   GET_PROVINCE: "catalog/location/all_province", // 获取省
   GET_CITY: "catalog/location/all_city", // 获取市
-  GET_ALL_CITY: "manage/house/allCity" // 获取所有城市
+  GET_ALL_CITY: "manage/house/allCity", // 获取所有城市
+
+//  todo 获取所有类型、材质、纹理、颜色、风格等
+  ALL_LEVEL: "catalog/classify/all_level" // 获取所有类型
+
 };

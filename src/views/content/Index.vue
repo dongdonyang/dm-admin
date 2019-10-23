@@ -37,7 +37,7 @@
           <Button size="small" @click="deleteRow(row)">删除</Button>
         </Row>
       </Table>
-      <div v-else>没数据</div>
+      <div v-else>暂无数据</div>
 
       <!--    分页-->
       <Page

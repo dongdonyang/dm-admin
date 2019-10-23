@@ -59,16 +59,18 @@ export const LIST_CONFIG = {
 
 // todo add、edit配置
 export const ADD_CONFIG = {
-  //
   addTitle: "新增户型",
   editTitle: "编辑户型",
-  addURL: "BUILDING_ADD",
-  editURL: "BUILDING_EDIT",
+  addURL: "HOUSE_ADD",
+  editURL: "HOUSE_EDIT",
   detailURL: "BUILDING_DETAIL",
   detailKey: "buildingId",
+  addKey: "houseInfo",
   buildingList: [],
   typeList: [],
-  form: {}, // 可以提供默认值
+  form: {
+    type: 1
+  }, // 可以提供默认值
   get formList() {
     this.getBuildingList();
     return this.list;
@@ -93,6 +95,7 @@ export const ADD_CONFIG = {
           list: ADD_CONFIG.buildingList
         };
       },
+      rule: rules.fieldFill("请选择楼盘"),
       change: function(id) {
         this.getTypeList(id);
       }
@@ -113,7 +116,7 @@ export const ADD_CONFIG = {
       attrs: {
         placeholder: "请选择户型"
       },
-      rule: rules.fieldFill("请选择户型")
+      // rule: rules.fieldFill("请选择户型")
     },
     {
       label: "效果图",
@@ -121,6 +124,7 @@ export const ADD_CONFIG = {
       component: "BaseUpload",
       rule: rules.fieldFill("请上传效果图"),
       change: function (list) {
+        this.form.picList = list
       }
     },
     {

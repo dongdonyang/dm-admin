@@ -1,5 +1,8 @@
 // 厂商管理，增删改查，权限控制，列表字段，筛选字段条件，样式，还是单独做成组件
 
+import rules from "../../libs/asyncRules";
+import API from "../../http/api";
+
 // todo list配置
 export const LIST_CONFIG = {
   // 筛选条件
@@ -88,7 +91,8 @@ export const ADD_CONFIG = {
       component: "Input",
       attrs: {
         placeholder: "请输入厂商名称"
-      }
+      },
+      rule: rules.fieldFill("请输入厂商名称")
     },
     {
       label: "所在城市",
@@ -96,8 +100,7 @@ export const ADD_CONFIG = {
       component: "BaseCity",
       get attrs() {
         return {
-          form: ADD_CONFIG.form,
-          formKey: "code"
+          form: ADD_CONFIG.form
         };
       }
     },
@@ -105,6 +108,8 @@ export const ADD_CONFIG = {
       label: "合作类型",
       value: "type",
       component: "BaseSelect",
+
+      rule: rules.fieldFill("请选择合作类型"),
       attrs: {
         placeholder: "请选择合作类型",
         list: [
@@ -131,8 +136,9 @@ export const ADD_CONFIG = {
   // 查询详情后
   editInfo: function() {
     this.form = this.form.vendor;
+    this.form.city = this.form.city.name;
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
-  }
+  },
 };
 
 // todo detail配置
