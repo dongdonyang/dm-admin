@@ -32,9 +32,15 @@
           slot-scope="{ row }"
           slot="action"
         >
-          <Button size="small" @click="obj.detailRow(row)">查看</Button>
-          <Button size="small" @click="obj.editRow(row.id)">编辑</Button>
-          <Button size="small" @click="deleteRow(row)">删除</Button>
+          <Tooltip content="详情" placement="top">
+            <i class="iconfont iconchakan" @click="obj.detailRow(row)"></i>
+          </Tooltip>
+          <Tooltip content="编辑" placement="top">
+            <i class="iconfont iconbianji" @click="obj.editRow(row)"></i>
+          </Tooltip>
+          <Tooltip content="删除" placement="top">
+            <i class="iconfont iconshanchu" @click="deleteRow(row)"></i>
+          </Tooltip>
         </Row>
       </Table>
       <div v-else>暂无数据</div>
@@ -86,18 +92,14 @@ export default {
     console.log("当前页面对象", obj);
   },
   mounted() {},
-  destroyed() {
-    // 销毁对象
-    this.obj = null;
-    obj = null;
-  },
   methods: {
-    deleteRow(row){
+    deleteRow(row) {
       this.$Modal.confirm({
-        title: '确认？',
-        content: '<p>一旦删除，无法撤销，确定删除么</p>',
+        title: "确认？",
+        content: "<p>一旦删除，无法撤销，确定删除么</p>",
         onOk: () => {
-          obj.deleteRow(row.id)
+          // todo 修改
+          obj.deleteRow(row);
         }
       });
     }

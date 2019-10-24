@@ -13,7 +13,9 @@ export const LIST_CONFIG = {
   addRoute: "manageAdd",
   detailRoute: "manageDetail",
   deleteURL: "MATERIAL_DELETE",
+  detailId: "sn",
   deleteKey: "sn",
+  deleteValue: "sn",
   tableColumn: [
     {
       title: "SN编码",
@@ -34,6 +36,7 @@ export const LIST_CONFIG = {
         return h("img", {
           attrs: {
             alt: "图片无法加载",
+            height: 80,
             width: 80, // todo 不会等比缩放
             src: params.row.previewFile
           }
@@ -42,7 +45,8 @@ export const LIST_CONFIG = {
     },
     {
       title: "备注信息",
-      key: "description"
+      key: "description",
+      ellipsis: true
     },
     {
       title: "操作",
@@ -62,7 +66,8 @@ export const ADD_CONFIG = {
   addKey: "materialInfo",
   editURL: "MATERIAL_EDIT",
   detailURL: "MATERIAL_DETAIL",
-  detailKey: "buildingId",
+  detailKey: "sn",
+  editKey: "materialInfo",
   colorList: [],
   veinList: [],
   materList: [],
@@ -123,8 +128,11 @@ export const ADD_CONFIG = {
       label: "材质文件",
       value: "pakFile",
       component: "BaseFiles",
-      attrs: {
-        placeholder: "请选择材质文件"
+      get attrs() {
+        return {
+          placeholder: "请选择材质文件",
+          file: ADD_CONFIG.form.pakFile
+        }
       },
       // rule: rules.fieldFill("请选择材质类别"),
       change: function (val) {
@@ -147,6 +155,11 @@ export const ADD_CONFIG = {
       value: "previewFile",
       component: "BaseUpload",
       rule: rules.fieldFill("请上传图片"),
+      get attrs() {
+        return {
+          list: [ADD_CONFIG.form.previewFile]
+        }
+      },
       change: function(value) {
         this.form.previewFile = value[0];
       },
@@ -160,6 +173,7 @@ export const ADD_CONFIG = {
       })
       .then(res => {
         if (res.success) {
+          this.colorList = [];
           res.data.list.forEach(item => {
             this.colorList.push({
               label: item.name,
@@ -177,6 +191,7 @@ export const ADD_CONFIG = {
         })
         .then(res => {
           if (res.success) {
+            this.veinList = [];
             res.data.list.forEach(item => {
               this.veinList.push({
                 label: item.name,
@@ -194,6 +209,7 @@ export const ADD_CONFIG = {
         })
         .then(res => {
           if (res.success) {
+            this.materList = [];
             res.data.list.forEach(item => {
               this.materList.push({
                 label: item.name,
@@ -209,8 +225,7 @@ export const ADD_CONFIG = {
   },
   // 编辑查询后
   editInfo: function() {
-    this.form.startDate = this.form.createTime;
-    this.form.btype = String(this.form.btype);
+    this.form = this.form.material;
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
   }
 };
@@ -221,7 +236,7 @@ export const DETAIL_CONFIG = {
   searchKey: "sn",
   searchValue: "sn",
   listKey: "material",
-  title: "楼盘详情",
+  title: "材质详情",
   form: {},
   formList: [
     {
@@ -269,6 +284,7 @@ export const DETAIL_CONFIG = {
         return h("img", {
           attrs: {
             alt: "",
+            width:100,
             height: 100, // todo 这种方式不会转成rem，可以给class名称来处理
             src: row.previewFile
           }

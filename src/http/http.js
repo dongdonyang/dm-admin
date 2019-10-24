@@ -14,7 +14,7 @@ let errQueue = 0; // 定义错误队列
 
 // axios 配置
 axios.defaults.timeout = 50000; // 请求超时时间
-axios.defaults.baseURL = process.env.BASE_URL || "http://192.168.50.11:8621/"; // 请求的地址
+axios.defaults.baseURL = process.env.BASE_URL1 || "http://192.168.50.11:8621/"; // 请求的地址
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
 
@@ -43,28 +43,20 @@ _axios.interceptors.response.use(
   res => {
     if (res.data.code) {
       if (res.data.code === 1001) {
-        // 接口返回数据正常
         errQueue = 0;
         res.data.success = true;
         return res.data;
-      } else if (res.data.code === 2003) {
+      } else if (res.data.code === 3003) {
         // 用户需要重新登陆
         errQueue += 1;
-        if (errQueue <= 1) {
-          Message.error("您的账号在别处登录，请重新登录");
-        }
-
-        // 如果需要重新登陆，清除掉role和token
-        window.$cookies.remove("bg_role");
-        window.$cookies.remove("bg_token");
-
-        store.dispatch("setToken", "");
         router.replace({
           path: "/login"
         });
+        if (errQueue <= 1) {
+          Message.error("您的账号在别处登录，请重新登录");
+        }
       } else {
-        // 如果请求不成功，则做对应的处理
-        // Message.error(res.data.msg);
+        Message.error(res.data.msg);
         return res;
       }
     } else {
@@ -78,9 +70,13 @@ _axios.interceptors.response.use(
           Message.error(error.response.request.responseURL + "服务器无响应");
           break;
       }
+    } else {
+      Message.error("服务器无响应");
     }
   }
 );
+
+// 插件注册
 Plugin.install = function(Vue) {
   Vue.axios = _axios;
   window.axios = _axios;

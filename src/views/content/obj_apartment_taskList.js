@@ -1,5 +1,5 @@
 // 户型任务，状态筛选条件加成一个属性来判断
-export const LIST_CONFIG =  {
+export const LIST_CONFIG = {
   //若过于复杂，抽离成单独组件
   // todo 头部组件
   get head() {

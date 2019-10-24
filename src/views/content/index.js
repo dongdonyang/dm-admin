@@ -76,24 +76,25 @@ export default class Content {
   }
 
   //  删除当前列
-  deleteRow(id) {
+  deleteRow(row) {
     let value = {};
-    value[this.deleteKey] = id;
+    value[this.deleteKey] = row[this.deleteValue];
     axios.post(API[this.deleteURL], value).then(res => {
       if (res.success) {
         Message.success("删除成功");
+        this.currentPage = 1;
         this.getList();
       }
     });
   }
 
   // 编辑当前行
-  editRow(id) {
+  editRow(row) {
     this.$router.push({
       name: this.addRoute,
       query: {
         path: this.path,
-        id: id
+        id: row[this.detailId] || row.id
       }
     });
   }

@@ -25,7 +25,7 @@ export default {
     getProvince() {
       axios.post(this.$API.GET_PROVINCE, {}).then(res => {
         if (res.success) {
-          this.list = res.data.province_list
+          this.list = res.data.province_list;
         }
       });
     },

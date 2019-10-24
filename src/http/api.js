@@ -25,7 +25,7 @@ export default {
   HOUSE_DETAIL: "manage/house/detail", // 户型detail
   HOUSE_DELETE: "manage/house/delete", // 户型delete
   HOUSE_ADD: "manage/house/add", // 户型add
-  HOUSE_EDIT: "manage/house/edit", // 户型edit
+  HOUSE_EDIT: "manage/house/update", // 户型edit
   HOUSE_DISTRICT: "manage/house/district", // 根据city查询所有的楼盘
   HOUSE_HOUSE: "manage/house/house", // 根据楼盘id查询所有的户型
 
@@ -49,6 +49,6 @@ export default {
   GET_ALL_CITY: "manage/house/allCity", // 获取所有城市
 
 //  todo 获取所有类型、材质、纹理、颜色、风格等
-  ALL_LEVEL: "catalog/classify/all_level" // 获取所有类型
+  ALL_LEVEL: "catalog/classify/all_level" // 获取所有类型1硬装 2软装成品 3软装饰品 4板式家具 5材质 6颜色 7纹理 8风格
 
 };

@@ -23,10 +23,20 @@
  */
 export default {
   name: "BaseFiles",
+  props: {
+    file: ""
+  },
   data() {
     return {
       value: ""
     };
+  },
+  watch: {
+    file: function(val) {
+      if (val) {
+        this.value = val;
+      }
+    }
   },
   created() {},
   mounted() {},
@@ -36,8 +46,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);

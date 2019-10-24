@@ -24,6 +24,7 @@ export const LIST_CONFIG = {
   detailRoute: "factorDetail",
   deleteURL: "VENDOR_DELETE",
   deleteKey: "vendorId",
+  deleteValue: "id",
   tableColumn: [
     {
       title: "名称",
@@ -63,8 +64,7 @@ export const LIST_CONFIG = {
     {
       title: "操作",
       slot: "action",
-      width: "160",
-      align: "center"
+      className: "base-action"
     }
   ]
 };
@@ -102,7 +102,8 @@ export const ADD_CONFIG = {
         return {
           form: ADD_CONFIG.form
         };
-      }
+      },
+      rule: rules.fieldFill("请选择所在城市")
     },
     {
       label: "合作类型",
@@ -138,7 +139,7 @@ export const ADD_CONFIG = {
     this.form = this.form.vendor;
     this.form.city = this.form.city.name;
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
-  },
+  }
 };
 
 // todo detail配置

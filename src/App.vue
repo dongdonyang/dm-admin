@@ -6,6 +6,7 @@
 
 <style lang="scss">
 @import "style/index";
+@import "views/content/content";
 #app {
   height: 100%;
   width: 100%;

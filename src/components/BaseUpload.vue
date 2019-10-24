@@ -1,14 +1,14 @@
 <template>
   <div class="base-upload">
-<!--    照片-->
+    <!--    照片-->
     <div class="base-upload-pic">
       <div v-for="(item, index) in fileList" :key="index">
         <img width="100" height="100" :src="item" />
-        <Icon @click="fileList.splice(index,1)" type="ios-trash" />
+        <Icon @click="fileList.splice(index, 1)" type="ios-trash" />
       </div>
     </div>
 
-<!--    上传-->
+    <!--    上传-->
     <Upload
       v-show="fileList.length < maxSize"
       :before-upload="action"
@@ -54,8 +54,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);
@@ -73,26 +73,26 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .base-upload{
-    &-pic{
-      &>:first-child{
-        margin: 0 6px;
-        position: relative;
-        display: inline-block;
+.base-upload {
+  &-pic {
+    & > div {
+      margin: 0 6px;
+      position: relative;
+      display: inline-block;
+      i {
+        font-size: 20px;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        color: #fff;
+        display: none;
+      }
+      &:hover {
         i {
-          font-size: 20px;
-          position: absolute;
-          top: 4px;
-          right: 4px;
-          color: #fff;
-          display: none;
-        }
-        &:hover{
-          i{
-            display: block;
-          }
+          display: block;
         }
       }
     }
   }
+}
 </style>

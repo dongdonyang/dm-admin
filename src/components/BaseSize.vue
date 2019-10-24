@@ -32,8 +32,7 @@ export default {
     form: {}
   },
   data() {
-    return {
-    };
+    return {};
   },
   created() {},
   mounted() {},

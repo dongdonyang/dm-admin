@@ -77,6 +77,7 @@ export default {
           let f = {
             account: Base64.encodeURI(this.form.account),
             password: md5(this.form.password),
+            isForce: 1, //0已登录需要询问 1强制踢出已登录
             loginType: 1 //1-manage 2-mkt
           };
           axios.post(this.$API.LOGIN, f).then(res => {

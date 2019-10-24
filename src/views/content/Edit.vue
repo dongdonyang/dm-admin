@@ -9,7 +9,12 @@
     <div class="edit-card">
       <h1>{{ id ? obj.editTitle : obj.addTitle }}</h1>
       <div>
-        <Form ref="form" :model="obj.form" class="edit-card-form" :label-width="obj.labelWidth || 90">
+        <Form
+          ref="form"
+          :model="obj.form"
+          class="edit-card-form"
+          :label-width="obj.labelWidth || 90"
+        >
           <form-item
             v-for="(item, index) in arr"
             :key="index"
@@ -34,9 +39,7 @@
 
           <!--          操作-->
           <form-item>
-            <Button v-if="!id" type="primary" @click="submit"
-              >提交</Button
-            >
+            <Button v-if="!id" type="primary" @click="submit">提交</Button>
             <Button v-else type="primary" @click="obj.edit.call(obj)"
               >更新</Button
             >
@@ -90,12 +93,12 @@ export default {
     this.arr = null;
   },
   methods: {
-    submit(){
-      this.$refs.form.validate((valid) => {
+    submit() {
+      this.$refs.form.validate(valid => {
         if (valid) {
-          obj.submit.call(obj)
+          obj.submit.call(obj);
         }
-      })
+      });
     }
   }
 };
@@ -129,8 +132,8 @@ export default {
         width: 440px;
       }
       /*操作*/
-      &>:last-child{
-        button{
+      & > :last-child {
+        button {
           margin-right: 20px;
         }
       }
