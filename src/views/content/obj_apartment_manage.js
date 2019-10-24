@@ -134,7 +134,7 @@ export const ADD_CONFIG = {
       get attrs() {
         return {
           maxSize: 10,
-          list: ADD_CONFIG.form.pic_list
+          list: ADD_CONFIG.form.picList
         };
       },
       change: function(list) {
@@ -194,7 +194,7 @@ export const ADD_CONFIG = {
   },
   // 编辑查询后
   editInfo: function() {
-    this.form.pic_list = this.form.pic_list
+    this.form.picList = this.form.pic_list
       ? JSON.parse(this.form.pic_list)
       : [];
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
