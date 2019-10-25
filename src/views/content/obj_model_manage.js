@@ -31,7 +31,7 @@ export const LIST_CONFIG = {
     },
     {
       title: "上传人员",
-      key: "available"
+      key: "creatorName"
     },
     {
       title: "创建时间",
