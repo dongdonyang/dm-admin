@@ -42,12 +42,11 @@ export default class edit {
       }
     });
   }
-
-/**
- * @fileOverview todo 更新数据
- * @property {editKey} 更新数据的key
- * @property {editURL} 更新数据的api todo 【***API】
- * */
+  /**
+   * @fileOverview todo 更新数据
+   * @property {editKey} 更新数据的key
+   * @property {editURL} 更新数据的api todo 【***API】
+   * */
   edit() {
     let value = {};
     value[this.editKey] = JSON.stringify(this.form);

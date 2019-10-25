@@ -6,21 +6,22 @@ export default {
   // todo 登录模块
   LOGIN: "/user/login", // 登录接口
 
-//  todo 厂商管理
+  //  todo 厂商管理
   VENDOR_ADD: "manage/vendor/add", // 厂商add
   VENDOR_DELETE: "manage/vendor/delete", // 厂商delete
   VENDOR_DETAIL: "manage/vendor/detail", // 厂商detail
   VENDOR_EDIT: "manage/vendor/edit", // 厂商edit
   VENDOR_LIST: "manage/vendor/list", // 厂商list
 
-//  todo 楼盘管理接口
+  //  todo 楼盘管理接口
   BUILDING_SEARCH: "manage/building/search", // 楼盘list
   BUILDING_DETAIL: "manage/building/detail", // 楼盘detail
   BUILDING_DELETE: "manage/building/delete", // 楼盘delete
   BUILDING_ADD: "manage/building/add", // 楼盘add
   BUILDING_EDIT: "manage/building/edit", // 楼盘edit
+  ALL_BUILDING_IN_CITY: "mkt/building/allBuildingInCity", // 根据城市名查询所有楼盘
 
-//  todo 户型管理
+  //  todo 户型管理
   HOUSE_SEARCH: "manage/house/search", // 户型list
   HOUSE_DETAIL: "manage/house/detail", // 户型detail
   HOUSE_DELETE: "manage/house/delete", // 户型delete
@@ -43,12 +44,11 @@ export default {
   MATERIAL_ADD: "manage/material/add", // 材质add
   MATERIAL_EDIT: "manage/material/edit", // 材质edit
 
-//  todo 获取省市区
+  //  todo 获取省市区
   GET_PROVINCE: "catalog/location/all_province", // 获取省
   GET_CITY: "catalog/location/all_city", // 获取市
   GET_ALL_CITY: "manage/house/allCity", // 获取所有城市
 
-//  todo 获取所有类型、材质、纹理、颜色、风格等
+  //  todo 获取所有类型、材质、纹理、颜色、风格等
   ALL_LEVEL: "catalog/classify/all_level" // 获取所有类型1硬装 2软装成品 3软装饰品 4板式家具 5材质 6颜色 7纹理 8风格
-
 };

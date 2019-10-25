@@ -36,6 +36,7 @@ export default {
   height: 100%;
   display: flex;
   & > div {
+    width: 1580px; // todo 并不想写这个属性、权宜之计
     flex: 2 0 auto;
     display: flex;
     flex-direction: column;

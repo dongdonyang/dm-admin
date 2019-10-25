@@ -50,8 +50,8 @@ export const LIST_CONFIG = {
     },
     {
       title: "操作",
-      width: "160",
       slot: "action",
+      width: 160,
       align: "center"
     }
   ]
@@ -108,7 +108,7 @@ export const ADD_CONFIG = {
         return {
           list: ADD_CONFIG.veinList,
           placeholder: "请选择纹理"
-        }
+        };
       },
       rule: rules.fieldFill("请选择纹理")
     },
@@ -120,7 +120,7 @@ export const ADD_CONFIG = {
         return {
           list: ADD_CONFIG.materList,
           placeholder: "请选择材质类别"
-        }
+        };
       },
       rule: rules.fieldFill("请选择材质类别")
     },
@@ -132,11 +132,11 @@ export const ADD_CONFIG = {
         return {
           placeholder: "请选择材质文件",
           file: ADD_CONFIG.form.pakFile
-        }
+        };
       },
-      // rule: rules.fieldFill("请选择材质类别"),
-      change: function (val) {
-        this.form.pakFile = val
+      rule: rules.fieldFill("请选择材质文件"),
+      change: function(val) {
+        this.form.pakFile = val;
       }
     },
     {
@@ -158,11 +158,11 @@ export const ADD_CONFIG = {
       get attrs() {
         return {
           list: [ADD_CONFIG.form.previewFile]
-        }
+        };
       },
       change: function(value) {
         this.form.previewFile = value[0];
-      },
+      }
     }
   ],
   // 获取色调
@@ -186,42 +186,42 @@ export const ADD_CONFIG = {
   // 获取纹理
   getVein: function() {
     axios
-        .post(API.ALL_LEVEL, {
-          classify: 7
-        })
-        .then(res => {
-          if (res.success) {
-            this.veinList = [];
-            res.data.list.forEach(item => {
-              this.veinList.push({
-                label: item.name,
-                value: item.code
-              });
+      .post(API.ALL_LEVEL, {
+        classify: 7
+      })
+      .then(res => {
+        if (res.success) {
+          this.veinList = [];
+          res.data.list.forEach(item => {
+            this.veinList.push({
+              label: item.name,
+              value: item.code
             });
-          }
-        });
+          });
+        }
+      });
   },
   // 获取材质
   getMater: function() {
     axios
-        .post(API.ALL_LEVEL, {
-          classify: 5
-        })
-        .then(res => {
-          if (res.success) {
-            this.materList = [];
-            res.data.list.forEach(item => {
-              this.materList.push({
-                label: item.name,
-                value: item.code
-              });
+      .post(API.ALL_LEVEL, {
+        classify: 5
+      })
+      .then(res => {
+        if (res.success) {
+          this.materList = [];
+          res.data.list.forEach(item => {
+            this.materList.push({
+              label: item.name,
+              value: item.code
             });
-          }
-        });
+          });
+        }
+      });
   },
   // 清除缓存
-  reForm(){
-    ADD_CONFIG.form = {}
+  reForm() {
+    ADD_CONFIG.form = {};
   },
   // 编辑查询后
   editInfo: function() {
@@ -241,7 +241,7 @@ export const DETAIL_CONFIG = {
   formList: [
     {
       label: "SN编码",
-      value: "name"
+      value: "sn"
     },
     {
       label: "材质名称",
@@ -284,7 +284,7 @@ export const DETAIL_CONFIG = {
         return h("img", {
           attrs: {
             alt: "",
-            width:100,
+            width: 100,
             height: 100, // todo 这种方式不会转成rem，可以给class名称来处理
             src: row.previewFile
           }

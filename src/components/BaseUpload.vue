@@ -4,7 +4,7 @@
     <div class="base-upload-pic">
       <div v-for="(item, index) in fileList" :key="index">
         <img width="100" height="100" :src="item" />
-        <Icon @click="fileList.splice(index, 1)" type="ios-trash" />
+        <Icon @click="deletePic(index)" type="ios-trash" />
       </div>
     </div>
 
@@ -54,8 +54,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);
@@ -67,6 +67,10 @@ export default {
 
       // 取消默认上传
       return false;
+    },
+    deletePic(index){
+      this.fileList.splice(index, 1);
+      this.$emit("change", this.fileList);
     }
   }
 };

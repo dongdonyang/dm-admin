@@ -16,7 +16,7 @@ export default class Content {
     this.currentPage = 1;
     this.pageSize = 10;
     this.totalSize = 0;
-    this.tableData = [{}];
+    this.tableData = [];
     this.path = "";
     this.init(currentRouter);
   }
@@ -39,7 +39,6 @@ export default class Content {
       alert("未找到当前页面配置文件", e);
     }
   }
-
   // todo 下列方法都可以在各自的对象中复写，重新定义同名方法即可覆盖
   // todo 建议优化一下命名规则，方便阅读，统一风格、便于区分
   /**

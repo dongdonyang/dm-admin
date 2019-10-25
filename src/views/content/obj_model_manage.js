@@ -133,8 +133,8 @@ export const ADD_CONFIG = {
         };
       },
       rule: rules.fieldFill("请上传一张图片"),
-      change: function(value) {
-        this.form.previewFile = value[0];
+      change: function(list) {
+        this.form.previewFile = list[0];
       }
     },
     {

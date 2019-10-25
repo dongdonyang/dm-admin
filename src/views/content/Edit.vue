@@ -40,9 +40,7 @@
           <!--          操作-->
           <form-item>
             <Button v-if="!id" type="primary" @click="submit">提交</Button>
-            <Button v-else type="primary" @click="obj.edit.call(obj)"
-              >更新</Button
-            >
+            <Button v-else type="primary" @click="submit">更新</Button>
             <Button type="text" @click="$router.back()">取消</Button>
           </form-item>
         </Form>
@@ -65,6 +63,7 @@ export default {
       id: "",
       obj: {},
       form: {},
+      time: null,
       arr: []
     };
   },
@@ -93,10 +92,18 @@ export default {
     this.arr = null;
   },
   methods: {
+    // todo 采取防抖策略
     submit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          obj.submit.call(obj);
+          if (this.time) clearTimeout(this.time);
+          this.time = setTimeout(() => {
+            if (this.id) {
+              obj.edit.call(obj);
+            } else {
+              obj.submit.call(obj);
+            }
+          }, 1000);
         }
       });
     }

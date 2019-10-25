@@ -46,8 +46,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);
@@ -59,7 +59,14 @@ export default {
 
       // 取消默认上传
       return false;
-    }
+    },
+    handleFormatError (file) {
+      debugger;
+      this.$Notice.warning({
+        title: 'The file format is incorrect',
+        desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+      });
+    },
   }
 };
 </script>

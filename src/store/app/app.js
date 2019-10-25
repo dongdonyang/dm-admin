@@ -5,6 +5,7 @@ export default {
   //todo 通信数据
   state: {
     menuState: false, // 菜单栏状态
+    apartmentSource: ["普通", "app", "卖场上传"],
     getApartmentType: {
       "1": "精装房",
       "2": "毛坯房",

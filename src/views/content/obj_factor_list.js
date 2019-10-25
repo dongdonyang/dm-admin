@@ -102,8 +102,8 @@ export const ADD_CONFIG = {
         return {
           form: ADD_CONFIG.form
         };
-      },
-      rule: rules.fieldFill("请选择所在城市")
+      }
+      // rule: rules.fieldFill("请选择所在城市")
     },
     {
       label: "合作类型",

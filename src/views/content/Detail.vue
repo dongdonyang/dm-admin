@@ -83,7 +83,7 @@ export default {
       font-size: 20px;
       line-height: 20px;
     }
-    &>form{
+    & > form {
       width: 550px;
     }
   }

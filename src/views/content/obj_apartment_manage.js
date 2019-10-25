@@ -5,6 +5,95 @@ import API from "../../http/api";
 
 // todo list配置
 export const LIST_CONFIG = {
+  get select() {
+    return {
+      template: `<div>
+<BaseSelect placeholder="省份" v-model="info.val1" :list="provinceList" @change="getCity"></BaseSelect>
+<BaseSelect placeholder="城市" v-model="info.val2" :list="cityList" @change="getApartment"></BaseSelect>
+<BaseSelect placeholder="楼盘" v-model="info.val3" :list="apartmentList" @change="search"></BaseSelect>
+</div>`,
+      props: {
+        obj: {}
+      },
+      data() {
+        return {
+          info: {},
+          provinceList: [],
+          cityList: [],
+          apartmentList: []
+        };
+      },
+      created() {
+        this.getProvince();
+      },
+      methods: {
+        // 查询
+        search(name) {
+          this.obj.searchInfo.name = name;
+          this.obj.pageNum = 1;
+          this.obj.getList();
+        },
+        // 获取省份
+        getProvince() {
+          axios.post(API.GET_PROVINCE, {}).then(res => {
+            if (res.success) {
+              this.provinceList = [];
+              this.info.val2 = "";
+              this.info.val3 = "";
+              res.data.province_list.forEach(i => {
+                this.provinceList.push({
+                  label: i.name,
+                  value: i.code
+                });
+              });
+            }
+          });
+        },
+        //  获取城市
+        getCity(code) {
+          axios
+            .post(API.GET_CITY, {
+              provinceCode: code
+            })
+            .then(res => {
+              if (res.success) {
+                this.cityList = [];
+                this.info.val3 = "";
+                res.data.city_list.forEach(i => {
+                  this.cityList.push({
+                    label: i.name,
+                    value: i.name
+                  });
+                });
+              }
+            });
+        },
+        //  获取楼盘
+        getApartment(code) {
+          let name = this.cityList.find(i => {
+            return i.value === code;
+          });
+          if (!name) return;
+          axios
+            .post(API.ALL_BUILDING_IN_CITY, {
+              cityName: name.label,
+              groupIndex: 0
+            })
+            .then(res => {
+              if (res.success) {
+                this.apartmentList = [];
+                res.data.building.forEach(i => {
+                  this.apartmentList.push({
+                    label: i.name,
+                    value: i.name
+                  });
+                });
+              }
+            });
+        }
+      }
+    };
+  },
   title: "户型管理",
   searchKey: "value",
   searchInfo: {
@@ -45,11 +134,20 @@ export const LIST_CONFIG = {
     },
     {
       title: "方案数量",
-      key: "comeSource"
+      key: "comeSource",
+      render: h => {
+        return h("div", 0);
+      }
     },
     {
       title: "来源",
-      key: ""
+      key: "comeSource",
+      render: (h, param) => {
+        return h(
+          "div",
+          store.state.app.apartmentSource[param.row.comeSource] || "普通"
+        );
+      }
     },
     {
       title: "创建人",
@@ -75,10 +173,17 @@ export const ADD_CONFIG = {
   detailKey: "houseId",
   addKey: "houseInfo",
   buildingList: [],
-  typeList: [],
-  form: {
-    type: 1
-  }, // 可以提供默认值
+  typeList: [
+    {
+      label: "三室",
+      value: "三室"
+    },
+    {
+      label: "四室",
+      value: "四室"
+    }
+  ],
+  form: {}, // 可以提供默认值
   get formList() {
     this.getBuildingList();
     return this.list;
@@ -105,7 +210,7 @@ export const ADD_CONFIG = {
       },
       rule: rules.fieldFill("请选择楼盘"),
       change: function(id) {
-        this.getTypeList(id);
+        // this.getTypeList(id);
       }
     },
     {
@@ -113,18 +218,22 @@ export const ADD_CONFIG = {
       value: "area",
       component: "Input",
       attrs: {
-        placeholder: "请输入户型面积"
+        placeholder: "请输入户型面积",
+        type: "number"
       },
-      rule: rules.fieldFill("请输入户型面积")
+      rule: rules.fieldFill("请输入户型面积", "integer")
     },
     {
       label: "类型",
       value: "type",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择户型"
-      }
-      // rule: rules.fieldFill("请选择户型")
+      get attrs() {
+        return {
+          list: ADD_CONFIG.typeList,
+          placeholder: "请选择户型"
+        };
+      },
+      rule: rules.fieldFill("请选择户型")
     },
     {
       label: "效果图",
@@ -220,7 +329,7 @@ export const DETAIL_CONFIG = {
       label: "面积",
       value: "area",
       render: (h, item) => {
-        return h("div", `${item.area}㎡`)
+        return h("div", `${item.area}㎡`);
       }
     },
     {
