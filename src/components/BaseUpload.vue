@@ -12,6 +12,9 @@
     <Upload
       v-show="fileList.length < maxSize"
       :before-upload="action"
+      :multiple="multiple"
+      accept=".jpg,.jpeg,.png"
+      :format="['jpg', 'jpeg', 'png']"
       action="https://devup.my-best-home.cn:10443/upload"
     >
       <Button icon="ios-cloud-upload-outline">上传图片</Button>
@@ -31,6 +34,10 @@ export default {
     maxSize: {
       type: Number,
       default: 1
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -50,6 +57,13 @@ export default {
   mounted() {},
   methods: {
     action(event) {
+      let arr = event.name.split(".");
+      let type = arr.slice(-1);
+      let arrs = ["jpg", "jpeg", "png"];
+      if (arrs.indexOf(type[0])) {
+        this.$Message.error("文件格式不正确");
+        return false;
+      }
       let data = new FormData();
       data.append("file", event);
       axios
@@ -68,7 +82,7 @@ export default {
       // 取消默认上传
       return false;
     },
-    deletePic(index){
+    deletePic(index) {
       this.fileList.splice(index, 1);
       this.$emit("change", this.fileList);
     }

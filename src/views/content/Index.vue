@@ -44,7 +44,6 @@
         </Row>
       </Table>
       <div v-else>暂无数据</div>
-
       <!--    分页-->
       <Page
         v-show="obj.totalSize > obj.pageSize"
@@ -75,6 +74,7 @@ export default {
   },
   data() {
     return {
+        pic: require("../../assets/Group.png"),
       obj: Object
     };
   },
@@ -94,9 +94,9 @@ export default {
   mounted() {},
   methods: {
     deleteRow(row) {
-      this.$Modal.confirm({
-        title: "确认？",
-        content: "<p>一旦删除，无法撤销，确定删除么</p>",
+        this.$Modal.confirm({
+        title: "确认删除？",
+        content: "<div class='sure'><div class='sure-img'></div>删除后将无法恢复该数据、确认删除当前数据吗?</div>",
         onOk: () => {
           // todo 修改
           obj.deleteRow(row);
@@ -174,6 +174,53 @@ export default {
     & > :nth-child(3) {
       text-align: center;
       line-height: 28px;
+    }
+  }
+}
+/*  todo 删除确认弹窗*/
+.ivu-modal {
+  top: 380px;
+  .ivu-modal-body {
+    padding: 0;
+    .ivu-modal-confirm {
+      padding: 0;
+    }
+    /*头部*/
+    .ivu-modal-confirm-head {
+      background-color: #0d35f1;
+      padding: 14px 30px;
+      .ivu-modal-confirm-head-title {
+        color: #fff;
+      }
+      .ivu-modal-confirm-head-icon {
+        display: none;
+      }
+    }
+    /*bady*/
+    .ivu-modal-confirm-body {
+      line-height: 60px;
+      font-size: 14px;
+        .sure{
+            display: flex;
+            align-items: center;
+        }
+        .sure-img{
+            margin: 5px;
+            height: 31px;
+            width: 31px;
+            background-image: url("../../assets/Group.png");
+        }
+    }
+    /*  footer*/
+    .ivu-modal-confirm-footer {
+      background:rgba(249,249,249,1);
+      margin-top: 0;
+      line-height: 96px;
+      padding: 0 30px;
+      & > :last-child {
+        background-color: #0d35f1;
+        border-radius: 18px;
+      }
     }
   }
 }

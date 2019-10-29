@@ -30,7 +30,7 @@ export const LIST_CONFIG = {
         // 查询
         search(name) {
           this.obj.searchInfo.name = name;
-          this.obj.pageNum = 1;
+          this.obj.currentPage = 1;
           this.obj.getList();
         },
         // 获取省份
@@ -77,7 +77,10 @@ export const LIST_CONFIG = {
           axios
             .post(API.ALL_BUILDING_IN_CITY, {
               cityName: name.label,
-              groupIndex: 0
+              groupIndex: 0,
+              isPageable: 0,
+              pageSize: 999999,
+              pageNum: 1
             })
             .then(res => {
               if (res.success) {
@@ -243,6 +246,7 @@ export const ADD_CONFIG = {
       get attrs() {
         return {
           maxSize: 10,
+          multiple: true,
           list: ADD_CONFIG.form.picList
         };
       },

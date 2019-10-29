@@ -8,13 +8,25 @@
     <Col :span="3" style="text-align: center;">mm *</Col>
     <Col :span="5">
       <FormItem prop="sizeWidth">
-        <Input v-model="form.sizeWidth" placeholder="宽" />
+        <Input
+          type="number"
+          :min="0"
+          v-model="form.sizeWidth"
+          @on-change="setValue(1)"
+          placeholder="宽"
+        />
       </FormItem>
     </Col>
     <Col :span="3" style="text-align: center;">mm *</Col>
     <Col :span="5">
       <FormItem prop="sizeHeight">
-        <Input v-model="form.sizeHeight" placeholder="高" />
+        <Input
+          type="number"
+          :max="0"
+          v-model="form.sizeHeight"
+          @on-change="setValue(0)"
+          placeholder="高"
+        />
       </FormItem>
     </Col>
     <Col :span="3" style="text-align: center;">mm</Col>
@@ -36,7 +48,22 @@ export default {
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    setValue(val) {
+      let a = null;
+      if (val) {
+        a = Number(this.form.sizeWidth);
+        if(a<0){
+          this.form.sizeWidth=0
+        }
+      } else {
+        a = Number(this.form.sizeHeight);
+        if(a<0){
+          this.form.sizeHeight=0
+        }
+      }
+    }
+  }
 };
 </script>
 

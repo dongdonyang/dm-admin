@@ -37,6 +37,7 @@ export const LIST_CONFIG = {
       },
       methods: {
         change() {
+          this.obj.currentPage = 1;
           this.obj.getList();
         }
       }

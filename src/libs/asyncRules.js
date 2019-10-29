@@ -19,14 +19,14 @@ const rules = {
 
 // 验证规则表
 const validate = {
-  // todo 整数
+  // todo 整数或者两位小数
   integer: (rule, value, callback) => {
     if (value) {
-      let regExp = /^\+?[1-9][0-9]*$/;
+      let regExp = /^(([0-9]+|0)\.([0-9]{1,2})$)|^([0-9]+|0)$/;
       if (regExp.test(value)) {
         callback();
       } else {
-        callback(new Error("请输入正整数"));
+        callback(new Error("请输入最多两位小数的正整数"));
       }
     } else {
       callback(new Error(rule.message));

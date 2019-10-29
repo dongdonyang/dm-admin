@@ -156,6 +156,7 @@ export default {
         return res.name === value;
       });
       this.form.cityCoded = id.code;
+      this.form.cityCode = id.code;
     }
   }
 };

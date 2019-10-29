@@ -42,6 +42,12 @@ export default {
   mounted() {},
   methods: {
     action(event) {
+      let arr = event.name.split(".");
+      let type = arr.slice(-1);
+      if ( type[0] !== "pak") {
+        this.$Message.error("文件格式不正确");
+        return false;
+      }
       let data = new FormData();
       data.append("file", event);
       axios
@@ -59,14 +65,7 @@ export default {
 
       // 取消默认上传
       return false;
-    },
-    handleFormatError (file) {
-      debugger;
-      this.$Notice.warning({
-        title: 'The file format is incorrect',
-        desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-      });
-    },
+    }
   }
 };
 </script>

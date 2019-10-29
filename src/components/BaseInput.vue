@@ -43,8 +43,8 @@ export default {
   mounted() {},
   methods: {
     change($event) {
-      this.$emit("input", $event.data);
-      this.$emit("change", $event.data);
+      this.$emit("input", this.inputValue);
+      this.$emit("change", this.inputValue);
     }
   }
 };

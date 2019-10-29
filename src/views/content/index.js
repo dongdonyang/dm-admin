@@ -21,7 +21,7 @@ export default class Content {
     this.init(currentRouter);
   }
   /**
-   * @fileOverview 查询当前页面的配置对象信息
+   * @fileOverview todo 查询当前页面的配置对象信息
    * @param router 当前页面的路由
    * @property {LIST_CONFIG} 当前页面的配置对象
    * */

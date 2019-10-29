@@ -117,9 +117,23 @@ export default [
         component: resolve =>
           require.ensure(
             [],
-            () => resolve(require("views/content/Index.vue")),
+            () => resolve(require("views/content/Edit.vue")),
             "home"
           )
+      },
+      {
+        path: "factorDetail",
+        name: "factorDetail",
+        meta: {
+          hideInMenu: true,
+          title: "详情"
+        },
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/content/Detail.vue")),
+                "home"
+            )
       }
     ]
   },

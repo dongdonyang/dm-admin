@@ -53,7 +53,7 @@ _axios.interceptors.response.use(
           path: "/login"
         });
         if (errQueue <= 1) {
-          Message.error("您的账号在别处登录，请重新登录");
+          Message.error(res.data.msg);
         }
       } else {
         Message.error(res.data.msg);

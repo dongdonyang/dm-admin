@@ -13,6 +13,13 @@ export default {
   VENDOR_EDIT: "manage/vendor/edit", // 厂商edit
   VENDOR_LIST: "manage/vendor/list", // 厂商list
 
+  //  todo 户型任务
+  HOUSE_TASK_SEARCH: "manage/houseTask/search", // 户型任务list
+  HOUSE_TASK_DETAIL: "manage/houseTask/detail", // 户型任务detail
+  HOUSE_TASK_DELETE: "manage/houseTask/delete", // 户型任务delete
+  HOUSE_TASK_ADD: "manage/houseTask/add", // 户型任务add
+  HOUSE_TASK_EDIT: "manage/houseTask/update", // 户型任务edit
+
   //  todo 楼盘管理接口
   BUILDING_SEARCH: "manage/building/search", // 楼盘list
   BUILDING_DETAIL: "manage/building/detail", // 楼盘detail
@@ -43,6 +50,7 @@ export default {
   MATERIAL_DELETE: "manage/material/delete", // 材质delete
   MATERIAL_ADD: "manage/material/add", // 材质add
   MATERIAL_EDIT: "manage/material/edit", // 材质edit
+  MATERIAL_CLASSIFY: "catalog/classify/materialClassify", // 材质分类0:主分类 1: 次分类
 
   //  todo 获取省市区
   GET_PROVINCE: "catalog/location/all_province", // 获取省

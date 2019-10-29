@@ -61,18 +61,28 @@ export default {
   name: "Login",
   data() {
     return {
+      isClick: false,
       form: {},
       isRemember: false,
       formRules: {}
     };
   },
-  created() {},
+  created() {
+    let that = this;
+    window.onkeydown = function(e) {
+      if (this.isClick) return;
+      if (e.keyCode === 13) {
+        that.login();
+      }
+    };
+  },
   mounted() {},
   methods: {
     //  todo 用户登录
     login() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.isClick = true;
           // 数据加密
           let f = {
             account: Base64.encodeURI(this.form.account),
@@ -82,6 +92,7 @@ export default {
           };
           axios.post(this.$API.LOGIN, f).then(res => {
             if (res.success) {
+              this.isClick = false;
               this.saveUserInfo(res.data);
               this.$router.push({
                 name: "home"
