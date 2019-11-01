@@ -70,8 +70,9 @@ export default {
   created() {
     let that = this;
     window.onkeydown = function(e) {
-      if (this.isClick) return;
+      if (that.isClick) return;
       if (e.keyCode === 13) {
+        that.isClick = true;
         that.login();
       }
     };
@@ -90,16 +91,21 @@ export default {
             isForce: 1, //0已登录需要询问 1强制踢出已登录
             loginType: 1 //1-manage 2-mkt
           };
-          axios.post(this.$API.LOGIN, f).then(res => {
-            if (res.success) {
+          axios
+            .post(this.$API.LOGIN, f)
+            .then(res => {
               this.isClick = false;
-              this.saveUserInfo(res.data);
-              this.$router.push({
-                name: "home"
-              });
-              this.$Message.success(`欢迎登录四维聚象后台管理系统`);
-            }
-          });
+              if (res.success) {
+                this.saveUserInfo(res.data);
+                this.$router.push({
+                  name: "home"
+                });
+                this.$Message.success(`欢迎登录四维聚象后台管理系统`);
+              }
+            })
+            .catch(() => {
+              this.isClick = false;
+            });
         }
       });
     },

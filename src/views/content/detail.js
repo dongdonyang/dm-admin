@@ -6,7 +6,7 @@ export default class detail {
     init(this, path);
   }
   /**
-   * @fileOverview 查询当前页面详情
+   * @fileOverview todo 查询当前页面详情
    * @param obj 当前生成class实例，todo 为啥没用this指向，
    * @param id 查询的值
    * @property {searchKey} 查询key ，todo 编辑也要使用查询，能否优化

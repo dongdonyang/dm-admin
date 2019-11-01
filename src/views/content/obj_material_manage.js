@@ -183,12 +183,15 @@ export const ADD_CONFIG = {
     {
       label: "材质类别",
       value: "catalogCode",
-      component: "BaseSelect",
+      component: "BaseCascader",
       get attrs() {
         return {
-          list: ADD_CONFIG.materList,
+          typeInfo: ADD_CONFIG.form.catoType,
           placeholder: "请选择材质类别"
         };
+      },
+      change: function(val) {
+        this.form.catalogCode = val;
       },
       rule: rules.fieldFill("请选择材质类别")
     },
@@ -294,6 +297,13 @@ export const ADD_CONFIG = {
   // 编辑查询后
   editInfo: function() {
     this.form = this.form.material;
+    let val = this.form.catalogs.find(i => {
+      return i.classify === "5";
+    });
+    this.form.catoType = {
+      val1: val.code,
+      val2: this.form.catalogCode
+    };
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
   }
 };
@@ -383,20 +393,37 @@ export const DETAIL_CONFIG = {
       label: "色调",
       value: "colorCode",
       render: (h, item) => {
-        // todo 拉取不到数据colorList还未返回
-        let o = DETAIL_CONFIG.colorList.find(i => {
-          return i.value === item.colorCode;
+        if (!item.colors) return;
+        let o = item.colors.find(i => {
+          return i.classify === "6";
         });
-        return h("div", item.colorCode);
+        return h("div", o && o.name);
       }
     },
     {
       label: "纹理",
-      value: "graphCode"
+      value: "graphCode",
+      render: (h, item) => {
+        if (!item.graphs) return;
+        let o = item.graphs.find(i => {
+          return i.classify === "7";
+        });
+        return h("div", o && o.name);
+      }
     },
     {
       label: "材质类别",
-      value: "catalogCode"
+      value: "catalogCode",
+      render: (h, item) => {
+        if (!item.catalogs) return;
+        // let o = item.catalogs.find(i => {
+        //   return i.code === item.catalogCode;
+        // });
+        let o = item.catalogs.find(i => {
+          return i.classify === "5";
+        });
+        return h("div", o && o.name);
+      }
     },
     {
       label: "材质文件",

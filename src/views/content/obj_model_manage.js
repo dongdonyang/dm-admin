@@ -7,7 +7,7 @@ export const LIST_CONFIG = {
   get select() {
     return {
       template: `<div>
-<base-input placeholder="请输入模型名称或关键字" v-model="info" @change="search"></base-input>
+<base-input placeholder="请输入模型名称或关键字" v-model.trim="info" @change="search"></base-input>
 </div>`,
       props: {
         obj: {}
@@ -18,9 +18,9 @@ export const LIST_CONFIG = {
         };
       },
       methods: {
-        search(val) {
+        search() {
           this.obj.currentPage = 1;
-          this.obj.searchInfo.value = val;
+          this.obj.searchInfo.value = this.info;
           this.obj.getList();
         }
       }

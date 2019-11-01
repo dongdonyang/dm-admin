@@ -62,11 +62,11 @@ export default class Content {
       }
     });
   }
-/**
- * @fileOverview todo 跳转到新增页面
- * @property {addRoute} 新增页面名称 todo 建议改成【***URL】
- * @property {path} 新增页面需要读取的配置文件地址，实例化对象 todo 改变一下传参方式，这种方式不安全
- * */
+  /**
+   * @fileOverview todo 跳转到新增页面
+   * @property {addRoute} 新增页面名称 todo 建议改成【***URL】
+   * @property {path} 新增页面需要读取的配置文件地址，实例化对象 todo 改变一下传参方式，这种方式不安全
+   * */
   addRow() {
     this.$router.push({
       name: this.addRoute,

@@ -60,7 +60,8 @@ export default {
       let arr = event.name.split(".");
       let type = arr.slice(-1);
       let arrs = ["jpg", "jpeg", "png"];
-      if (arrs.indexOf(type[0])) {
+      let a = arrs.indexOf(type[0]);
+      if (a < 0) {
         this.$Message.error("文件格式不正确");
         return false;
       }
@@ -68,8 +69,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);

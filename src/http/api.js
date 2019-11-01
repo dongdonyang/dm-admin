@@ -3,6 +3,9 @@ export default {
    * @fileoverview 整个系统的后台API接口，通过vue.installed引入
    * */
 
+  // todo 用户模块
+  USER_LIST: "/user/console/list", // 用户列表、2户型管理员 3模型管理员 4厂商管理员 5CAD制图员 6硬装设计师 7软装设计师 8导购员
+
   // todo 登录模块
   LOGIN: "/user/login", // 登录接口
 
@@ -19,6 +22,9 @@ export default {
   HOUSE_TASK_DELETE: "manage/houseTask/delete", // 户型任务delete
   HOUSE_TASK_ADD: "manage/houseTask/add", // 户型任务add
   HOUSE_TASK_EDIT: "manage/houseTask/update", // 户型任务edit
+  HOUSE_HARD_TASK: "manage/houseTask/hard_task", // 根据户型id查询户型任务
+  HOUSE_CAD_BACK: "manage/houseTask/cad_back", // CAD任务回退
+  HOUSE_FINISH_HARD_TASK: "manage/houseTask/finish_hardTask", // 完成硬装任务
 
   //  todo 楼盘管理接口
   BUILDING_SEARCH: "manage/building/search", // 楼盘list
@@ -36,6 +42,14 @@ export default {
   HOUSE_EDIT: "manage/house/update", // 户型edit
   HOUSE_DISTRICT: "manage/house/district", // 根据city查询所有的楼盘
   HOUSE_HOUSE: "manage/house/house", // 根据楼盘id查询所有的户型
+
+  //  todo 图例管理
+  LEGEND_CAD_SEARCH: "manage/legend/CADSearch", // 图例管理list
+  LEGEND_SEARCH: "manage/legend/search", // 图例管理search
+  LEGEND_DELETE: "manage/legend/delete", // 图例管理delete
+  LEGEND_ADD: "manage/legend/add", // 图例管理add
+  LEGEND_UPDATE: "manage/legend/update", // 图例管理edit
+  LEGEND_DETAIL: "manage/legend/CADDetail", // 图例管理detail
 
   //  todo 模型管理
   MODEL_SEARCH: "manage/model/list", // 模型list

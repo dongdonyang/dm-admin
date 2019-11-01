@@ -13,7 +13,7 @@ export const LIST_CONFIG = {
 <base-select placeholder="省份" v-model="info.val0" :list="provinceList" @change="getCity"></base-select>
 <base-select placeholder="城市" v-model="info.val1" :list="cityList" @change="search"></base-select>
 <base-select placeholder="合作类型" v-model="info.val2" :list="typeList" @change="search"></base-select>
-<base-input placeholder="请输入厂商名称或关键字" v-model="info.val3" @change="search"></base-input>
+<base-input placeholder="请输入厂商名称或关键字" v-model.trim="info.val3" @change="search"></base-input>
 </div>`,
       props: {
         obj: {}

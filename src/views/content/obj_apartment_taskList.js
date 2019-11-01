@@ -1,6 +1,8 @@
 // 户型任务，状态筛选条件加成一个属性来判断
 import rules from "../../libs/asyncRules";
 import store from "../../store";
+import API from "../../http/api";
+import router from "../../router/index";
 
 export const LIST_CONFIG = {
   //若过于复杂，抽离成单独组件
@@ -8,15 +10,25 @@ export const LIST_CONFIG = {
   get head() {
     return {
       template: `<div>
-    <RadioGroup v-model="type" type="button">
-    <Radio v-for="(item, index) in list" :key="index" :label="index">{{item}}</Radio>
+    <RadioGroup v-model="type" type="button" @on-change="search">
+    <Radio style="margin: 0 5px" v-for="(item, index) in list" :key="index" :label="index">{{item}}</Radio>
     </RadioGroup>
       </div>`,
+      props: {
+        obj: {}
+      },
       data() {
         return {
           type: 0,
           list: ["全部", "户型制作中", "硬装制作中", "已完成"]
         };
+      },
+      methods: {
+        search() {
+          this.obj.searchInfo.status = this.type;
+          this.obj.currentPage = 1;
+          this.obj.getList();
+        }
       }
     };
   },
@@ -25,61 +37,97 @@ export const LIST_CONFIG = {
   get select() {
     return {
       template: `<div>
-<base-select placeholder="省份" v-model='info.val1'></base-select>
-<base-select placeholder="城市" v-model='info.val2'></base-select>
-<base-select placeholder="楼盘" v-model='info.val3'></base-select>
-<base-input placeholder="请输入任务名称或关键字" v-model="info.val4"></base-input>
+<BaseApartment @change="searchByName"></BaseApartment>
+<base-input placeholder="请输入任务名称或关键字" v-model.trim="info.val4" @change="search"></base-input>
 </div>`,
+      props: {
+        obj: {}
+      },
       data() {
         return {
           info: {}
         };
+      },
+      methods: {
+        searchByName(id) {
+          this.obj.searchInfo.buildingId = id || -1;
+          this.search();
+        },
+        search() {
+          this.obj.currentPage = 1;
+          this.obj.searchInfo.keyword = this.info.val4;
+          this.obj.getList();
+        }
       }
     };
   },
+  hasButton: true,
   searchKey: "value",
   searchInfo: {
-    status: 0
+    status: 0,
+    buildingId: -1
   },
   addRoute: "factorEdit",
   detailRoute: "factorDetail",
   listKey: "house_task",
   detailKey: "id",
   listURL: "HOUSE_TASK_SEARCH",
-  deleteURL: "BUILDING_DELETE",
-  deleteKey: "removeBuildingId",
+  deleteURL: "HOUSE_TASK_DELETE",
+  deleteKey: "houseTaskId",
   deleteValue: "id",
   title: "户型任务",
   tableColumn: [
     {
       title: "任务名称",
-      key: ""
+      key: "name"
     },
     {
       title: "户型",
-      key: ""
+      key: "houseName",
+      render: (h, params) => {
+        return h("a", {
+          domProps: {
+            innerHTML: params.row.houseName
+          },
+          on: {
+            click: () => {
+              router.push({
+                name: "apartmentManageDetail",
+                query: {
+                  path: "apartment_manage",
+                  id: params.row.houseId
+                }
+              });
+              console.log(router);
+            }
+          }
+        });
+      }
     },
     {
       title: "创建者",
-      key: ""
+      key: "creatorName"
     },
     {
       title: "户型制作者",
-      key: ""
+      key: "cadExecutorName"
     },
     {
       title: "硬装制作者",
-      key: ""
+      key: "hardExecutorName"
     },
     {
       title: "状态",
-      key: ""
+      key: "status",
+      render: (h, params) => {
+        return h("div", store.state.app.houseTaskStatus[params.row.status]);
+      }
     },
     {
       title: "操作",
       align: "center",
       slot: "action",
-      width: "160"
+      width: "180"
     }
   ]
 };
@@ -87,31 +135,168 @@ export const LIST_CONFIG = {
 // todo add、edit配置
 export const ADD_CONFIG = {
   addTitle: "新增户型任务",
-  editTitle: "新增户型任务",
-  addURL: "BUILDING_ADD",
-  addKey: "buildingInfo",
-  editURL: "BUILDING_EDIT",
-  detailURL: "BUILDING_DETAIL",
-  detailKey: "buildingId",
-  editKey: "newInfo",
+  editTitle: "编辑户型任务",
+  addURL: "HOUSE_TASK_ADD",
+  addKey: "houseTaskInfo",
+  editURL: "HOUSE_TASK_EDIT",
+  detailURL: "HOUSE_TASK_DETAIL",
+  detailKey: "houseTaskId",
+  editKey: "houseTaskInfo",
   labelWidth: 100,
+  buildingList: [],
+  CADList: [],
+  hardList: [],
+  styleList: [],
+  typeList: [],
   form: {}, // 可以提供默认值
-  formList: [
+  get formList() {
+    this.getBuildingList();
+    this.getCADUser();
+    this.getHardUser();
+    this.getStyle();
+    return this.list;
+  },
+  // 硬装风格
+  getStyle() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 1
+      })
+      .then(res => {
+        if (res.success) {
+          ADD_CONFIG.styleList = [];
+          res.data.list.forEach(i => {
+            ADD_CONFIG.styleList.push({
+              label: i.name,
+              value: i.code
+            });
+          });
+        }
+      });
+  },
+  // 获取CAD执行者
+  getCADUser() {
+    axios
+      .post(API.USER_LIST, {
+        roleId: 5,
+        value: "",
+        pageNum: 1,
+        pageSize: 9999
+      })
+      .then(res => {
+        if (res.success) {
+          ADD_CONFIG.CADList = [];
+          res.data.user_list.forEach(i => {
+            ADD_CONFIG.CADList.push({
+              label: i.nickName,
+              value: i.account
+            });
+          });
+        }
+      });
+  },
+  //获取硬装执行者
+  getHardUser() {
+    axios
+      .post(API.USER_LIST, {
+        roleId: 6,
+        value: "",
+        pageNum: 1,
+        pageSize: 9999
+      })
+      .then(res => {
+        if (res.success) {
+          ADD_CONFIG.hardList = [];
+          res.data.user_list.forEach(i => {
+            ADD_CONFIG.hardList.push({
+              label: i.nickName,
+              value: i.account
+            });
+          });
+        }
+      });
+  },
+  //查询所有楼盘
+  getBuildingList() {
+    let value = {
+      value: JSON.stringify({
+        btype: 0
+      }),
+      pageSize: 999999,
+      pageNum: 1
+    };
+    axios.post(API.BUILDING_SEARCH, value).then(res => {
+      if (res.success) {
+        res.data.buildings.forEach(item => {
+          ADD_CONFIG.buildingList.push({
+            label: item.name,
+            value: item.name
+          });
+        });
+      }
+    });
+  },
+  // 查询楼盘下的户型
+  getTypeList(id) {
+    // this.typeList = [];
+    let value = {
+      buildingId: id
+    };
+    axios.post(API.HOUSE_HOUSE, value).then(res => {
+      if (res.success) {
+        res.data.house.forEach(item => {
+          ADD_CONFIG.typeList.push({
+            label: item.houseName,
+            value: item.houseId
+          });
+        });
+      }
+    });
+  },
+  list: [
     {
       label: "匹配楼盘",
-      component: "BaseSelect",
-      value: "name",
-      attrs: {
-        placeholder: "请输入楼盘名称"
+      component: "BaseApartment",
+      get attrs() {
+        return {
+          disabled: ADD_CONFIG.form.isEdit
+        };
       },
-      rule: rules.fieldFill("请选择楼盘")
+      change: function(id) {
+        ADD_CONFIG.getTypeList(id);
+      }
     },
     {
       label: "匹配户型",
       value: "houseId",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择户型"
+      get attrs() {
+        return {
+          value: ADD_CONFIG.form.houseName,
+          disabled: ADD_CONFIG.form.isEdit,
+          list: ADD_CONFIG.typeList,
+          placeholder: "请选择户型"
+        };
+      },
+      change: function(id) {
+        axios
+          .post(API.HOUSE_HARD_TASK, {
+            houseId: id
+          })
+          .then(res => {
+            if (res.success) {
+              let val = res.data.hard_task;
+              if (val.length) {
+                // ADD_CONFIG.form = Object.assign({}, ADD_CONFIG.form, {
+                //   isDisabled: true,
+                //   housePic: val[0].housePic,
+                //   cadExecutorAccount: val[0].cadExecutorAccount,
+                //   hardExecutorAccount: val[0].hardExecutorAccount
+                // });
+                // console.log(ADD_CONFIG.form);
+              }
+            }
+          });
       },
       rule: rules.fieldFill("请选择户型")
     },
@@ -128,8 +313,13 @@ export const ADD_CONFIG = {
       label: "硬装风格",
       value: "styleCode",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择硬装风格"
+      get attrs() {
+        return {
+          value: [ADD_CONFIG.form.styleCodeList],
+          list: ADD_CONFIG.styleList,
+          multiple: true,
+          placeholder: "请选择硬装风格"
+        };
       },
       rule: rules.fieldFill("请选择硬装风格")
     },
@@ -137,8 +327,12 @@ export const ADD_CONFIG = {
       label: "CAD执行者",
       value: "cadExecutorAccount",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择CAD执行者"
+      get attrs() {
+        return {
+          disabled: ADD_CONFIG.form.isEdit,
+          placeholder: "请选择CAD执行者",
+          list: ADD_CONFIG.CADList
+        };
       },
       rule: rules.fieldFill("请选择CAD执行者")
     },
@@ -146,8 +340,12 @@ export const ADD_CONFIG = {
       label: "硬装执行者",
       value: "hardExecutorAccount",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择硬装执行者",
+      get attrs() {
+        return {
+          disabled: ADD_CONFIG.form.isEdit,
+          list: ADD_CONFIG.hardList,
+          placeholder: "请选择硬装执行者"
+        };
       },
       rule: rules.fieldFill("请选择硬装执行者")
     },
@@ -157,7 +355,7 @@ export const ADD_CONFIG = {
       component: "BaseUpload",
       get attrs() {
         return {
-          list: [ADD_CONFIG.form.previewPic]
+          list: [ADD_CONFIG.form.housePic]
         };
       },
       change: function(value) {
@@ -184,65 +382,72 @@ export const ADD_CONFIG = {
   },
   // 编辑查询后
   editInfo: function() {
-    this.form.startDate = this.form.createTime;
-    this.form.btype = String(this.form.btype);
+    this.form = this.form.houseTask;
+    this.form.isEdit = true;
+    ADD_CONFIG.typeList = [
+      {
+        label: this.form.houseName,
+        value: this.form.houseId
+      }
+    ];
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
   }
 };
 
 // todo detail 配置
 export const DETAIL_CONFIG = {
-  searchURL: "BUILDING_DETAIL",
-  searchKey: "buildingId",
+  searchURL: "HOUSE_TASK_DETAIL",
+  searchKey: "houseTaskId",
+  listKey: "houseTask",
   title: "户型任务详情",
   form: {},
   formList: [
     {
-      label: "楼盘名称",
+      label: "匹配户型",
+      value: "houseName"
+    },
+    {
+      label: "任务名称",
       value: "name"
     },
     {
-      label: "楼盘类型",
-      value: "btype",
-      render: (h, row) => {
-        return h("div", store.state.app.getApartmentType[row.btype]);
-      }
-    },
-    {
-      label: "地区",
-      value: "province",
+      label: "硬装风格",
+      value: "styleNameList",
       render: (h, item) => {
-        return h("div", `${item.province}-${item.city}`);
+        if (!item.styleNameList) return;
+        function getList(h, item) {
+          let arr = [];
+          item.styleNameList.forEach(i => {
+            arr.push(h("div", `${i}、`));
+          });
+          return arr;
+        }
+        return h("div", getList(h, item));
       }
     },
     {
-      label: "楼盘位置",
-      value: "location"
+      label: "CAD执行者",
+      value: "cadExecutorName"
     },
     {
-      label: "开发商",
-      value: "developer"
+      label: "硬装执行者",
+      value: "hardExecutorName"
     },
     {
-      label: "开盘时间",
-      value: "createTime"
-    },
-    {
-      label: "楼盘描述",
-      value: "description"
-    },
-    {
-      label: "上传图片",
-      value: "previewPic",
-      render: (h, row) => {
+      label: "户型图",
+      value: "pakPic",
+      render: (h, item) => {
         return h("img", {
           attrs: {
-            alt: "",
-            height: 100, // todo 这种方式不会转成rem，可以给class名称来处理
-            src: row.previewPic
+            height: 80,
+            src: item.housePic
           }
         });
       }
+    },
+    {
+      label: "任务描述",
+      value: "description"
     }
   ]
 };

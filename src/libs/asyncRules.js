@@ -26,7 +26,20 @@ const validate = {
       if (regExp.test(value)) {
         callback();
       } else {
-        callback(new Error("请输入最多两位小数的正整数"));
+        callback(new Error("请输入整数"));
+      }
+    } else {
+      callback(new Error(rule.message));
+    }
+  },
+  // todo 正整数
+  ints: (rule, value, callback) => {
+    if (value) {
+      let regExp = /^\+?[1-9][0-9]*$/;
+      if (regExp.test(value)) {
+        callback();
+      } else {
+        callback(new Error("请输入整数"));
       }
     } else {
       callback(new Error(rule.message));

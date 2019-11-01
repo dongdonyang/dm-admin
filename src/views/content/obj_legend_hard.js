@@ -1,6 +1,7 @@
 // 楼盘管理-配置list页面
 import rules from "../../libs/asyncRules"; // 表单验证表
 import store from "../../store";
+import API from "../../http/api";
 
 // todo list配置
 export const LIST_CONFIG = {
@@ -8,10 +9,8 @@ export const LIST_CONFIG = {
     let that = this;
     return {
       template: `<div>
-<base-select placeholder="楼盘类型" :list="typeList" @change="change" v-model="currentObj.searchInfo.btype"></base-select>
-<!--<base-select placeholder="选择省份" v-model="currentObj.searchInfo.province"></base-select>-->
-<!--<base-select placeholder="选择城市" v-model="currentObj.searchInfo.city"></base-select>-->
-<base-input placeholder="楼盘名称或关键字" @change="change" v-model="currentObj.searchInfo.name"></base-input>
+<base-select placeholder="分类" :list="typeList" @change="change" v-model="currentObj.searchInfo.typeCode"></base-select>
+<base-input placeholder="图例名称或关键字" @change="change" v-model="currentObj.searchInfo.name"></base-input>
 </div>`,
       props: {
         obj: {}
@@ -19,23 +18,31 @@ export const LIST_CONFIG = {
       data() {
         return {
           currentObj: that,
-          typeList: [
-            {
-              value: "1",
-              label: "精装房"
-            },
-            {
-              value: "2",
-              label: "毛坯房"
-            },
-            {
-              value: "3",
-              label: "旧改房"
-            }
-          ]
+          typeList: []
         };
       },
+      created() {
+        this.typeList = [];
+        this.getCatalogList();
+      },
       methods: {
+        // 获取硬装分类
+        getCatalogList: function() {
+          axios
+            .post(API.ALL_LEVEL, {
+              classify: 1
+            })
+            .then(res => {
+              if (res.success) {
+                res.data.list.forEach(i => {
+                  this.typeList.push({
+                    label: i.name,
+                    value: i.code
+                  });
+                });
+              }
+            });
+        },
         change() {
           this.obj.currentPage = 1;
           this.obj.getList();
@@ -45,58 +52,42 @@ export const LIST_CONFIG = {
   },
   searchKey: "value",
   searchInfo: {
-    btype: 0
+    classify: 1
   },
-  type: "",
-  city: "",
   title: "硬装图例管理",
-  addRoute: "addFloor",
-  detailRoute: "lookFloor",
-  listKey: "buildings",
-  detailKey: "id",
-  listURL: "BUILDING_SEARCH",
-  deleteURL: "BUILDING_DELETE",
-  deleteKey: "removeBuildingId",
-  deleteValue: "id",
+  addRoute: "legendHardADD",
+  detailRoute: "legendHardDetail",
+  listKey: "legends",
+  detailKey: "sn",
+  detailId: "sn",
+  listURL: "LEGEND_CAD_SEARCH",
+  deleteURL: "LEGEND_DELETE",
+  deleteKey: "sn",
+  deleteValue: "sn",
   tableColumn: [
     {
-      title: "楼盘名称",
+      title: "sn编码",
+      key: "sn"
+    },
+    {
+      title: "名称",
       key: "name"
     },
     {
-      title: "开发商",
-      key: "developer"
+      title: "类型",
+      key: "typeName"
     },
     {
-      title: "创建人",
-      key: "creator"
+      title: "图例容差(mm)",
+      key: "tolerance"
     },
     {
-      title: "开盘时间",
-      key: "startDate"
+      title: "创建时间",
+      key: "createTimeFormat"
     },
     {
-      title: "楼盘类型",
-      key: "btype",
-      render: (h, params) => {
-        return h("span", store.state.app.getApartmentType[params.row.btype]);
-      }
-    },
-    {
-      title: "户型数量",
-      key: "houseNum"
-    },
-    {
-      title: "省份",
-      key: "province"
-    },
-    {
-      title: "城市",
-      key: "city"
-    },
-    {
-      title: "楼盘位置",
-      key: "location"
+      title: "备注",
+      key: "description"
     },
     //  默认查看，编辑，删除，可配置，可自定义，还得匹配权限，什么权限能删除和修改，都得配置好，默认所有权限
     {
@@ -108,112 +99,112 @@ export const LIST_CONFIG = {
   ]
 };
 
-// 配置新增页面?抛出一个class如何？新增页面之间是否存在相同属性？抛出对象还是class？
-// 验证规则表放在哪里？不可能每个配置单独写一份规则表。单独写一份规则表js，然后在edit.vue中引入。这边配置相应的配置规则名和参数就ok
 // todo add、edit配置
 export const ADD_CONFIG = {
   //
-  addTitle: "新增楼盘",
-  editTitle: "编辑楼盘",
-  addURL: "BUILDING_ADD",
-  addKey: "buildingInfo",
-  editURL: "BUILDING_EDIT",
-  detailURL: "BUILDING_DETAIL",
-  detailKey: "buildingId",
-  editKey: "newInfo",
+  addTitle: "新增硬装图例",
+  editTitle: "编辑硬装图例",
+  addURL: "LEGEND_ADD",
+  addKey: "legendInfo",
+  editURL: "LEGEND_UPDATE",
+  detailURL: "LEGEND_DETAIL",
+  detailKey: "sn",
+  editKey: "newLegendInfo",
+  catalogList: [],
   form: {}, // 可以提供默认值
-  formList: [
+  get formList() {
+    this.getCatalogList();
+    return this.list;
+  },
+  // 获取硬装分类
+  getCatalogList: function() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 1
+      })
+      .then(res => {
+        if (res.success) {
+          res.data.list.forEach(i => {
+            ADD_CONFIG.catalogList.push({
+              label: i.name,
+              value: i.code
+            });
+          });
+        }
+      });
+  },
+  list: [
     {
-      label: "楼盘名称",
+      label: "名称",
       component: "Input",
       value: "name",
       attrs: {
-        placeholder: "请输入楼盘名称"
+        placeholder: "请输入硬装图例"
       },
-      rule: rules.fieldFill("请填写楼盘名称")
+      rule: rules.fieldFill("请填写硬装图例")
     },
     {
-      label: "楼盘类型",
-      value: "btype",
+      label: "分类",
+      value: "typeCode",
       component: "BaseSelect",
-      attrs: {
-        placeholder: "请选择楼盘类型",
-        list: store.state.app.apartmentType
+      get attrs() {
+        return {
+          placeholder: "请选择硬装图例类型",
+          list: ADD_CONFIG.catalogList
+        };
       },
-      rule: rules.fieldFill("请选择楼盘类型")
+      rule: rules.fieldFill("请选择硬装图例类型")
     },
     {
-      label: "地区",
-      value: "province",
-      component: "BaseCity",
+      label: "尺寸",
+      value: "sizeLong",
+      component: "BaseSize",
       get attrs() {
         return {
           province: ADD_CONFIG.form.province,
           form: ADD_CONFIG.form
         };
       },
-      change: function(value) {
-        this.form.province = value.province;
-        this.form.city = value.city;
-      },
-      rule: rules.fieldFill("请选择地区")
+      rule: rules.fieldFill("请输入硬装图例尺寸")
     },
     {
-      label: "楼盘位置",
-      value: "location",
+      label: "图例容差",
+      value: "tolerance",
       component: "Input",
       attrs: {
-        placeholder: "请输入楼盘具体位置信息"
+        placeholder: "请输入图例容差",
+        type: "number"
       },
-      rule: rules.fieldFill("请输入楼盘具体位置信息")
+      rule: rules.fieldFill("请输入图例容差", "ints")
     },
     {
-      label: "开发商",
-      value: "developer",
-      component: "Input",
-      attrs: {
-        placeholder: "请输入开发商名称"
+      label: "dwg文件",
+      value: "dwgUrl",
+      component: "BaseFiles",
+      get attrs() {
+        return {
+          file: ADD_CONFIG.form.dwgUrl,
+          placeholder: "请输入dwg文件",
+          fileType: "dwg"
+        }
       },
-      rule: rules.fieldFill("请输入开发商名称")
+      change: function(file) {
+        this.form.dwgUrl = file;
+        this.form.classify = 1;
+      },
+      rule: rules.fieldFill("请输入dwg文件")
     },
     {
-      label: "开盘时间",
-      value: "startDate",
-      component: "DatePicker",
-      attrs: {
-        placeholder: "请选择开盘时间",
-        format: "yyyy-MM-dd"
-      },
-      change: function(value) {
-        this.form.startDate = value;
-      },
-      rule: rules.fieldFill("请选择开盘时间")
-    },
-    {
-      label: "楼盘描述",
+      label: "备注信息",
       value: "description",
       component: "Input",
       // 传入多个html属性
       attrs: {
         rows: 5,
         type: "textarea",
-        placeholder: "请输入楼盘描述"
+        placeholder: "请输入备注信息"
       },
-      rule: rules.fieldFill("请输入楼盘描述")
-    },
-    {
-      label: "上传图片",
-      value: "previewPic",
-      component: "BaseUpload",
-      get attrs() {
-        return {
-          list: [ADD_CONFIG.form.previewPic]
-        };
-      },
-      change: function(value) {
-        this.form.previewPic = value[0];
-      },
-      rule: rules.fieldFill("请上传一张图片")
+      rule: rules.fieldFill("请输入备注信息")
     }
   ],
 
@@ -223,65 +214,66 @@ export const ADD_CONFIG = {
   },
   // 编辑查询后
   editInfo: function() {
-    this.form.startDate = this.form.createTime;
-    this.form.btype = String(this.form.btype);
+    this.form = this.form.legend;
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
   }
 };
 
 // todo detail 配置
 export const DETAIL_CONFIG = {
-  searchURL: "BUILDING_DETAIL",
-  searchKey: "buildingId",
-  title: "楼盘详情",
+  searchURL: "LEGEND_DETAIL",
+  searchKey: "sn",
+  listKey: "legend",
+  title: "硬装图例详情",
   form: {},
   formList: [
     {
-      label: "楼盘名称",
+      label: "SN编码",
+      value: "sn"
+    },
+    {
+      label: "名称",
       value: "name"
     },
     {
-      label: "楼盘类型",
-      value: "btype",
-      render: (h, row) => {
-        return h("div", store.state.app.getApartmentType[row.btype]);
-      }
+      label: "分类",
+      value: "typeName"
     },
     {
-      label: "地区",
-      value: "province",
+      label: "尺寸",
+      value: "location",
       render: (h, item) => {
-        return h("div", `${item.province}-${item.city}`);
+        return h(
+          "div",
+          `${item.sizeLong}mm * ${item.sizeWidth}mm * ${item.sizeHeight}mm`
+        );
       }
     },
     {
-      label: "楼盘位置",
-      value: "location"
+      label: "图例容差",
+      value: "tolerance",
+      render: (h, item) => {
+        return h("div", `${item.tolerance}mm`);
+      }
     },
     {
-      label: "开发商",
-      value: "developer"
-    },
-    {
-      label: "开盘时间",
-      value: "createTime"
-    },
-    {
-      label: "楼盘描述",
-      value: "description"
-    },
-    {
-      label: "上传图片",
-      value: "previewPic",
-      render: (h, row) => {
-        return h("img", {
+      label: "dwg文件",
+      value: "dwgUrl",
+      render: (h, item) => {
+        return h("a", {
+          domProps: {
+            innerHTML: "下载"
+          },
           attrs: {
-            alt: "",
-            height: 100, // todo 这种方式不会转成rem，可以给class名称来处理
-            src: row.previewPic
+            href: item.dwgUrl,
+            download: "dwg文件"
           }
         });
       }
+    },
+    {
+      label: "备注信息",
+      value: "description"
     }
   ]
 };

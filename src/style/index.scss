@@ -10,3 +10,38 @@ img {
   object-fit: cover;
 }
 
+.modalStyle{
+
+  .ivu-modal-header{
+    background:#0D35F1;
+  }
+  .ivu-modal-body{
+    padding:2rem 1rem;
+  }
+  .ivu-modal-footer button+button{
+    width:88px;
+    // height:36px;
+    background:rgba(13,53,241,1);
+    border-radius:18px;
+  }
+  .ivu-modal-header p, .ivu-modal-header-inner{
+    color:#fff;
+}
+.ivu-icon-ios-close:before{
+    color:#fff;
+}
+}
+
+.modalContent{
+  // width:308px;
+  font-size:14px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(51,51,51,1);
+  line-height:14px;
+
+  img{
+      vertical-align: middle;
+      margin-right:10px;
+  }
+}

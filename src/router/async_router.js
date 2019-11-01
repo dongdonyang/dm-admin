@@ -129,11 +129,11 @@ export default [
           title: "详情"
         },
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/content/Detail.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
+            "home"
+          )
       }
     ]
   },
@@ -201,22 +201,22 @@ export default [
         path: "apartmentManageAdd",
         name: "apartmentManageAdd",
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/content/Edit.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Edit.vue")),
+            "home"
+          )
       },
       //  户型管理-查看
       {
         path: "apartmentManageDetail",
         name: "apartmentManageDetail",
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/content/Detail.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
+            "home"
+          )
       }
     ]
   },
@@ -242,6 +242,26 @@ export default [
             () => resolve(require("views/content/Index.vue")),
             "home"
           )
+      },
+      {
+        path: "hardADD",
+        name: "legendHardADD",
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/content/Edit.vue")),
+                "home"
+            )
+      },
+      {
+        path: "hardDetail",
+        name: "legendHardDetail",
+        component: resolve =>
+            require.ensure(
+                [],
+                () => resolve(require("views/content/Detail.vue")),
+                "home"
+            )
       },
       {
         path: "soft",

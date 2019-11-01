@@ -1,5 +1,5 @@
 <template>
-  <row type="flex" justify="space-between">
+  <row type="flex" justify="space-between" style="width: 347px;">
     <Input
       style="width: 72%"
       placeholder="选择文件后获取"
@@ -8,7 +8,7 @@
     ></Input>
     <Upload
       :before-upload="action"
-      accept=".pak"
+      :accept="`.${fileType}`"
       action="https://devup.my-best-home.cn:10443/upload"
     >
       <Button>选择文件</Button>
@@ -24,7 +24,11 @@
 export default {
   name: "BaseFiles",
   props: {
-    file: ""
+    file: "",
+    fileType: {
+      type: String,
+      default: "pak"
+    }
   },
   data() {
     return {
@@ -44,7 +48,7 @@ export default {
     action(event) {
       let arr = event.name.split(".");
       let type = arr.slice(-1);
-      if ( type[0] !== "pak") {
+      if (type[0] !== this.fileType) {
         this.$Message.error("文件格式不正确");
         return false;
       }
@@ -52,8 +56,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);

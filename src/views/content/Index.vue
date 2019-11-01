@@ -2,7 +2,11 @@
   <div class="index">
     <!--    todo 因组件注册有缓存，故使用v-if-->
     <!--    可以使用异步组件来渲染render-->
-    <head-component class="index-header" v-if="obj.head"></head-component>
+    <head-component
+      :obj="obj"
+      class="index-header"
+      v-if="obj.head"
+    ></head-component>
 
     <div class="index-card">
       <!--    筛选选项-->
@@ -35,10 +39,33 @@
           <Tooltip content="详情" placement="top">
             <i class="iconfont iconchakan" @click="obj.detailRow(row)"></i>
           </Tooltip>
-          <Tooltip content="编辑" placement="top">
+          <Tooltip
+            v-if="obj.searchInfo.status !== 2"
+            content="编辑"
+            placement="top"
+          >
             <i class="iconfont iconbianji" @click="obj.editRow(row)"></i>
           </Tooltip>
-          <Tooltip content="删除" placement="top">
+          <!--          todo 户型任务操作-->
+          <Tooltip
+            v-if="obj.hasButton && obj.searchInfo.status === 1"
+            content="撤回"
+            placement="top"
+          >
+            <i class="iconfont iconchehui" @click="clickBack(row)"></i>
+          </Tooltip>
+          <Tooltip
+            v-if="obj.hasButton && obj.searchInfo.status === 2"
+            content="上传"
+            placement="top"
+          >
+            <i class="iconfont iconshangchuan" @click="clickFile(row)"></i>
+          </Tooltip>
+          <Tooltip
+            v-if="obj.searchInfo.status !== 3"
+            content="删除"
+            placement="top"
+          >
             <i class="iconfont iconshanchu" @click="deleteRow(row)"></i>
           </Tooltip>
         </Row>
@@ -50,11 +77,47 @@
         prev-text="上一页"
         next-text="下一页"
         size="small"
+        :current="obj.currentPage"
         :total="obj.totalSize"
         show-sizere
         @on-change="obj.pageChange.call(obj, $event)"
       ></Page>
     </div>
+
+    <!--    todo 户型任务撤回弹窗、建议不要写在这里，写成组件，加载户型任务再注册该组件-->
+    <Modal
+      class="index-modal"
+      v-model="modal"
+      @on-ok="isBack"
+      title="是否确认撤回到CAD重新绘制?"
+    >
+      <p>请输入撤回理由</p>
+      <Input v-model="backForm.description" type="textarea" :rows="4"></Input>
+    </Modal>
+
+    <!--    todo 户型任务上传文件弹窗、建议不要写在这里，写成组件，加载户型任务再注册该组件-->
+    <Modal
+      class="index-modal"
+      @on-ok="isFile"
+      v-model="modalFile"
+      title="文件上传"
+    >
+      <Form :label-width="80">
+        <FormItem label="硬装名称：">
+          <Input v-model="fileForm.chardTitle"></Input>
+        </FormItem>
+        <FormItem label="硬装封面：">
+          <BaseUpload
+            v-model="fileForm.hardCoverPic"
+            :max-size="1"
+            @change="setPic"
+          ></BaseUpload>
+        </FormItem>
+        <FormItem label="PAK文件：">
+          <BaseFiles @change="setFile" v-model="fileForm.pakFile"></BaseFiles>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -74,7 +137,11 @@ export default {
   },
   data() {
     return {
-        pic: require("../../assets/Group.png"),
+      backForm: {},
+      fileForm: {},
+      modalFile: false,
+      modal: false,
+      pic: require("../../assets/Group.png"),
       obj: Object
     };
   },
@@ -94,14 +161,53 @@ export default {
   mounted() {},
   methods: {
     deleteRow(row) {
-        this.$Modal.confirm({
+      this.$Modal.confirm({
         title: "确认删除？",
-        content: "<div class='sure'><div class='sure-img'></div>删除后将无法恢复该数据、确认删除当前数据吗?</div>",
+        content:
+          "<div class='sure'><div class='sure-img'></div>删除后将无法恢复该数据，确认删除当前数据吗?</div>",
         onOk: () => {
           // todo 修改
           obj.deleteRow(row);
         }
       });
+    },
+    // 显示任务回退
+    clickBack(val) {
+      this.backForm.houseId = val.houseId;
+      this.modal = true;
+    },
+    //  cad任务回退
+    isBack() {
+      axios.post(this.$API.HOUSE_CAD_BACK, this.backForm).then(res => {
+        if (res.success) {
+          this.$message.success("撤回成功");
+          obj.getList();
+        }
+      });
+    },
+    // 显示上传文件
+    clickFile(row) {
+      this.fileForm.taskId = row.id;
+      this.modalFile = true;
+    },
+    setPic(list) {
+      this.fileForm.hardCoverPic = list[0];
+    },
+    setFile(file) {
+      this.fileForm.pakFile = file;
+    },
+    //  文件上传
+    isFile() {
+      axios
+        .post(this.$API.HOUSE_FINISH_HARD_TASK, {
+          value: JSON.stringify(this.fileForm)
+        })
+        .then(res => {
+          if (res.success) {
+            this.$message.success("上传成功");
+            obj.getList();
+          }
+        });
     }
   }
 };
@@ -176,6 +282,38 @@ export default {
       line-height: 28px;
     }
   }
+  /*  弹窗*/
+  &-modal {
+    .ivu-modal {
+      top: 180px;
+    }
+    .ivu-icon {
+      color: #fff;
+    }
+    .ivu-modal-header {
+      background-color: #0d35f1;
+      .ivu-modal-header-inner {
+        color: #fff;
+      }
+    }
+    .ivu-modal-body {
+      min-height: 140px;
+      padding: 10px 30px !important;
+      p {
+        line-height: 40px;
+      }
+    }
+    .ivu-modal-footer {
+      line-height: 60px;
+      background: rgba(249, 249, 249, 1);
+      & > :last-child {
+        width: 88px;
+        height: 36px;
+        background: rgba(13, 53, 241, 1);
+        border-radius: 18px;
+      }
+    }
+  }
 }
 /*  todo 删除确认弹窗*/
 .ivu-modal {
@@ -200,11 +338,11 @@ export default {
     .ivu-modal-confirm-body {
       line-height: 60px;
       font-size: 14px;
-      .sure{
+      .sure {
         display: flex;
         align-items: center;
       }
-      .sure-img{
+      .sure-img {
         margin: 5px;
         height: 31px;
         width: 31px;
@@ -213,7 +351,7 @@ export default {
     }
     /*  footer*/
     .ivu-modal-confirm-footer {
-      background:rgba(249,249,249,1);
+      background: rgba(249, 249, 249, 1);
       margin-top: 0;
       line-height: 96px;
       padding: 0 30px;

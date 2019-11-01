@@ -6,6 +6,8 @@ import BaseCity from "./BaseCity";
 import BaseSize from "./BaseSize";
 import BaseFiles from "./BaseFiles";
 import BaseApartment from "./BaseApartment";
+import BaseCascader from "./BaseCascader";
+import BaseRadio from "./BaseRadio";
 
 Vue.component("BaseInput", BaseInput);
 Vue.component("BaseSelect", BaseSelect);
@@ -14,3 +16,5 @@ Vue.component("BaseCity", BaseCity);
 Vue.component("BaseFiles", BaseFiles);
 Vue.component("BaseSize", BaseSize);
 Vue.component("BaseApartment", BaseApartment);
+Vue.component("BaseCascader", BaseCascader);
+Vue.component("BaseRadio", BaseRadio);
