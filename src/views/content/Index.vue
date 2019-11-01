@@ -200,16 +200,16 @@ export default {
     .ivu-modal-confirm-body {
       line-height: 60px;
       font-size: 14px;
-        .sure{
-            display: flex;
-            align-items: center;
-        }
-        .sure-img{
-            margin: 5px;
-            height: 31px;
-            width: 31px;
-            background-image: url("../../assets/Group.png");
-        }
+      .sure{
+        display: flex;
+        align-items: center;
+      }
+      .sure-img{
+        margin: 5px;
+        height: 31px;
+        width: 31px;
+        background-image: url("../../assets/Group.png");
+      }
     }
     /*  footer*/
     .ivu-modal-confirm-footer {
