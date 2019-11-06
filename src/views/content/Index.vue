@@ -9,8 +9,10 @@
     ></head-component>
 
     <div class="index-card">
+      <!--      加载状态-->
+      <Spin size="large" fix v-if="obj.loding"></Spin>
       <!--    筛选选项-->
-      <Row type="flex" justify="space-between">
+      <Row class="index-card-first" type="flex" justify="space-between">
         <p class="index-card-title">{{ obj.title }}</p>
         <!--        自定义筛选组件-->
         <select-component
@@ -24,6 +26,7 @@
 
       <!--    table列表-->
       <Table
+        class="index-card-table"
         highlight-row
         v-if="obj.tableData.length"
         :columns="obj.tableColumn"
@@ -37,42 +40,56 @@
           slot="action"
         >
           <Tooltip content="详情" placement="top">
-            <i class="iconfont iconchakan" @click="obj.detailRow(row)"></i>
+            <i
+              class="iconfont iconchakan index-card-action"
+              @click="obj.detailRow(row)"
+            ></i>
           </Tooltip>
           <Tooltip
             v-if="obj.searchInfo.status !== 2"
             content="编辑"
             placement="top"
           >
-            <i class="iconfont iconbianji" @click="obj.editRow(row)"></i>
+            <i
+              class="iconfont iconbianji index-card-action"
+              @click="obj.editRow(row)"
+            ></i>
           </Tooltip>
           <!--          todo 户型任务操作-->
-          <Tooltip
-            v-if="obj.hasButton && obj.searchInfo.status === 1"
-            content="撤回"
-            placement="top"
-          >
-            <i class="iconfont iconchehui" @click="clickBack(row)"></i>
-          </Tooltip>
+          <!--          <Tooltip-->
+          <!--            v-if="obj.hasButton && obj.searchInfo.status === 2"-->
+          <!--            content="撤回"-->
+          <!--            placement="top"-->
+          <!--          >-->
+          <!--            <i class="iconfont iconchehui index-card-action" @click="clickBack(row)"></i>-->
+          <!--          </Tooltip>-->
           <Tooltip
             v-if="obj.hasButton && obj.searchInfo.status === 2"
             content="上传"
             placement="top"
           >
-            <i class="iconfont iconshangchuan" @click="clickFile(row)"></i>
+            <i
+              class="iconfont iconshangchuan index-card-action"
+              @click="clickFile(row)"
+            ></i>
           </Tooltip>
           <Tooltip
             v-if="obj.searchInfo.status !== 3"
             content="删除"
             placement="top"
           >
-            <i class="iconfont iconshanchu" @click="deleteRow(row)"></i>
+            <i
+              class="iconfont iconshanchu index-card-action"
+              @click="deleteRow(row)"
+            ></i>
           </Tooltip>
         </Row>
       </Table>
       <div v-else>暂无数据</div>
+
       <!--    分页-->
       <Page
+        class="index-card-page"
         v-show="obj.totalSize > obj.pageSize"
         prev-text="上一页"
         next-text="下一页"
@@ -92,7 +109,7 @@
       title="是否确认撤回到CAD重新绘制?"
     >
       <p>请输入撤回理由</p>
-      <Input v-model="backForm.description" type="textarea" :rows="4"></Input>
+      <Input v-model="backForm.description" type="textarea" :rows="4" />
     </Modal>
 
     <!--    todo 户型任务上传文件弹窗、建议不要写在这里，写成组件，加载户型任务再注册该组件-->
@@ -104,7 +121,7 @@
     >
       <Form :label-width="80">
         <FormItem label="硬装名称：">
-          <Input v-model="fileForm.chardTitle"></Input>
+          <Input v-model="fileForm.hardTitle"></Input>
         </FormItem>
         <FormItem label="硬装封面：">
           <BaseUpload
@@ -226,6 +243,7 @@ export default {
 
   /*  卡片*/
   &-card {
+    position: relative;
     background-color: #fff;
     padding: 30px;
     border-radius: 6px;
@@ -241,7 +259,7 @@ export default {
       justify-content: flex-end;
       padding: 0 15px;
     }
-    & > :nth-child(1) {
+    &-first {
       line-height: 36px;
       margin-bottom: 30px;
       /*新增按钮*/
@@ -258,7 +276,7 @@ export default {
       color: #333;
     }
     /*todo table*/
-    & > :nth-child(2) {
+    &-table {
       flex: 2 0 auto;
       /*去掉边框*/
       border-width: 0;
@@ -276,10 +294,44 @@ export default {
         background-color: #f9f9f9;
       }
     }
-    /*todo page*/
-    & > :nth-child(3) {
+    /*操作按钮*/
+    &-action {
+      &:hover {
+        color: #0d35f1 !important;
+        cursor: pointer;
+      }
+    }
+    /*  分页*/
+    /*因为实在自定义下面修改iview属性，故要加上import*/
+    &-page {
       text-align: center;
       line-height: 28px;
+      .ivu-page-item {
+        font-size: 14px !important;
+        height: 28px !important;
+        width: 28px !important;
+        line-height: 28px !important;
+        margin: 0 5px !important;
+        border: 1px solid #e5e5e5 !important;
+        border-radius: 25px !important;
+      }
+      .ivu-page-item-active {
+        transition: all 1s;
+        background-color: #0d35f1;
+        border-color: #0d35f1 !important;
+        a {
+          color: #fff;
+        }
+      }
+      .ivu-page-prev,
+      .ivu-page-next {
+        height: 28px !important;
+        width: 68px !important;
+        line-height: 28px !important;
+        border: 1px solid #e5e5e5 !important;
+        font-size: 14px !important;
+        border-radius: 20px !important;
+      }
     }
   }
   /*  弹窗*/

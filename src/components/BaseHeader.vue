@@ -12,7 +12,9 @@
     />
 
     <!--    右侧-->
-    <div>1</div>
+    <div>
+      <Button type="text" @click="logoOut">退出</Button>
+    </div>
   </div>
 </template>
 
@@ -33,7 +35,17 @@ export default {
   },
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    //  退出
+    logoOut() {
+      axios.post(this.$API.LOGOUT, {}).then(res => {
+        sessionStorage.setItem("token", null);
+        this.$router.push({
+          name: "login"
+        });
+      });
+    }
+  }
 };
 </script>
 

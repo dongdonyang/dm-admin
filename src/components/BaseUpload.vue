@@ -4,7 +4,7 @@
     <div class="base-upload-pic">
       <div v-for="(item, index) in fileList" :key="index">
         <img width="100" height="100" :src="item" />
-        <Icon @click="deletePic(index)" type="ios-trash" />
+        <Icon v-if="canDelete" @click="deletePic(index)" type="ios-trash" />
       </div>
     </div>
 
@@ -17,7 +17,7 @@
       :format="['jpg', 'jpeg', 'png']"
       action="https://devup.my-best-home.cn:10443/upload"
     >
-      <Button icon="ios-cloud-upload-outline">上传图片</Button>
+      <Button>上传图片</Button>
     </Upload>
   </div>
 </template>
@@ -34,6 +34,10 @@ export default {
     maxSize: {
       type: Number,
       default: 1
+    },
+    canDelete: {
+      type: Boolean,
+      default: true
     },
     multiple: {
       type: Boolean,
@@ -69,8 +73,8 @@ export default {
       data.append("file", event);
       axios
         .post("upload", data, {
-          baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
-          // baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          // baseURL: "https://devup.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
+          baseURL: "https://up.my-best-home.cn:10443/" // todo 此处url需要跟着环境变化
         })
         .then(res => {
           console.log("res", res);

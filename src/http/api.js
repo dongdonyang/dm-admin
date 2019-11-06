@@ -8,6 +8,7 @@ export default {
 
   // todo 登录模块
   LOGIN: "/user/login", // 登录接口
+  LOGOUT: "/user/logout", // 退出
 
   //  todo 厂商管理
   VENDOR_ADD: "manage/vendor/add", // 厂商add
@@ -42,6 +43,7 @@ export default {
   HOUSE_EDIT: "manage/house/update", // 户型edit
   HOUSE_DISTRICT: "manage/house/district", // 根据city查询所有的楼盘
   HOUSE_HOUSE: "manage/house/house", // 根据楼盘id查询所有的户型
+  HOUSE_TYPE: "manage/house/type", // 根据楼盘id查询所有的户型
 
   //  todo 图例管理
   LEGEND_CAD_SEARCH: "manage/legend/CADSearch", // 图例管理list
@@ -65,6 +67,13 @@ export default {
   MATERIAL_ADD: "manage/material/add", // 材质add
   MATERIAL_EDIT: "manage/material/edit", // 材质edit
   MATERIAL_CLASSIFY: "catalog/classify/materialClassify", // 材质分类0:主分类 1: 次分类
+
+  //  todo 用户管理
+  USER_SEARCH: "user/console/list", // 用户list 2户型管理员 3模型管理员 4厂商管理员 5CAD制图员 6硬装设计师 7软装设计师 8导购员
+  USER_DETAIL: "user/console/detail", // 用户detail
+  USER_DELETE: "user/console/delete", // 用户delete
+  USER_ADD: "user/console/add", // 用户add {'nickName':'昵称','psssword':'初始化密码 MD5加密','phone':'手机号','email':'邮箱','roleId':'2户型管理员 3模型管理员 4厂商管理员 5CAD制图员 6硬装设计师 7软装设计师 8导购员','vendorId':'厂家管理员所属厂家Id','marketId':'卖场ID'}
+  USER_EDIT: "user/console/edit", // 用户edit
 
   //  todo 获取省市区
   GET_PROVINCE: "catalog/location/all_province", // 获取省

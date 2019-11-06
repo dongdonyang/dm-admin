@@ -15,16 +15,16 @@
           <h1>{{ totalCount[item.value] || 0 }}</h1>
           <p>{{ `${item.name}数量` }}</p>
         </div>
-        <Icon type="md-barcode" />
+        <Icon :class="`iconfont ${item.icon}`" />
       </div>
     </div>
 
     <!--    统计图-->
     <div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
+      <div>统计图</div>
+      <div>统计图</div>
+      <div>统计图</div>
+      <div>统计图</div>
     </div>
   </div>
 </template>
@@ -43,28 +43,28 @@ export default {
         {
           value: "",
           name: "模型",
-          icon: "",
+          icon: "iconmoxingda",
           leftColor: "#8192FF",
           rightColor: "#5D75E6"
         },
         {
           value: "",
           name: "户型",
-          icon: "",
+          icon: "iconhuxingda",
           leftColor: "#4FDEE2",
           rightColor: "#1292FF"
         },
         {
           value: "",
           name: "商品",
-          icon: "",
+          icon: "iconshangpinda",
           leftColor: "#F9A355",
           rightColor: "#F76C8C"
         },
         {
           value: "",
           name: "材质",
-          icon: "",
+          icon: "iconcaizhida",
           leftColor: "#7FE085",
           rightColor: "#56B765"
         }

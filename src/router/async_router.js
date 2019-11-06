@@ -10,6 +10,7 @@ export default [
     name: "home",
     meta: {
       title: "首页",
+      icon: "iconshouye1",
       roles: []
     },
     redirect: { name: "home" },
@@ -34,6 +35,7 @@ export default [
     redirect: { name: "factorList" },
     meta: {
       title: "厂商管理",
+      icon: "iconchangshang1",
       roles: [1, 2]
     },
     component: Main,
@@ -89,6 +91,7 @@ export default [
     redirect: { name: "apartmentTaskList" },
     meta: {
       title: "户型任务",
+      icon: "iconhuxingrenwu",
       roles: []
     },
     component: Main,
@@ -143,6 +146,7 @@ export default [
     name: "apartment",
     meta: {
       title: "户型资源",
+      icon: "iconhuxingziyuan",
       roles: []
     },
     component: Main,
@@ -226,6 +230,7 @@ export default [
     name: "legend",
     meta: {
       title: "图例资源",
+      icon: "icontuli1",
       roles: []
     },
     component: Main,
@@ -247,21 +252,21 @@ export default [
         path: "hardADD",
         name: "legendHardADD",
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/content/Edit.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Edit.vue")),
+            "home"
+          )
       },
       {
         path: "hardDetail",
         name: "legendHardDetail",
         component: resolve =>
-            require.ensure(
-                [],
-                () => resolve(require("views/content/Detail.vue")),
-                "home"
-            )
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
+            "home"
+          )
       },
       {
         path: "soft",
@@ -284,6 +289,7 @@ export default [
     name: "model",
     meta: {
       title: "模型资源",
+      icon: "iconmoxing1",
       roles: []
     },
     component: Main,
@@ -337,6 +343,7 @@ export default [
     name: "material",
     meta: {
       title: "材质资源",
+      icon: "iconcaizhi1",
       roles: []
     },
     component: Main,
@@ -390,15 +397,18 @@ export default [
     name: "user",
     meta: {
       title: "用户管理",
+      icon: "iconyonghu1",
       roles: []
     },
     component: Main,
     children: [
       {
-        path: "manage",
-        name: "materialManage",
+        path: "userApartmentManage",
+        name: "userApartmentManage",
         meta: {
-          title: "户型设计师管理"
+          title: "户型管理员管理",
+          id: 2,
+          path: "user_manage"
         },
         component: resolve =>
           require.ensure(
@@ -408,10 +418,12 @@ export default [
           )
       },
       {
-        path: "manage",
-        name: "materialManage",
+        path: "userModelManage",
+        name: "userModelManage",
         meta: {
-          title: "模型设计师管理"
+          title: "模型管理员管理",
+          id: 3,
+          path: "user_manage"
         },
         component: resolve =>
           require.ensure(
@@ -421,26 +433,87 @@ export default [
           )
       },
       {
-        path: "manage",
-        name: "materialManage",
+        path: "userCADManage",
+        name: "userCADManage",
         meta: {
-          title: "厂商管理员管理"
+          title: "CAD制图员管理",
+          id: 5,
+          path: "user_manage"
         },
         component: resolve =>
           require.ensure(
             [],
             () => resolve(require("views/content/Index.vue")),
+            "home"
+          )
+      },
+      {
+        path: "userHardManage",
+        name: "userHardManage",
+        meta: {
+          title: "硬装设计师管理",
+          id: 6,
+          path: "user_manage"
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Index.vue")),
+            "home"
+          )
+      },
+      {
+        path: "userFactoryManage",
+        name: "userFactoryManage",
+        meta: {
+          title: "厂商管理员管理",
+          id: 4,
+          path: "user_manage"
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Index.vue")),
+            "home"
+          )
+      },
+      {
+        path: "addUser",
+        name: "addUser",
+        meta: {
+          hideInMenu: true,
+          title: "新增用户"
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Edit.vue")),
+            "home"
+          )
+      },
+      {
+        path: "detailUser",
+        name: "detailUser",
+        meta: {
+          hideInMenu: true,
+          title: "用户详情"
+        },
+        component: resolve =>
+          require.ensure(
+            [],
+            () => resolve(require("views/content/Detail.vue")),
             "home"
           )
       }
     ]
   },
-  //  分类管理
+  //  分类管理、todo 建议使用render函数来做，没必要写六个大同小异的组件，路由还是写六分，不同的地方配置在路由中，或者写个配置文件
   {
     path: "/category",
     name: "category",
     meta: {
       title: "分类管理",
+      icon: "iconfenlei1",
       roles: []
     },
     component: Main,
@@ -532,6 +605,7 @@ export default [
     name: "operate",
     meta: {
       title: "运营面板",
+      icon: "iconyunying1",
       roles: []
     },
     component: Main

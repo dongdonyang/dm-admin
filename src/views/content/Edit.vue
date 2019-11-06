@@ -39,9 +39,23 @@
 
           <!--          操作-->
           <form-item>
-            <Button v-if="!id" type="primary" @click="submit">提交</Button>
-            <Button v-else type="primary" @click="submit">更新</Button>
-            <Button type="text" @click="$router.back()">取消</Button>
+            <Button
+              class="edit-card-submit"
+              v-if="!id"
+              type="primary"
+              @click="submit"
+              >提交</Button
+            >
+            <Button
+              v-else
+              class="edit-card-submit"
+              type="primary"
+              @click="submit"
+              >更新</Button
+            >
+            <Button style="color: #0D35F1" type="text" @click="$router.back()"
+              >取消</Button
+            >
           </form-item>
         </Form>
       </div>
@@ -75,11 +89,20 @@ export default {
   created() {
     this.id = this.$route.query.id;
     obj = new editObj(this.$route.query.path, this.$router);
+    obj.status = this.$route.query.status;
+    obj.meta = this.$route.query.meta;
     if (this.id) {
       obj.getInfo(this.id);
+      // todo 这里的3可以替换成变量、变量定义在各自的配置对象中
+      if (obj.status === 3) {
+        this.arr = [...obj.formList, ...obj.asyncList];
+      } else {
+        this.arr = obj.formList;
+      }
+    } else {
+      this.arr = obj.formList;
     }
     this.obj = obj;
-    this.arr = obj.formList;
     this.form = obj.from;
     console.log("新增、编辑对象", this.form);
   },
@@ -150,6 +173,11 @@ export default {
         width: 100% !important;
         margin: 0 !important;
       }
+    }
+    &-submit {
+      background-color: #0d35f1;
+      border-color: #0d35f1;
+      border-radius: 6px;
     }
   }
 }

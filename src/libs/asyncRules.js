@@ -44,6 +44,32 @@ const validate = {
     } else {
       callback(new Error(rule.message));
     }
+  },
+  // 验证手机号  ==必填
+  phone: (rule, value, callback) => {
+    let reg = /^1[34578][0-9]{9}$/;
+    if (!value) {
+      return callback(new Error("请输入手机号码"));
+    } else {
+      if (reg.test(value)) {
+        callback();
+      } else {
+        return callback(new Error("请输入有效的手机号码"));
+      }
+    }
+  },
+  // 验证邮箱
+  CheckEmail: (rule, value, callback) => {
+    let reg = /^[A-z0-9_]{3,12}@[A-z0-9]{2,12}(\.com|\.cn|\.com\.cn)$/g;
+    if (!value) {
+      callback();
+      return;
+    }
+    if (!reg.test(value)) {
+      callback(new Error("请输入正确的邮箱"));
+    } else {
+      callback();
+    }
   }
 };
 

@@ -88,9 +88,6 @@ export default {
     uploadInit() {
       let that = this;
       this.uploader = new plupload.Uploader({
-        // headers: {
-        //   'Content-Type': 'application/json; charset=utf-8'
-        // },
         runtimes: "html5,flash,html4", // 文件上传方式的优先级，一次递减
         browse_button: `CustomUpload${that.idIndex}`,
         multi_selection: that.multi,

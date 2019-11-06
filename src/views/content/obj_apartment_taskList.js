@@ -23,8 +23,17 @@ export const LIST_CONFIG = {
           list: ["全部", "户型制作中", "硬装制作中", "已完成"]
         };
       },
+      destroyed() {
+        this.obj.searchInfo.status = 0;
+      },
       methods: {
         search() {
+          // 'type':'1cad任务 2硬装任务
+          if (this.type === 1) {
+            this.obj.searchInfo.type = 1;
+          } else {
+            this.obj.searchInfo.type = 2;
+          }
           this.obj.searchInfo.status = this.type;
           this.obj.currentPage = 1;
           this.obj.getList();
@@ -147,7 +156,28 @@ export const ADD_CONFIG = {
   CADList: [],
   hardList: [],
   styleList: [],
-  typeList: [],
+  // todo 通过这种方式来实现数据双向绑定，实时刷新、适用于当前数据需要根据其他数据来变化而变化的情况
+  houseAttrs: {
+    get value() {
+      return ADD_CONFIG.form.houseName;
+    },
+    get disabled() {
+      return ADD_CONFIG.form.isEdit;
+    },
+    get list() {
+      return this._data_;
+    },
+    set list(arr) {
+      this._data_ = arr;
+    },
+    placeholder: "请选择户型"
+  },
+  get typeList() {
+    return this._data_;
+  },
+  set typeList(arr) {
+    this._data_ = arr;
+  },
   form: {}, // 可以提供默认值
   get formList() {
     this.getBuildingList();
@@ -160,7 +190,7 @@ export const ADD_CONFIG = {
   getStyle() {
     axios
       .post(API.ALL_LEVEL, {
-        classify: 1
+        classify: 8
       })
       .then(res => {
         if (res.success) {
@@ -238,18 +268,20 @@ export const ADD_CONFIG = {
   },
   // 查询楼盘下的户型
   getTypeList(id) {
-    // this.typeList = [];
+    this.typeList = [];
     let value = {
       buildingId: id
     };
     axios.post(API.HOUSE_HOUSE, value).then(res => {
       if (res.success) {
+        let arr = [];
         res.data.house.forEach(item => {
-          ADD_CONFIG.typeList.push({
+          arr.push({
             label: item.houseName,
             value: item.houseId
           });
         });
+        ADD_CONFIG.houseAttrs.list = arr;
       }
     });
   },
@@ -271,12 +303,7 @@ export const ADD_CONFIG = {
       value: "houseId",
       component: "BaseSelect",
       get attrs() {
-        return {
-          value: ADD_CONFIG.form.houseName,
-          disabled: ADD_CONFIG.form.isEdit,
-          list: ADD_CONFIG.typeList,
-          placeholder: "请选择户型"
-        };
+        return ADD_CONFIG.houseAttrs; // todo 通过这种方式来实现数据双向绑定，实时刷新
       },
       change: function(id) {
         axios
@@ -355,6 +382,7 @@ export const ADD_CONFIG = {
       component: "BaseUpload",
       get attrs() {
         return {
+          canDelete: false,
           list: [ADD_CONFIG.form.housePic]
         };
       },
@@ -375,6 +403,47 @@ export const ADD_CONFIG = {
       rule: rules.fieldFill("请输入任务描述")
     }
   ],
+  asyncList: [
+    {
+      label: "硬装名称",
+      value: "hardTitle",
+      component: "Input",
+      attrs: {
+        placeholder: "请输入硬装名称"
+      },
+      rule: rules.fieldFill("请输入硬装名称")
+    },
+    {
+      label: "户型图",
+      value: "housePic",
+      component: "BaseUpload",
+      get attrs() {
+        return {
+          canDelete: false,
+          list: [ADD_CONFIG.form.housePic]
+        };
+      },
+      change: function(value) {
+        this.form.housePic = value[0];
+      },
+      rule: rules.fieldFill("请上传一张图片")
+    },
+    {
+      label: "pak文件",
+      value: "pakFile",
+      component: "BaseFiles",
+      get attrs() {
+        return {
+          placeholder: "请选择pak文件",
+          file: ADD_CONFIG.form.pakFile
+        };
+      },
+      rule: rules.fieldFill("请选择pak文件"),
+      change: function(val) {
+        this.form.pakFile = val;
+      }
+    }
+  ],
 
   //form重置
   reForm: function() {
@@ -384,6 +453,7 @@ export const ADD_CONFIG = {
   editInfo: function() {
     this.form = this.form.houseTask;
     this.form.isEdit = true;
+    this.form.styleCode = this.form.styleCodeList;
     ADD_CONFIG.typeList = [
       {
         label: this.form.houseName,
@@ -401,7 +471,10 @@ export const DETAIL_CONFIG = {
   listKey: "houseTask",
   title: "户型任务详情",
   form: {},
-  formList: [
+  get formList() {
+    return this.list;
+  },
+  list: [
     {
       label: "匹配户型",
       value: "houseName"
@@ -448,6 +521,39 @@ export const DETAIL_CONFIG = {
     {
       label: "任务描述",
       value: "description"
+    }
+  ],
+  asyncList: [
+    {
+      label: "硬装名称",
+      value: "hardTitle"
+    },
+    {
+      label: "硬装封面",
+      value: "pakPic",
+      render: (h, item) => {
+        return h("img", {
+          attrs: {
+            height: 80,
+            src: item.pakPic
+          }
+        });
+      }
+    },
+    {
+      label: "pak文件",
+      value: "pakFile",
+      render: (h, item) => {
+        return h("a", {
+          domProps: {
+            innerHTML: "下载"
+          },
+          attrs: {
+            href: item.pakFile,
+            download: "pak文件"
+          }
+        });
+      }
     }
   ]
 };

@@ -80,7 +80,7 @@ export default {
           return i.code.slice(0, 2) === val.slice(0, 2);
         });
         this.form.province = vals.name;
-        if(!this.form.cityCoded) {
+        if (!this.form.cityCoded) {
           this.getlist2(vals.name);
         }
       }
