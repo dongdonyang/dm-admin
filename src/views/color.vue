@@ -8,6 +8,7 @@
       <Tree :data="dataList" :render="renderContent"></Tree>
     </div>
     <Modal
+      class="modalStyle"
       v-model="model1"
       :title="
         `新增分类 > 当前父级分类： ${
@@ -23,6 +24,7 @@
       </Form>
     </Modal>
     <Modal
+      class="modalStyle"
       v-model="model2"
       :title="
         `修改分类 > 当前父级分类： ${
@@ -36,6 +38,17 @@
           <Input placeholder="请输入分类名称" v-model="classifyName"></Input>
         </FormItem>
       </Form>
+    </Modal>
+    <Modal
+      v-model="model3"
+      class="modalStyle"
+      title="确认删除"
+      @on-ok="removeData"
+    >
+      <div class="modalContent">
+        <img src="@/assets/Group.png" alt="" />确认删除 [ {{ chose }} ]
+        分类及下属所有子分类，且无法恢复？
+      </div>
     </Modal>
   </div>
 </template>
@@ -62,6 +75,8 @@ export default {
       // classifyType: true,
       model2: false,
       model1: false,
+      model3: false,
+      chose: "",
       dataList: [
         {
           title: "颜色分类",
@@ -227,63 +242,59 @@ export default {
     },
 
     //删除数据
-    remove(root, node, data) {
-      var delData = {
-        classify: data.classify,
-        code: data.code,
-        force: false
-      };
-      this.$Modal.confirm({
-        title: "确认？",
-        content:
-          "<p>" +
-          `确认删除 [ ${data.name} ] 分类及下属所有子分类，且无法恢复？` +
-          "</p>",
-        onOk: () => {
+    removeData(delData, parentKey, parent, index) {
+      this.axios({
+        method: "post",
+        url: "/catalog//classify/delete",
+        data: this.delData
+      }).then(res => {
+        console.log(res);
+        if (res.code === 1001) {
+          this.$Message.success(res.msg);
+          this.parent.children.splice(this.index, 1);
+          // this.getList();
+        } else if (res.data.code === 1002) {
+          var data = res.data.data;
+          data.force = true;
           this.axios({
             method: "post",
             url: "/catalog//classify/delete",
-            data: delData
+            data
           }).then(res => {
-            console.log(res);
-            if (res.code === 1001) {
-              this.$Message.success(res.msg);
-              const parentKey = root.find(el => el === node).parent;
-              const parent = root.find(el => el.nodeKey === parentKey).node;
-              const index = parent.children.indexOf(data);
-              // console.log(parent.children)
-              parent.children.splice(index, 1);
-              console.log(parentKey);
-              console.log(parent);
-              console.log(index);
-              console.log(data);
-              console.log(parent.children);
-              // this.getList();
-            } else if (res.data.code === 1002) {
-              var data = res.data.data;
-              data.force = true;
-              this.axios({
-                method: "post",
-                url: "/catalog//classify/delete",
-                data
-              }).then(res => {
-                this.$Message.success(res.msg);
-                // const parentKey = root.find(el => el === node).parent;
-                // const parent = root.find(el => el.nodeKey === parentKey).node;
-                // const index = parent.children.indexOf(data);
-                // // console.log(parent.children)
-                // parent.children.splice(index, 1);
-                this.getList();
-              });
-            }
+            this.$Message.success(res.msg);
+            this.parent.children.splice(this.index, 1);
+            // this.getList();
           });
         }
       });
     },
+    remove(root, node, data) {
+      this.model3 = true;
+      this.chose = data.name;
+      this.delData = {
+        classify: data.classify,
+        code: data.code,
+        force: false
+      };
+      var parentKey = root.find(el => el === node).parent;
+      this.parent = root.find(el => el.nodeKey === parentKey).node;
+      this.index = this.parent.children.indexOf(data);
+      // this.$Modal.confirm({
+      //     title: '确认删除',
+      //     content: '<p>' + `确认删除 [ ${data.name} ] 分类及下属所有子分类，且无法恢复？` + '</p>',
+      //     onOk: () => {
+
+      //     }
+      // });
+    },
 
     addClassify() {
-      var root = this.root;
-      var node = this.node;
+      var reg = /^\s+$/;
+      var isTrue = reg.test(this.classifyName);
+      if (this.classifyName === "" || isTrue === true) {
+        this.$Message.warning("不能为空");
+        return;
+      }
       var data = {
         classify:
           this.selectData.classify || this.selectData.children[0].classify,
@@ -293,7 +304,7 @@ export default {
       this.classifyName = "";
       this.axios({
         method: "post",
-        url: "/catalog/classify/add/",
+        url: "/catalog/classify/add",
         data
       }).then(res => {
         if (res.code === 1001) {
@@ -308,6 +319,12 @@ export default {
       });
     },
     updataClassify() {
+      var reg = /^\s+$/;
+      var isTrue = reg.test(this.classifyName);
+      if (this.classifyName === "" || isTrue === true) {
+        this.$Message.warning("不能为空");
+        return;
+      }
       var data = {
         classify: this.selectData.classify,
         newName: this.classifyName,

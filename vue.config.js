@@ -4,8 +4,14 @@ const path = require("path");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
+let Version = new Date().getTime();
 module.exports = {
   assetsDir: "static",
+  // output: {
+  //   path: config.build.assetsRoot,
+  //   filename: utils.assetsPath("js/[name].[chunkhash]." + Version + ".js"),
+  //   chunkFilename: utils.assetsPath("js/[id].[chunkhash]." + Version + ".js")
+  // },
   chainWebpack: config => {
     //  todo 设置路径别名
     config.resolve.alias.set("views", resolve("src/views"));
@@ -25,8 +31,18 @@ module.exports = {
     });
   },
 
-  // todo 打包忽略，使用CDN来提升访问速度
   configureWebpack: {
+    // todo 添加版本号、防止缓存
+    output: {
+      // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+      // assetsRoot: path.resolve(__dirname, "../dist"),
+      // assetsSubDirectory: "static",
+      // assetsPublicPath: "/",
+      // path: "./dist/js",
+      filename: `[name]${Version}.js`,
+      chunkFilename: `[name]${Version}.js`
+    },
+    // todo 打包忽略，使用CDN来提升访问速度
     externals: {
       vue: "Vue",
       "vue-router": "VueRouter",

@@ -11,17 +11,19 @@ export default class Content {
   pageSize = Number;
   totalSize = Number;
   path = String;
+  loding = false;
 
   constructor(roles = [], currentRouter = {}) {
     this.currentPage = 1;
     this.pageSize = 10;
     this.totalSize = 0;
     this.tableData = [];
+    this.loding = false;
     this.path = "";
     this.init(currentRouter);
   }
   /**
-   * @fileOverview 查询当前页面的配置对象信息
+   * @fileOverview todo 查询当前页面的配置对象信息
    * @param router 当前页面的路由
    * @property {LIST_CONFIG} 当前页面的配置对象
    * */
@@ -31,10 +33,19 @@ export default class Content {
       return `_${val.toLocaleLowerCase()}`;
     });
     console.log(path);
+    // 若指定了配置对象，则读取指定路径、则不会读取当前路由名称
+    if (router.meta.path) {
+      this.meta = router.meta;
+      path = router.meta.path;
+    }
     this.path = path;
     try {
       let config = require(`./obj_${path}`); // 取值
       Object.assign(this, config.LIST_CONFIG); // 合并
+      //用户管理处区分
+      if (router.meta.path) {
+        config.USER_CONFIG.call(this);
+      }
     } catch (e) {
       alert("未找到当前页面配置文件", e);
     }
@@ -55,23 +66,31 @@ export default class Content {
       pageSize: this.pageSize
     };
     value[this.searchKey] = JSON.stringify(this.searchInfo);
-    axios.post(API[this.listURL], value).then(res => {
-      if (res.success) {
-        this.totalSize = res.data.count;
-        this.tableData = res.data[this.listKey];
-      }
-    });
+    this.loding = true;
+    axios
+      .post(API[this.listURL], value)
+      .then(res => {
+        this.loding = false;
+        if (res.success) {
+          this.totalSize = res.data.count;
+          this.tableData = res.data[this.listKey];
+        }
+      })
+      .catch(() => {
+        this.loding = false;
+      });
   }
-/**
- * @fileOverview todo 跳转到新增页面
- * @property {addRoute} 新增页面名称 todo 建议改成【***URL】
- * @property {path} 新增页面需要读取的配置文件地址，实例化对象 todo 改变一下传参方式，这种方式不安全
- * */
+  /**
+   * @fileOverview todo 跳转到新增页面
+   * @property {addRoute} 新增页面名称 todo 建议改成【***URL】
+   * @property {path} 新增页面需要读取的配置文件地址，实例化对象 todo 改变一下传参方式，这种方式不安全
+   * */
   addRow() {
     this.$router.push({
       name: this.addRoute,
       query: {
-        path: this.path
+        path: this.path,
+        meta: JSON.stringify(this.meta)
       }
     });
   }
@@ -86,7 +105,8 @@ export default class Content {
       name: this.detailRoute,
       query: {
         path: this.path,
-        id: row[this.detailKey]
+        id: row[this.detailKey],
+        status: this.searchInfo ? this.searchInfo.status : "" // todo 户型任务完成阶段时候需要展示额外数据
       }
     });
   }
@@ -119,7 +139,8 @@ export default class Content {
       name: this.addRoute,
       query: {
         path: this.path,
-        id: row[this.detailId] || row.id
+        id: row[this.detailId] || row.id,
+        status: this.searchInfo ? this.searchInfo.status : "" // todo 户型任务完成阶段时候需要展示额外数据
       }
     });
   }

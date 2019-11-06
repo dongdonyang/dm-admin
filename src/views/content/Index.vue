@@ -2,11 +2,17 @@
   <div class="index">
     <!--    todo 因组件注册有缓存，故使用v-if-->
     <!--    可以使用异步组件来渲染render-->
-    <head-component class="index-header" v-if="obj.head"></head-component>
+    <head-component
+      :obj="obj"
+      class="index-header"
+      v-if="obj.head"
+    ></head-component>
 
     <div class="index-card">
+      <!--      加载状态-->
+      <Spin size="large" fix v-if="obj.loding"></Spin>
       <!--    筛选选项-->
-      <Row type="flex" justify="space-between">
+      <Row class="index-card-first" type="flex" justify="space-between">
         <p class="index-card-title">{{ obj.title }}</p>
         <!--        自定义筛选组件-->
         <select-component
@@ -20,6 +26,7 @@
 
       <!--    table列表-->
       <Table
+        class="index-card-table"
         highlight-row
         v-if="obj.tableData.length"
         :columns="obj.tableColumn"
@@ -33,13 +40,48 @@
           slot="action"
         >
           <Tooltip content="详情" placement="top">
-            <i class="iconfont iconchakan" @click="obj.detailRow(row)"></i>
+            <i
+              class="iconfont iconchakan index-card-action"
+              @click="obj.detailRow(row)"
+            ></i>
           </Tooltip>
-          <Tooltip content="编辑" placement="top">
-            <i class="iconfont iconbianji" @click="obj.editRow(row)"></i>
+          <Tooltip
+            v-if="obj.searchInfo.status !== 2"
+            content="编辑"
+            placement="top"
+          >
+            <i
+              class="iconfont iconbianji index-card-action"
+              @click="obj.editRow(row)"
+            ></i>
           </Tooltip>
-          <Tooltip content="删除" placement="top">
-            <i class="iconfont iconshanchu" @click="deleteRow(row)"></i>
+          <!--          todo 户型任务操作-->
+          <!--          <Tooltip-->
+          <!--            v-if="obj.hasButton && obj.searchInfo.status === 2"-->
+          <!--            content="撤回"-->
+          <!--            placement="top"-->
+          <!--          >-->
+          <!--            <i class="iconfont iconchehui index-card-action" @click="clickBack(row)"></i>-->
+          <!--          </Tooltip>-->
+          <Tooltip
+            v-if="obj.hasButton && obj.searchInfo.status === 2"
+            content="上传"
+            placement="top"
+          >
+            <i
+              class="iconfont iconshangchuan index-card-action"
+              @click="clickFile(row)"
+            ></i>
+          </Tooltip>
+          <Tooltip
+            v-if="obj.searchInfo.status !== 3"
+            content="删除"
+            placement="top"
+          >
+            <i
+              class="iconfont iconshanchu index-card-action"
+              @click="deleteRow(row)"
+            ></i>
           </Tooltip>
         </Row>
       </Table>
@@ -47,15 +89,52 @@
 
       <!--    分页-->
       <Page
+        class="index-card-page"
         v-show="obj.totalSize > obj.pageSize"
         prev-text="上一页"
         next-text="下一页"
         size="small"
+        :current="obj.currentPage"
         :total="obj.totalSize"
         show-sizere
         @on-change="obj.pageChange.call(obj, $event)"
       ></Page>
     </div>
+
+    <!--    todo 户型任务撤回弹窗、建议不要写在这里，写成组件，加载户型任务再注册该组件-->
+    <Modal
+      class="index-modal"
+      v-model="modal"
+      @on-ok="isBack"
+      title="是否确认撤回到CAD重新绘制?"
+    >
+      <p>请输入撤回理由</p>
+      <Input v-model="backForm.description" type="textarea" :rows="4" />
+    </Modal>
+
+    <!--    todo 户型任务上传文件弹窗、建议不要写在这里，写成组件，加载户型任务再注册该组件-->
+    <Modal
+      class="index-modal"
+      @on-ok="isFile"
+      v-model="modalFile"
+      title="文件上传"
+    >
+      <Form :label-width="80">
+        <FormItem label="硬装名称：">
+          <Input v-model="fileForm.hardTitle"></Input>
+        </FormItem>
+        <FormItem label="硬装封面：">
+          <BaseUpload
+            v-model="fileForm.hardCoverPic"
+            :max-size="1"
+            @change="setPic"
+          ></BaseUpload>
+        </FormItem>
+        <FormItem label="PAK文件：">
+          <BaseFiles @change="setFile" v-model="fileForm.pakFile"></BaseFiles>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -75,6 +154,11 @@ export default {
   },
   data() {
     return {
+      backForm: {},
+      fileForm: {},
+      modalFile: false,
+      modal: false,
+      pic: require("../../assets/Group.png"),
       obj: Object
     };
   },
@@ -95,13 +179,52 @@ export default {
   methods: {
     deleteRow(row) {
       this.$Modal.confirm({
-        title: "确认？",
-        content: "<p>一旦删除，无法撤销，确定删除么</p>",
+        title: "确认删除？",
+        content:
+          "<div class='sure'><div class='sure-img'></div>删除后将无法恢复该数据，确认删除当前数据吗?</div>",
         onOk: () => {
           // todo 修改
           obj.deleteRow(row);
         }
       });
+    },
+    // 显示任务回退
+    clickBack(val) {
+      this.backForm.houseId = val.houseId;
+      this.modal = true;
+    },
+    //  cad任务回退
+    isBack() {
+      axios.post(this.$API.HOUSE_CAD_BACK, this.backForm).then(res => {
+        if (res.success) {
+          this.$message.success("撤回成功");
+          obj.getList();
+        }
+      });
+    },
+    // 显示上传文件
+    clickFile(row) {
+      this.fileForm.taskId = row.id;
+      this.modalFile = true;
+    },
+    setPic(list) {
+      this.fileForm.hardCoverPic = list[0];
+    },
+    setFile(file) {
+      this.fileForm.pakFile = file;
+    },
+    //  文件上传
+    isFile() {
+      axios
+        .post(this.$API.HOUSE_FINISH_HARD_TASK, {
+          value: JSON.stringify(this.fileForm)
+        })
+        .then(res => {
+          if (res.success) {
+            this.$message.success("上传成功");
+            obj.getList();
+          }
+        });
     }
   }
 };
@@ -120,6 +243,7 @@ export default {
 
   /*  卡片*/
   &-card {
+    position: relative;
     background-color: #fff;
     padding: 30px;
     border-radius: 6px;
@@ -135,7 +259,7 @@ export default {
       justify-content: flex-end;
       padding: 0 15px;
     }
-    & > :nth-child(1) {
+    &-first {
       line-height: 36px;
       margin-bottom: 30px;
       /*新增按钮*/
@@ -152,7 +276,7 @@ export default {
       color: #333;
     }
     /*todo table*/
-    & > :nth-child(2) {
+    &-table {
       flex: 2 0 auto;
       /*去掉边框*/
       border-width: 0;
@@ -170,10 +294,123 @@ export default {
         background-color: #f9f9f9;
       }
     }
-    /*todo page*/
-    & > :nth-child(3) {
+    /*操作按钮*/
+    &-action {
+      &:hover {
+        color: #0d35f1 !important;
+        cursor: pointer;
+      }
+    }
+    /*  分页*/
+    /*因为实在自定义下面修改iview属性，故要加上import*/
+    &-page {
       text-align: center;
       line-height: 28px;
+      .ivu-page-item {
+        font-size: 14px !important;
+        height: 28px !important;
+        width: 28px !important;
+        line-height: 28px !important;
+        margin: 0 5px !important;
+        border: 1px solid #e5e5e5 !important;
+        border-radius: 25px !important;
+      }
+      .ivu-page-item-active {
+        transition: all 1s;
+        background-color: #0d35f1;
+        border-color: #0d35f1 !important;
+        a {
+          color: #fff;
+        }
+      }
+      .ivu-page-prev,
+      .ivu-page-next {
+        height: 28px !important;
+        width: 68px !important;
+        line-height: 28px !important;
+        border: 1px solid #e5e5e5 !important;
+        font-size: 14px !important;
+        border-radius: 20px !important;
+      }
+    }
+  }
+  /*  弹窗*/
+  &-modal {
+    .ivu-modal {
+      top: 180px;
+    }
+    .ivu-icon {
+      color: #fff;
+    }
+    .ivu-modal-header {
+      background-color: #0d35f1;
+      .ivu-modal-header-inner {
+        color: #fff;
+      }
+    }
+    .ivu-modal-body {
+      min-height: 140px;
+      padding: 10px 30px !important;
+      p {
+        line-height: 40px;
+      }
+    }
+    .ivu-modal-footer {
+      line-height: 60px;
+      background: rgba(249, 249, 249, 1);
+      & > :last-child {
+        width: 88px;
+        height: 36px;
+        background: rgba(13, 53, 241, 1);
+        border-radius: 18px;
+      }
+    }
+  }
+}
+/*  todo 删除确认弹窗*/
+.ivu-modal {
+  top: 380px;
+  .ivu-modal-body {
+    padding: 0;
+    .ivu-modal-confirm {
+      padding: 0;
+    }
+    /*头部*/
+    .ivu-modal-confirm-head {
+      background-color: #0d35f1;
+      padding: 14px 30px;
+      .ivu-modal-confirm-head-title {
+        color: #fff;
+      }
+      .ivu-modal-confirm-head-icon {
+        display: none;
+      }
+    }
+    /*bady*/
+    .ivu-modal-confirm-body {
+      line-height: 60px;
+      font-size: 14px;
+      .sure {
+        display: flex;
+        align-items: center;
+      }
+      .sure-img {
+        margin: 5px;
+        height: 31px;
+        width: 31px;
+        background-image: url("../../assets/Group.png");
+      }
+    }
+    /*  footer*/
+    .ivu-modal-confirm-footer {
+      background: rgba(249, 249, 249, 1);
+      margin-top: 0;
+      line-height: 96px;
+      padding: 0 30px;
+      & > :last-child {
+        background-color: #0d35f1;
+        border-radius: 18px;
+      }
     }
   }
 }

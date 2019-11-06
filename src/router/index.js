@@ -24,6 +24,8 @@ router.beforeEach((to, form, next) => {
   }
 });
 
+export default router;
+
 // // 用户是否有权限进入该页面
 // function hasPermission(role, route) {
 //   if (role && typeof role === "string") {

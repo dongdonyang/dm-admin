@@ -1,46 +1,56 @@
 <template>
   <div class="base-city">
-        <!--        省-->
-        <Select placeholder="请选择省份" v-model="form.province" style="width: 48%" @on-change="getlist2">
-          <Option v-for="(item, index) in list1" :key="index" :value="item.name">{{
-            item.name
-          }}</Option>
-        </Select>
+    <!--        省-->
+    <Select
+      placeholder="请选择省份"
+      v-model="form.province"
+      style="width: 200px;margin-right: 5px"
+      @on-change="getlist2"
+    >
+      <Option v-for="(item, index) in list1" :key="index" :value="item.name">{{
+        item.name
+      }}</Option>
+    </Select>
 
-        <!--        city-->
-        <Select placeholder="请选择市区" v-model="form.city" style="width: 48%" @on-change="setCity">
-          <Option v-for="(item, index) in list2" :key="index" :value="item.name">{{
-            item.name
-          }}</Option>
-        </Select>
+    <!--        city-->
+    <Select
+      placeholder="请选择市区"
+      v-model="form.city"
+      style="width: 200px"
+      @on-change="setCity"
+    >
+      <Option v-for="(item, index) in list2" :key="index" :value="item.name">{{
+        item.name
+      }}</Option>
+    </Select>
 
     <!--        省-->
-<!--    <Select-->
-<!--      placeholder="请选择省份"-->
-<!--      v-model="position.province"-->
-<!--      @on-change="provinceChange"-->
-<!--    >-->
-<!--      <Option-->
-<!--        v-for="(item, index) in provinceList"-->
-<!--        :key="index"-->
-<!--        :value="item.code"-->
-<!--        >{{ item.name }}</Option-->
-<!--      >-->
-<!--    </Select>-->
+    <!--    <Select-->
+    <!--      placeholder="请选择省份"-->
+    <!--      v-model="position.province"-->
+    <!--      @on-change="provinceChange"-->
+    <!--    >-->
+    <!--      <Option-->
+    <!--        v-for="(item, index) in provinceList"-->
+    <!--        :key="index"-->
+    <!--        :value="item.code"-->
+    <!--        >{{ item.name }}</Option-->
+    <!--      >-->
+    <!--    </Select>-->
 
-<!--    &lt;!&ndash;        city&ndash;&gt;-->
-<!--    <Select-->
-<!--      placeholder="请选择市区"-->
-<!--      v-model="position.city"-->
-<!--      @on-change="cityChange"-->
-<!--    >-->
-<!--      <Option-->
-<!--        v-for="(item, index) in cityList"-->
-<!--        :key="index"-->
-<!--        :value="item.code"-->
-<!--        >{{ item.name }}</Option-->
-<!--      >-->
-<!--    </Select>-->
+    <!--    &lt;!&ndash;        city&ndash;&gt;-->
+    <!--    <Select-->
+    <!--      placeholder="请选择市区"-->
+    <!--      v-model="position.city"-->
+    <!--      @on-change="cityChange"-->
+    <!--    >-->
+    <!--      <Option-->
+    <!--        v-for="(item, index) in cityList"-->
+    <!--        :key="index"-->
+    <!--        :value="item.code"-->
+    <!--        >{{ item.name }}</Option-->
+    <!--      >-->
+    <!--    </Select>-->
   </div>
 </template>
 
@@ -70,7 +80,9 @@ export default {
           return i.code.slice(0, 2) === val.slice(0, 2);
         });
         this.form.province = vals.name;
-        this.getlist2(vals.name);
+        if (!this.form.cityCoded) {
+          this.getlist2(vals.name);
+        }
       }
     }
   },
@@ -156,6 +168,7 @@ export default {
         return res.name === value;
       });
       this.form.cityCoded = id.code;
+      this.form.cityCode = id.code;
     }
   }
 };

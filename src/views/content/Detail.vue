@@ -47,10 +47,16 @@ export default {
   },
   created() {
     obj = new detailObj(this.$route.query.path);
+    obj.status = this.$route.query.status; // todo 户型任务完成阶段时候需要展示额外数据
     obj.getInfo.call(this, obj, this.$route.query.id);
     this.from = obj.form;
     this.obj = obj;
-    this.formList = obj.formList;
+    // todo 这里的3可以替换成变量、变量定义在各自的配置对象中
+    if (obj.status === 3) {
+      this.formList = [...obj.formList, ...obj.asyncList];
+    } else {
+      this.formList = obj.formList;
+    }
     console.log("详情对象", obj);
   },
   mounted() {},

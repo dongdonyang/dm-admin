@@ -3,7 +3,12 @@
     <!--    LOGO-->
     <div>
       <img v-show="!isCollapsed" src="../assets/fullLogo.png" alt="" />
-      <span v-show="isCollapsed">LOGO</span>
+      <span v-show="isCollapsed">
+        <i
+          style="font-size: 24px; color: #0D35F1"
+          class="iconfont iconlogo"
+        ></i>
+      </span>
     </div>
 
     <!--    菜单-->
@@ -31,6 +36,7 @@
             <template v-if="item.children">
               <Submenu :name="item.name">
                 <template slot="title">
+                  <i :class="`iconfont ${item.icon}`" />
                   {{ item.title }}
                 </template>
                 <menu-item
@@ -43,7 +49,10 @@
             </template>
             <!--            一级菜单-->
             <template v-else>
-              <menu-item :name="item.name">{{ item.title }}</menu-item>
+              <menu-item :name="item.name">
+                <i :class="`iconfont ${item.icon}`" />
+                {{ item.title }}</menu-item
+              >
             </template>
           </div>
         </div>
@@ -77,7 +86,9 @@ export default {
     };
   },
   created() {
-    this.activeName = this.$route.name;
+    // this.activeName = this.$route.name;
+    this.activeName = sessionStorage.getItem("menuName");
+    console.log("当前路由name", this.activeName);
     this.createMenuByRouter();
   },
   mounted() {},
@@ -106,6 +117,7 @@ export default {
     },
     //  路由跳转
     openNew(name) {
+      sessionStorage.setItem("menuName", name); //刷新页面菜单栏能定位到当前
       this.$router.push({
         name: name
       });
@@ -126,8 +138,15 @@ export default {
     background-color: #f1f1f1;
   }
   /*修改菜单栏颜色*/
-  /*.ivu-menu-item:hover,*/
-  /*.ivu-menu-submenu:hover {*/
+  .ivu-menu-item-selected {
+    transition: all 1s;
+    color: #fff !important;
+    background-color: #0d35f1 !important;
+    &::after {
+      width: 0 !important;
+    }
+  }
+  /*.ivu-menu-item:hover {*/
   /*  background-color: #f1f1f1 !important;*/
   /*}*/
 }

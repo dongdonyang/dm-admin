@@ -2,7 +2,9 @@
   <Select
     :placeholder="this.placeholder"
     :style="selectStyle"
+    :disabled="disabled"
     v-model="val"
+    :multiple="multiple"
     @on-change="change"
   >
     <Option v-for="(item, index) in list" :key="index" :value="item.value">{{
@@ -23,6 +25,14 @@ export default {
     event: "change"
   },
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: "",
       required: true
@@ -38,8 +48,8 @@ export default {
     }
   },
   watch: {
-    value: function (news) {
-      this.val = news
+    value: function(news) {
+      this.val = news;
     }
   },
   data() {
@@ -51,8 +61,7 @@ export default {
       }
     };
   },
-  created() {
-  },
+  created() {},
   mounted() {},
   methods: {
     change($event) {

@@ -30,7 +30,7 @@ export const LIST_CONFIG = {
         // 查询
         search(name) {
           this.obj.searchInfo.name = name;
-          this.obj.pageNum = 1;
+          this.obj.currentPage = 1;
           this.obj.getList();
         },
         // 获取省份
@@ -77,7 +77,10 @@ export const LIST_CONFIG = {
           axios
             .post(API.ALL_BUILDING_IN_CITY, {
               cityName: name.label,
-              groupIndex: 0
+              groupIndex: 0,
+              isPageable: 0,
+              pageSize: 999999,
+              pageNum: 1
             })
             .then(res => {
               if (res.success) {
@@ -173,16 +176,15 @@ export const ADD_CONFIG = {
   detailKey: "houseId",
   addKey: "houseInfo",
   buildingList: [],
-  typeList: [
-    {
-      label: "三室",
-      value: "三室"
+  typeList: {
+    get list() {
+      return this._data_;
     },
-    {
-      label: "四室",
-      value: "四室"
-    }
-  ],
+    set list(arr) {
+      this._data_ = arr;
+    },
+    placeholder: "请选择户型"
+  },
   form: {}, // 可以提供默认值
   get formList() {
     this.getBuildingList();
@@ -210,7 +212,7 @@ export const ADD_CONFIG = {
       },
       rule: rules.fieldFill("请选择楼盘"),
       change: function(id) {
-        // this.getTypeList(id);
+        this.getTypeList(id);
       }
     },
     {
@@ -228,10 +230,7 @@ export const ADD_CONFIG = {
       value: "type",
       component: "BaseSelect",
       get attrs() {
-        return {
-          list: ADD_CONFIG.typeList,
-          placeholder: "请选择户型"
-        };
+        return ADD_CONFIG.typeList;
       },
       rule: rules.fieldFill("请选择户型")
     },
@@ -243,6 +242,7 @@ export const ADD_CONFIG = {
       get attrs() {
         return {
           maxSize: 10,
+          multiple: true,
           list: ADD_CONFIG.form.picList
         };
       },
@@ -290,14 +290,17 @@ export const ADD_CONFIG = {
     let value = {
       buildingId: id
     };
-    axios.post(API.HOUSE_HOUSE, value).then(res => {
+    axios.post(API.HOUSE_TYPE, value).then(res => {
       if (res.success) {
-        res.data.buildings.forEach(item => {
-          ADD_CONFIG.typeList.push({
-            label: item.name,
-            value: item.id
+        ADD_CONFIG.typeList.list = [];
+        let arr = [];
+        res.data.house_type.forEach(item => {
+          arr.push({
+            label: item,
+            value: item
           });
         });
+        ADD_CONFIG.typeList.list = arr;
       }
     });
   },

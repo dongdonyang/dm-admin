@@ -18,7 +18,7 @@ if (token) {
   store.commit("setToken", token);
 }
 
-console.log("当前环境：", process.env.MODE);
+console.log("当前环境：", process.env);
 
 new Vue({
   router,

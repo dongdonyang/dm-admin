@@ -6,6 +6,7 @@ export default {
   state: {
     menuState: false, // 菜单栏状态
     apartmentSource: ["普通", "app", "卖场上传"],
+    houseTaskStatus: ["全部", "户型制作中", "硬装制作中", "已完成"],
     getApartmentType: {
       "1": "精装房",
       "2": "毛坯房",

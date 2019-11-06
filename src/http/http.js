@@ -14,7 +14,7 @@ let errQueue = 0; // 定义错误队列
 
 // axios 配置
 axios.defaults.timeout = 50000; // 请求超时时间
-axios.defaults.baseURL = process.env.BASE_URL || "http://192.168.50.11:8621/"; // 请求的地址
+axios.defaults.baseURL = process.env.BASE_URL || "http://192.168.50.138:8621/"; // 请求的地址
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
 
@@ -45,15 +45,15 @@ _axios.interceptors.response.use(
       if (res.data.code === 1001) {
         errQueue = 0;
         res.data.success = true;
-        return res.data;
+        return res.data; // todo 此处return的是res.data!
       } else if (res.data.code === 3003) {
         // 用户需要重新登陆
-        errQueue += 1;
-        router.replace({
-          path: "/login"
-        });
-        if (errQueue <= 1) {
-          Message.error("您的账号在别处登录，请重新登录");
+        // router.replace({
+        //   path: "/login"
+        // });
+        if (errQueue === 0) {
+          errQueue += 1;
+          Message.error(res.data.msg);
         }
       } else {
         Message.error(res.data.msg);

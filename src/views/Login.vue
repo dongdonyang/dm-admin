@@ -8,6 +8,7 @@
     <!--    main-->
     <div>
       <div class="login-main">
+        <!--        放背景图的-->
         <div></div>
 
         <!--        form-->
@@ -16,20 +17,19 @@
           <Form ref="form" :model="form" :rules="formRules">
             <FormItem prop="account">
               <!--              账号-->
-              <Input
-                v-model="form.account"
-                prefix="ios-contact"
-                placeholder="请输入登录手机号码"
-              />
+              <Input v-model="form.account" placeholder="请输入登录手机号码">
+                <i class="iconfont iconshouji" slot="prefix" />
+              </Input>
             </FormItem>
             <!--            密码-->
             <FormItem prop="password">
               <Input
                 type="password"
                 v-model="form.password"
-                prefix="ios-contact"
                 placeholder="请输入密码"
-              />
+              >
+                <i class="iconfont iconmima" slot="prefix" />
+              </Input>
             </FormItem>
             <FormItem class="login-main-form-word">
               <Checkbox v-model="isRemember">记住密码</Checkbox>
@@ -61,18 +61,44 @@ export default {
   name: "Login",
   data() {
     return {
-      form: {},
+      isClick: false,
+      form: {
+        account: "",
+        password: ""
+      },
       isRemember: false,
-      formRules: {}
+      formRules: {
+        account: [{ required: true, message: "请输入登录手机号码" }],
+        password: [{ required: true, message: "请输入密码" }]
+      }
     };
   },
-  created() {},
+  created() {
+    this.getInfo();
+    let that = this;
+    window.onkeydown = function(e) {
+      if (that.isClick) return;
+      if (e.keyCode === 13) {
+        that.isClick = true;
+        that.login();
+      }
+    };
+  },
   mounted() {},
   methods: {
+    getInfo() {
+      let account = sessionStorage.getItem("account");
+      let password = sessionStorage.getItem("password");
+      let isRemember = sessionStorage.getItem("isRemember");
+      this.isRemember = isRemember && true;
+      this.form.account = account;
+      this.form.password = password;
+    },
     //  todo 用户登录
     login() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.isClick = true;
           // 数据加密
           let f = {
             account: Base64.encodeURI(this.form.account),
@@ -80,15 +106,21 @@ export default {
             isForce: 1, //0已登录需要询问 1强制踢出已登录
             loginType: 1 //1-manage 2-mkt
           };
-          axios.post(this.$API.LOGIN, f).then(res => {
-            if (res.success) {
-              this.saveUserInfo(res.data);
-              this.$router.push({
-                name: "home"
-              });
-              this.$Message.success(`欢迎登录四维聚象后台管理系统`);
-            }
-          });
+          axios
+            .post(this.$API.LOGIN, f)
+            .then(res => {
+              this.isClick = false;
+              if (res.success) {
+                this.saveUserInfo(res.data);
+                this.$router.push({
+                  name: "home"
+                });
+                this.$Message.success(`欢迎登录四维聚象后台管理系统`);
+              }
+            })
+            .catch(() => {
+              this.isClick = false;
+            });
         }
       });
     },
@@ -97,8 +129,14 @@ export default {
       this.$store.commit("setToken", info.token);
       sessionStorage.setItem("token", info.token);
       if (this.isRemember) {
+        sessionStorage.setItem("account", this.form.account);
+        sessionStorage.setItem("password", this.form.password);
+        sessionStorage.setItem("isRemember", this.isRemember);
         //存在localStorage中，进行长期存储
       } else {
+        sessionStorage.setItem("account", this.form.account);
+        sessionStorage.setItem("password", "");
+        sessionStorage.setItem("isRemember", "");
         //  存在session中，进行短期会话存储
       }
     }
@@ -179,9 +217,14 @@ export default {
             padding-left: 58px;
           }
           /*    图标*/
-          .ivu-icon {
+          .ivu-input-prefix {
             line-height: 40px;
             padding-left: 20px;
+            padding-top: 2px;
+            i {
+              font-size: 18px;
+              color: #0d35f1;
+            }
           }
         }
       }

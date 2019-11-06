@@ -4,6 +4,74 @@ import rules from "../../libs/asyncRules";
 import API from "../../http/api";
 
 export const LIST_CONFIG = {
+  get select() {
+    return {
+      template: `<div>
+<BaseSelect placeholder="总分类" v-model="info.val1" :list="allList" @change="getSecond"></BaseSelect>
+<BaseSelect placeholder="次分类" v-model="info.val2" :list="secondList" @change="search"></BaseSelect>
+<baseInput placeholder="请输入材质名称或关键字" v-model.trim="info.val3" @change="search"></baseInput>
+</div>`,
+      props: {
+        obj: {}
+      },
+      data() {
+        return {
+          info: {},
+          allList: [],
+          secondList: []
+        };
+      },
+      created() {
+        this.getAll();
+      },
+      methods: {
+        search() {
+          this.obj.searchInfo.value = this.info.val3;
+          this.obj.searchInfo.code = this.info.val2;
+          this.obj.currentPage = 1;
+          this.obj.getList();
+        },
+        // 总分类
+        getAll() {
+          axios
+            .post(API.MATERIAL_CLASSIFY, {
+              classIndex: 0,
+              code: "000000"
+            })
+            .then(res => {
+              this.allList = [];
+              if (res.success) {
+                res.data.catalogs.forEach(i => {
+                  this.allList.push({
+                    label: i.name,
+                    value: i.code
+                  });
+                });
+              }
+            });
+        },
+        //  次分类
+        getSecond(code) {
+          axios
+            .post(API.MATERIAL_CLASSIFY, {
+              classIndex: 1,
+              code: code
+            })
+            .then(res => {
+              this.secondList = [];
+              if (res.success) {
+                res.data.catalogs.forEach(i => {
+                  this.secondList.push({
+                    label: i.name,
+                    value: i.code
+                  });
+                });
+              }
+            });
+        }
+      }
+    };
+  },
   title: "材质管理",
   listURL: "MATERIAL_SEARCH",
   searchKey: "searchInfo",
@@ -115,12 +183,15 @@ export const ADD_CONFIG = {
     {
       label: "材质类别",
       value: "catalogCode",
-      component: "BaseSelect",
+      component: "BaseCascader",
       get attrs() {
         return {
-          list: ADD_CONFIG.materList,
+          typeInfo: ADD_CONFIG.form.catoType,
           placeholder: "请选择材质类别"
         };
+      },
+      change: function(val) {
+        this.form.catalogCode = val;
       },
       rule: rules.fieldFill("请选择材质类别")
     },
@@ -226,6 +297,13 @@ export const ADD_CONFIG = {
   // 编辑查询后
   editInfo: function() {
     this.form = this.form.material;
+    let val = this.form.catalogs.find(i => {
+      return i.classify === "5";
+    });
+    this.form.catoType = {
+      val1: val.code,
+      val2: this.form.catalogCode
+    };
     ADD_CONFIG.form = this.form; // 动态改变子组件的参数
   }
 };
@@ -237,27 +315,115 @@ export const DETAIL_CONFIG = {
   searchValue: "sn",
   listKey: "material",
   title: "材质详情",
+  colorList: [],
+  veinList: [],
+  materList: [],
   form: {},
-  formList: [
+  // 获取色调
+  getColor: function() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 6
+      })
+      .then(res => {
+        if (res.success) {
+          this.colorList = [];
+          res.data.list.forEach(item => {
+            this.colorList.push({
+              label: item.name,
+              value: item.code
+            });
+          });
+        }
+      });
+  },
+  // 获取纹理
+  getVein: function() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 7
+      })
+      .then(res => {
+        if (res.success) {
+          this.veinList = [];
+          res.data.list.forEach(item => {
+            this.veinList.push({
+              label: item.name,
+              value: item.code
+            });
+          });
+        }
+      });
+  },
+  // 获取材质
+  getMater: function() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 5
+      })
+      .then(res => {
+        if (res.success) {
+          this.materList = [];
+          res.data.list.forEach(item => {
+            this.materList.push({
+              label: item.name,
+              value: item.code
+            });
+          });
+        }
+      });
+  },
+  get formList() {
+    // todo 改成异步
+    this.getColor();
+    this.getVein();
+    this.getMater();
+    return this.list;
+  },
+  list: [
     {
       label: "SN编码",
       value: "sn"
     },
     {
       label: "材质名称",
-      value: "catalogCode"
+      value: "name"
     },
     {
       label: "色调",
-      value: "colorCode"
+      value: "colorCode",
+      render: (h, item) => {
+        if (!item.colors) return;
+        let o = item.colors.find(i => {
+          return i.classify === "6";
+        });
+        return h("div", o && o.name);
+      }
     },
     {
       label: "纹理",
-      value: "graphCode"
+      value: "graphCode",
+      render: (h, item) => {
+        if (!item.graphs) return;
+        let o = item.graphs.find(i => {
+          return i.classify === "7";
+        });
+        return h("div", o && o.name);
+      }
     },
     {
       label: "材质类别",
-      value: "catalogCode"
+      value: "catalogCode",
+      render: (h, item) => {
+        if (!item.catalogs) return;
+        // let o = item.catalogs.find(i => {
+        //   return i.code === item.catalogCode;
+        // });
+        let o = item.catalogs.find(i => {
+          return i.classify === "5";
+        });
+        return h("div", o && o.name);
+      }
     },
     {
       label: "材质文件",

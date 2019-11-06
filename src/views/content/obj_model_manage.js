@@ -4,6 +4,28 @@ import rules from "../../libs/asyncRules";
 import API from "../../http/api";
 
 export const LIST_CONFIG = {
+  get select() {
+    return {
+      template: `<div>
+<base-input placeholder="请输入模型名称或关键字" v-model.trim="info" @change="search"></base-input>
+</div>`,
+      props: {
+        obj: {}
+      },
+      data() {
+        return {
+          info: ""
+        };
+      },
+      methods: {
+        search() {
+          this.obj.currentPage = 1;
+          this.obj.searchInfo.value = this.info;
+          this.obj.getList();
+        }
+      }
+    };
+  },
   title: "模型管理",
   listURL: "MODEL_SEARCH",
   searchKey: "searchInfo",
@@ -16,7 +38,24 @@ export const LIST_CONFIG = {
   detailId: "sn",
   searchInfo: {},
   listKey: "model_list",
-  tableColumn: [
+  catalogList: [],
+  // 获取硬装分类
+  getCatalogList() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 1
+      })
+      .then(res => {
+        if (res.success) {
+          this.catalogList = res.data.list;
+        }
+      });
+  },
+  get tableColumn() {
+    this.getCatalogList();
+    return this.list;
+  },
+  list: [
     {
       title: "SN编码",
       key: "sn"
@@ -27,7 +66,15 @@ export const LIST_CONFIG = {
     },
     {
       title: "模型类型",
-      key: "catalogCode"
+      key: "catalogCode",
+      render: (h, params) => {
+        return h(
+          "div",
+          LIST_CONFIG.catalogList.find(i => {
+            return i.code === params.row.catalogCode;
+          }).name
+        );
+      }
     },
     {
       title: "上传人员",
@@ -141,13 +188,13 @@ export const ADD_CONFIG = {
       label: "模型文件",
       value: "pakFile",
       component: "BaseFiles",
-      change: function(value) {
-        this.form.pakFile = value;
-      },
       get attrs() {
         return {
           file: ADD_CONFIG.form.pakFile
         };
+      },
+      change: function(value) {
+        this.form.pakFile = value;
       },
       rule: rules.fieldFill("请上传模型文件")
     },
@@ -199,8 +246,25 @@ export const DETAIL_CONFIG = {
   searchKey: "sn",
   listKey: "model_detail",
   title: "模型详情",
+  catalogList: [],
   form: {},
-  formList: [
+  get formList() {
+    this.getCatalogList();
+    return this.list;
+  },
+  // 获取硬装分类
+  getCatalogList() {
+    axios
+      .post(API.ALL_LEVEL, {
+        classify: 1
+      })
+      .then(res => {
+        if (res.success) {
+          this.catalogList = res.data.list;
+        }
+      });
+  },
+  list: [
     {
       label: "SN编码",
       value: "name"
@@ -218,7 +282,15 @@ export const DETAIL_CONFIG = {
     },
     {
       label: "分类",
-      value: "catalogCode"
+      value: "catalogCode",
+      render: (h, item) => {
+        return h(
+          "div",
+          DETAIL_CONFIG.catalogList.find(i => {
+            return i.code === item.catalogCode;
+          }).name
+        );
+      }
     },
     {
       label: "尺寸",

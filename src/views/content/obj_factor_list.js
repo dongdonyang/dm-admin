@@ -10,16 +10,87 @@ export const LIST_CONFIG = {
     let that = this;
     return {
       template: `<div>
-<!--<base-select></base-select>-->
-<!--<base-select></base-select>-->
-<!--<Input />-->
-</div>`
+<base-select placeholder="省份" v-model="info.val0" :list="provinceList" @change="getCity"></base-select>
+<base-select placeholder="城市" v-model="info.val1" :list="cityList" @change="search"></base-select>
+<base-select placeholder="合作类型" v-model="info.val2" :list="typeList" @change="search"></base-select>
+<base-input placeholder="请输入厂商名称或关键字" v-model.trim="info.val3" @change="search"></base-input>
+</div>`,
+      props: {
+        obj: {}
+      },
+      data() {
+        return {
+          info: {},
+          typeList: [
+            {
+              label: "金牌",
+              value: "金牌"
+            },
+            {
+              label: "银牌",
+              value: "银牌"
+            },
+            {
+              label: "铜牌",
+              value: "铜牌"
+            }
+          ],
+          cityList: [],
+          provinceList: []
+        };
+      },
+      created() {
+        this.getProvince();
+      },
+      methods: {
+        search() {
+          this.obj.currentPage = 1;
+          this.obj.searchInfo.keyWord = this.info.val3;
+          this.obj.searchInfo.cityCode = this.info.val1;
+          this.obj.searchInfo.type = this.info.val2;
+          this.obj.getList();
+        },
+        // 获取省份
+        getProvince() {
+          axios.post(this.$API.GET_PROVINCE, {}).then(res => {
+            if (res.success) {
+              this.provinceList = [];
+              res.data.province_list.forEach(i => {
+                this.provinceList.push({
+                  label: i.name,
+                  value: i.code
+                });
+              });
+            }
+          });
+        },
+        // 获取市区
+        getCity(code) {
+          axios
+            .post(this.$API.GET_CITY, {
+              provinceCode: code
+            })
+            .then(res => {
+              if (res.success) {
+                this.cityList = [];
+                res.data.city_list.forEach(i => {
+                  this.cityList.push({
+                    label: i.name,
+                    value: i.code
+                  });
+                });
+              }
+            });
+        }
+      }
     };
   },
   title: "厂商管理",
   listURL: "VENDOR_LIST",
   listKey: "vendor_list",
   detailKey: "id",
+  searchKey: "searchInfo",
+  searchInfo: {},
   addRoute: "factorEdit",
   detailRoute: "factorDetail",
   deleteURL: "VENDOR_DELETE",
@@ -64,6 +135,7 @@ export const LIST_CONFIG = {
     {
       title: "操作",
       slot: "action",
+      width: 140,
       className: "base-action"
     }
   ]
