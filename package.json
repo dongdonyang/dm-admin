@@ -25,7 +25,7 @@
     "js-cookie": "^2.2.1",
     "js-md5": "^0.7.3",
     "lodash": "^4.17.15",
-    "plupload": "^2.3.6",
+    "plupload": "^2.3.9",
     "vue": "^2.6.10",
     "vue-awesome-swiper": "^3.1.3",
     "vue-context-menu": "^2.0.6",
